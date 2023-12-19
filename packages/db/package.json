@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit",
     "generate": "drizzle-kit generate:sqlite --out ./src/migrations --breakpoints --schema=./src/schema.ts",
     "migrate": "pnpm with-env tsx src/migrations/migrate",
+    "studio": "pnpm with-env drizzle-kit studio --port 3333",
     "with-env": "dotenv -e ../../.env --"
   },
   "devDependencies": {
