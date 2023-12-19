@@ -21,11 +21,11 @@
     "@nearbyy/eslint-config": "workspace:^0.2.0",
     "@nearbyy/prettier-config": "workspace:^0.1.0",
     "@nearbyy/tsconfig": "workspace:^0.1.0",
-    "drizzle-orm": "^0.29.1",
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
     "tsx": "^4.7.0",
     "dotenv": "^16.3.1",
+    "drizzle-kit": "^0.20.7",
     "typescript": "^5.3.3"
   },
   "eslintConfig": {
@@ -36,6 +36,6 @@
   "prettier": "@nearbyy/prettier-config",
   "dependencies": {
     "@libsql/client": "0.4.0-pre.5",
-    "drizzle-kit": "^0.20.7"
+    "drizzle-orm": "^0.29.1"
   }
 }
