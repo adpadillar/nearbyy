@@ -1,8 +1,7 @@
 "use client";
 
+import type { RouterOutputs } from "@nearbyy/api";
 import { useState } from "react";
-
-import type { RouterOutputs } from "@acme/api";
 
 import { api } from "~/trpc/react";
 
