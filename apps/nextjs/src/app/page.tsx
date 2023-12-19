@@ -1,3 +1,6 @@
+import { db } from "@nearbyy/db";
+
+import { env } from "~/env";
 import { api } from "~/trpc/server";
 
 export const runtime = "edge";
@@ -10,10 +13,28 @@ export default async function HomePage() {
   const { posts } = await api.post.all.query();
   console.log("RSC Posts:", posts);
 
+  const turso = db({
+    authToken: env.DATABASE_TOKEN,
+    url: env.DATABASE_URL,
+  });
+
+  const users = await turso.query.users.findMany({});
+
   return (
     <main>
       <div>
         <h1>Posts</h1>
+      </div>
+
+      <div>
+        {users.map((u) => {
+          return (
+            <div key={u.id}>
+              <h2>{u.name}</h2>
+              <p>{u.createdAt}</p>
+            </div>
+          );
+        })}
       </div>
 
       <div>

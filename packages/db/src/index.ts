@@ -1,1 +1,3 @@
-export const name = "db";
+import { buildDbClient } from "./lib/client";
+
+export { buildDbClient as db };

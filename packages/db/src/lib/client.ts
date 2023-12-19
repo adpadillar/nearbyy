@@ -3,17 +3,20 @@ import { drizzle } from "drizzle-orm/libsql";
 
 import * as schema from "../schema";
 
+/**
+ *
+ * @param url The URL of the database server.
+ * @param authToken The authentication token to use when connecting to the database.
+ * @returns A Drizzle client connected to the database.
+ */
 export function buildDbClient({
-  DATABASE_URL,
-  DATABASE_TOKEN,
+  url,
+  authToken,
 }: {
-  DATABASE_URL: string;
-  DATABASE_TOKEN: string;
+  url: string;
+  authToken: string;
 }) {
-  return drizzle(
-    createClient({ url: DATABASE_URL, authToken: DATABASE_TOKEN }),
-    {
-      schema,
-    },
-  );
+  return drizzle(createClient({ url, authToken }), {
+    schema,
+  });
 }
