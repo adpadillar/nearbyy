@@ -3,9 +3,8 @@ import type { Config } from "drizzle-kit";
 export default {
   schema: "./src/schema.ts",
   out: "./src/migrations",
-  driver: "turso",
+  driver: "pg",
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
-    authToken: process.env.DATABASE_TOKEN!,
+    connectionString: process.env.NEON_DIRECT_URL!,
   },
 } satisfies Config;

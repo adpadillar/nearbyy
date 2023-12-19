@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
-    "generate": "drizzle-kit generate:sqlite --out ./src/migrations --breakpoints --schema=./src/schema.ts",
+    "generate": "drizzle-kit generate:pg --out ./src/migrations --breakpoints --schema=./src/schema.ts",
     "migrate": "pnpm with-env tsx src/migrations/migrate",
     "studio": "pnpm with-env drizzle-kit studio --port 3333",
     "with-env": "dotenv -e ../../.env --"
@@ -21,11 +21,12 @@
     "@nearbyy/eslint-config": "workspace:^0.2.0",
     "@nearbyy/prettier-config": "workspace:^0.1.0",
     "@nearbyy/tsconfig": "workspace:^0.1.0",
+    "dotenv": "^16.3.1",
+    "drizzle-kit": "^0.20.7",
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
     "tsx": "^4.7.0",
-    "dotenv": "^16.3.1",
-    "drizzle-kit": "^0.20.7",
+    "pg": "^8.11.3",
     "typescript": "^5.3.3"
   },
   "eslintConfig": {
@@ -36,6 +37,7 @@
   "prettier": "@nearbyy/prettier-config",
   "dependencies": {
     "@libsql/client": "0.4.0-pre.5",
+    "@neondatabase/serverless": "^0.6.1",
     "drizzle-orm": "^0.29.1"
   }
 }

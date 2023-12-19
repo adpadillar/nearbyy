@@ -1,33 +1,37 @@
 {
-  "version": "5",
-  "dialect": "sqlite",
-  "id": "f006e202-38b2-40d4-af0f-a6416beee102",
+  "id": "7fc8cae1-ca73-4454-95c1-5df417daa09f",
   "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
   "tables": {
     "users": {
       "name": "users",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": true
         },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "integer",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "(cast (unixepoch () as int))"
+          "default": "now()"
+        },
+        "embeddings": {
+          "name": "embeddings",
+          "type": "numeric[]",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -45,6 +49,7 @@
     }
   },
   "enums": {},
+  "schemas": {},
   "_meta": {
     "schemas": {},
     "tables": {},
