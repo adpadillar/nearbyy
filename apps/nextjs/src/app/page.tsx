@@ -1,17 +1,13 @@
 import { db } from "@nearbyy/db";
 
 import { env } from "~/env";
-import { api } from "~/trpc/server";
 
 export const runtime = "edge";
+export const preferredRegion = "iad1";
 
 export default async function HomePage() {
-  // You don't need to fetch these here, just showing different usages
-  // If you don't want the Suspense loading state, you could pass these
-  // posts as props as use as initialData in the query.
-
-  const { posts } = await api.post.all.query();
-  console.log("RSC Posts:", posts);
+  // I want to measure the time it takes to run this query
+  const start = Date.now();
 
   const turso = db({
     authToken: env.DATABASE_TOKEN,
@@ -19,6 +15,10 @@ export default async function HomePage() {
   });
 
   const users = await turso.query.users.findMany({});
+
+  const end = Date.now();
+
+  console.log(`Query took ${end - start}ms`);
 
   return (
     <main>
@@ -32,17 +32,6 @@ export default async function HomePage() {
             <div key={u.id}>
               <h2>{u.name}</h2>
               <p>{u.createdAt}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      <div>
-        {posts.map((p) => {
-          return (
-            <div key={p.id}>
-              <h2>{p.title}</h2>
-              <p>{p.content}</p>
             </div>
           );
         })}
