@@ -19,7 +19,7 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().min(1),
-    DATABSE_TOKEN: z.string().min(1),
+    DATABASE_TOKEN: z.string().min(1),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -35,7 +35,7 @@ export const env = createEnv({
     VERCEL_URL: process.env.VERCEL_URL,
     PORT: process.env.PORT,
     DATABASE_URL: process.env.DATABASE_URL,
-    DATABSE_TOKEN: process.env.DATABSE_TOKEN,
+    DATABASE_TOKEN: process.env.DATABASE_TOKEN,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:
