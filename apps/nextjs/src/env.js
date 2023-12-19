@@ -17,7 +17,10 @@ export const env = createEnv({
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
    * built with invalid env vars.
    */
-  server: {},
+  server: {
+    DATABASE_URL: z.string().min(1),
+    DATABSE_TOKEN: z.string().min(1),
+  },
   /**
    * Specify your client-side environment variables schema here.
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
@@ -31,10 +34,8 @@ export const env = createEnv({
   runtimeEnv: {
     VERCEL_URL: process.env.VERCEL_URL,
     PORT: process.env.PORT,
-    DB_USERNAME: process.env.DB_USERNAME,
-    DB_PASSWORD: process.env.DB_PASSWORD,
-    DB_HOST: process.env.DB_HOST,
-    DB_NAME: process.env.DB_NAME,
+    DATABASE_URL: process.env.DATABASE_URL,
+    DATABSE_TOKEN: process.env.DATABSE_TOKEN,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:
