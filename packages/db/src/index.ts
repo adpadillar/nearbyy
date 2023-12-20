@@ -1,3 +1,6 @@
-import { buildDbClient } from "./lib/client";
+import { sql } from "drizzle-orm";
 
-export { buildDbClient as db };
+import { buildDbClient } from "./lib/client";
+import { files } from "./schema";
+
+export { buildDbClient as db, files as filesTable, sql };

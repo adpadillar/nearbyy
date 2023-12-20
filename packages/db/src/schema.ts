@@ -1,15 +1,10 @@
-import { sql } from "drizzle-orm";
-import { index, numeric, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { numeric, pgTable, serial, text } from "drizzle-orm/pg-core";
 
-export const users = pgTable(
-  "users",
-  {
-    id: text("id").primaryKey(),
-    name: text("name"),
-    createdAt: timestamp("created_at").default(sql`now()`),
-    embeddings: numeric("embeddings").array(),
-  },
-  (categories) => ({
-    nameIdx: index("name_idx").on(categories.name),
-  }),
-);
+export const files = pgTable("files", {
+  id: serial("id").primaryKey(),
+  text: text("text"),
+  url: text("url"),
+  projectid: text("projectid"),
+  type: text("type"),
+  embedding: numeric("embedding").array(1536),
+});

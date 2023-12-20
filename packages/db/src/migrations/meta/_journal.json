@@ -8,6 +8,13 @@
       "when": 1703029709487,
       "tag": "0000_great_dust",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1703103706909,
+      "tag": "0001_parched_tarot",
+      "breakpoints": true
     }
   ]
 }

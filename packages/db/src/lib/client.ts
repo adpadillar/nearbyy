@@ -1,6 +1,8 @@
 import { neon, neonConfig } from "@neondatabase/serverless";
 import { drizzle as neonDrizzle } from "drizzle-orm/neon-http";
 
+import * as schema from "../schema";
+
 /**
  *
  * @param url The URL of the database server.
@@ -9,5 +11,5 @@ import { drizzle as neonDrizzle } from "drizzle-orm/neon-http";
  */
 export function buildDbClient({ directUrl }: { directUrl: string }) {
   neonConfig.fetchConnectionCache = true;
-  return neonDrizzle(neon(directUrl));
+  return neonDrizzle(neon(directUrl), { schema });
 }
