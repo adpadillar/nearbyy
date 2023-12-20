@@ -21,6 +21,7 @@ export const env = createEnv({
     DATABASE_URL: z.string().min(1),
     DATABASE_TOKEN: z.string().min(1),
     NEON_DIRECT_URL: z.string().min(1),
+    OPENAI_KEY: z.string().min(1),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -38,6 +39,7 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     DATABASE_TOKEN: process.env.DATABASE_TOKEN,
     NEON_DIRECT_URL: process.env.NEON_DIRECT_URL,
+    OPENAI_KEY: process.env.OPENAI_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:
