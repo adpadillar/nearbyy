@@ -1,128 +1,69 @@
-import type { NextRequest } from "next/server";
-import type { z } from "zod";
-import OpenAI from "openai";
+import { z } from "zod";
 
+import { withAuth } from "@nearbyy/auth";
 import { db } from "@nearbyy/db";
+import { getSingleEmbedding } from "@nearbyy/embeddings";
 
-import { env } from "~/env";
 import { syncFileBodySchema } from "./types";
 
 export const runtime = "edge";
 export const preferredRegion = "iad1";
 
-const openai = new OpenAI({
-  apiKey: env.OPENAI_KEY,
-});
+export const POST = withAuth(
+  async ({ body, token }) => {
+    // STEP 1: Download the file from the URL
+    const file = await fetch(body.fileUrl);
+    const fileBuffer = await file.arrayBuffer();
 
-type SyncFileBody = z.infer<typeof syncFileBodySchema>;
+    // STEP 2: Check file type
+    const fileMimeString = file.headers.get("Content-Type") ?? "";
 
-export const POST = async (req: NextRequest) => {
-  const token = req.headers.get("Authorization");
+    if (fileMimeString === "text/markdown") {
+      const text = new TextDecoder().decode(fileBuffer);
 
-  let body: SyncFileBody;
+      // STEP 3: Upload the file to Vector Database
+      const embedding = (await getSingleEmbedding(text))!;
 
-  try {
-    const res = (await req.json()) as unknown;
-    body = syncFileBodySchema.parse(res);
-  } catch (error) {
-    return new Response("Bad Request", { status: 400 });
-  }
+      await db.drizzle.insert(db.schema.files).values({
+        embedding: embedding.map((x) => `${x}`),
+        projectid: token,
+        text,
+        type: "markdown",
+        url: body.fileUrl,
+      });
 
-  if (!token) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+      return new Response("OK", { status: 200 });
+    }
 
-  // STEP 1: Download the file from the URL
-  const file = await fetch(body.fileUrl);
-  const fileBuffer = await file.arrayBuffer();
+    return new Response("Unsupported file type", { status: 415 });
+  },
+  { bodySchema: syncFileBodySchema },
+);
 
-  // STEP 2: Check file type
-  const fileMimeString = file.headers.get("Content-Type") ?? "";
+export const GET = withAuth(
+  async ({ params }) => {
+    const embedding = (await getSingleEmbedding(params.query))!;
 
-  if (fileMimeString === "text/markdown") {
-    const text = new TextDecoder().decode(fileBuffer);
+    const files = await db.vector.similarity("files", "embedding", embedding);
 
-    // STEP 3: Upload the file to Vector Database
-    const textToEmbed = [text];
-
-    const embeddings_res = await openai.embeddings.create({
-      model: "text-embedding-ada-002",
-      input: textToEmbed,
-    });
-
-    await db.drizzle.insert(db.schema.files).values({
-      embedding: embeddings_res.data[0]?.embedding.map((x) => `${x}`),
-      projectid: token,
-      text,
-      type: "markdown",
-      url: body.fileUrl,
-    });
-
-    return new Response("OK", { status: 200 });
-  }
-
-  return new Response("Unsupported file type", { status: 415 });
-};
-
-export const GET = async (req: NextRequest) => {
-  const initialTime = Date.now();
-
-  const token = req.headers.get("Authorization");
-
-  if (!token) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
-  const query = req.nextUrl.searchParams.get("query");
-  const limit = parseInt(req.nextUrl.searchParams.get("limit") ?? "5");
-
-  if (!query) {
-    return new Response("Bad Request", { status: 400 });
-  }
-
-  const embeddingStart = Date.now();
-
-  const embeddings_res = await openai.embeddings.create({
-    model: "text-embedding-ada-002",
-    input: [query],
-  });
-
-  const embeddings = embeddings_res.data[0]?.embedding ?? [];
-
-  const embeddingEnd = Date.now();
-
-  console.log("Embedding time: ", embeddingEnd - embeddingStart);
-
-  const queryStart = Date.now();
-
-  const res = await db.vector.similarity(
-    "files",
-    "embedding",
-    embeddings,
-    limit,
-  );
-
-  const queryEnd = Date.now();
-
-  console.log("Query time: ", queryEnd - queryStart);
-
-  const response = new Response(
-    JSON.stringify(
-      res.map((file) => ({
-        ...file,
-        embedding: undefined,
-        distance: undefined,
-        _extras: {
-          distance: file.distance,
-        },
-      })),
-    ),
-    { status: 200 },
-  );
-
-  const finalTime = Date.now();
-
-  console.log("Total time: ", finalTime - initialTime);
-
-  return response;
-};
+    return new Response(
+      JSON.stringify(
+        files.map((file) => ({
+          ...file,
+          embedding: undefined,
+          distance: undefined,
+          _extras: {
+            distance: file.distance,
+          },
+        })),
+      ),
+      { status: 200 },
+    );
+  },
+  {
+    paramsSchema: z.object({
+      query: z.string(),
+      limit: z.string().default("5"),
+    }),
+  },
+);

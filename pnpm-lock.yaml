@@ -153,6 +153,13 @@ importers:
         version: 5.3.3
 
   packages/auth:
+    dependencies:
+      next:
+        specifier: ^14.0.3
+        version: 14.0.3(react-dom@18.2.0)(react@18.2.0)
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@nearbyy/eslint-config':
         specifier: workspace:^0.2.0
