@@ -1,5 +1,12 @@
 # @nearbyy/core
 
+## 0.3.6
+
+### Patch Changes
+
+- test
+- initial commit
+
 ## 0.3.5
 
 ### Patch Changes
