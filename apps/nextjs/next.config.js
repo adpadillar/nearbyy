@@ -5,7 +5,7 @@ import "./src/env.js";
 const config = {
   reactStrictMode: true,
   /** Enables hot reloading for local packages without a build step */
-  transpilePackages: ["@nearbyy/api", "@nearbyy/db"],
+  transpilePackages: ["@nearbyy/api", "@nearbyy/db", "@nearbyy/embeddings"],
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },

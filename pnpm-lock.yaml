@@ -32,6 +32,9 @@ importers:
       '@nearbyy/db':
         specifier: workspace:^
         version: link:../../packages/db
+      '@nearbyy/embeddings':
+        specifier: workspace:^
+        version: link:../../packages/embeddings
       '@t3-oss/env-nextjs':
         specifier: ^0.7.1
         version: 0.7.1(typescript@5.3.3)(zod@3.22.4)
