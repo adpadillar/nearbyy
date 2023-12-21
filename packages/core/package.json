@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
-    "release": "pnpm run ci && changeset version && changeset publish",
+    "release": "pnpm run ci && changeset publish",
     "ci": "pnpm build && pnpm lint && pnpm typecheck && pnpm format"
   },
   "devDependencies": {
