@@ -29,6 +29,9 @@ importers:
       '@nearbyy/api':
         specifier: workspace:^0.1.0
         version: link:../../packages/api
+      '@nearbyy/auth':
+        specifier: workspace:^
+        version: link:../../packages/auth
       '@nearbyy/db':
         specifier: workspace:^
         version: link:../../packages/db
