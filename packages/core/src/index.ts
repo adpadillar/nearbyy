@@ -1,9 +1,29 @@
-export const name = "core";
+import type { FileSearchClientResponse } from "./types";
 
-export const version = "1.0.0";
+const API_URL = "https://nearbyy.com/api";
 
-export const sayHello = () => {
-  console.log(`Hello from ${name} v${version}`);
+const syncFile = async (fileUrl: string, projectId: string) => {
+  await fetch(`${API_URL}/files`, {
+    headers: {
+      Authorization: `Bearer ${projectId}`,
+    },
+    method: "POST",
+    body: JSON.stringify({
+      fileUrl,
+    }),
+  });
 };
 
-export const sum = (a: number, b: number) => a + b;
+const searchFiles = async (query: string, projectId: string) => {
+  const res = await fetch(`${API_URL}/file?query=${query}`, {
+    headers: {
+      Authorization: `Bearer ${projectId}`,
+    },
+  });
+
+  const data = (await res.json()) as unknown as FileSearchClientResponse;
+
+  return data;
+};
+
+export { syncFile, searchFiles };

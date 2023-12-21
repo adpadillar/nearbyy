@@ -16,19 +16,22 @@
     "ci": "pnpm build && pnpm lint && pnpm typecheck && pnpm format"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "@nearbyy/eslint-config": "workspace:^0.2.0",
     "@nearbyy/prettier-config": "workspace:^0.1.0",
     "@nearbyy/tsconfig": "workspace:^0.1.0",
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
     "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "@changesets/cli": "^2.27.1"
+    "typescript": "^5.3.3"
   },
   "eslintConfig": {
     "extends": [
       "@nearbyy/eslint-config/base"
     ]
   },
-  "prettier": "@nearbyy/prettier-config"
+  "prettier": "@nearbyy/prettier-config",
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
 }

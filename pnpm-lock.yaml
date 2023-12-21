@@ -181,6 +181,10 @@ importers:
         version: 5.3.3
 
   packages/core:
+    dependencies:
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@changesets/cli':
         specifier: ^2.27.1
