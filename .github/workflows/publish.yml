@@ -26,13 +26,16 @@ jobs:
           cache: "pnpm"
 
       - run: pnpm install --frozen-lockfile
-      - name: Create Release Pull Request or Publish to npm
+      - name: Create Release Pull Request
         id: changesets
         uses: changesets/action@v1
         with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
-          publish: pnpm release
           cwd: packages/core
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: cd packages/core && pnpm release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
