@@ -46,13 +46,19 @@ export const withAuth = <T extends ZodSchema<X>, U extends ZodSchema<Y>, X, Y>(
     const token = req.headers.get("Authorization");
 
     if (!token) {
-      return new Response("Unauthorized", { status: 401 });
+      return new Response(
+        `Unauthorized\nDid you forget to add the Bearer token?`,
+        { status: 401 },
+      );
     }
 
     const valid = validateKey(token);
 
     if (!valid) {
-      return new Response("Unauthorized", { status: 401 });
+      return new Response(
+        `Unauthorized\nThis is an unvalid token. Please provide a valid one`,
+        { status: 401 },
+      );
     }
 
     let b = null;
@@ -62,7 +68,7 @@ export const withAuth = <T extends ZodSchema<X>, U extends ZodSchema<Y>, X, Y>(
       b = opts.bodySchema.safeParse(body);
 
       if (!b.success) {
-        return new Response("Bad Request", { status: 400 });
+        return new Response(`Bad request\n${b.error.message}`, { status: 400 });
       }
     }
 
@@ -72,7 +78,7 @@ export const withAuth = <T extends ZodSchema<X>, U extends ZodSchema<Y>, X, Y>(
       p = opts.paramsSchema.safeParse(paramsToObject(req.nextUrl.searchParams));
 
       if (!p.success) {
-        return new Response("Bad Request", { status: 400 });
+        return new Response(`Bad request\n${p.error.message}`, { status: 400 });
       }
     }
 

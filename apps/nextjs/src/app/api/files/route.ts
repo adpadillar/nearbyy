@@ -11,19 +11,20 @@ export const preferredRegion = "iad1";
 
 export const POST = withAuth(
   async ({ body, token }) => {
-    // STEP 1: Download the file from the URL
+    // We download the file from the URL
     const file = await fetch(body.fileUrl);
     const fileBuffer = await file.arrayBuffer();
-
-    // STEP 2: Check file type
     const fileMimeString = file.headers.get("Content-Type") ?? "";
 
+    // If the file is a markdown file
     if (fileMimeString === "text/markdown") {
+      // Extract the text from the markdown file
       const text = new TextDecoder().decode(fileBuffer);
 
-      // STEP 3: Upload the file to Vector Database
+      // Generate the embedding
       const embedding = (await getSingleEmbedding(text))!;
 
+      // Insert the file into the database
       await db.drizzle.insert(db.schema.files).values({
         embedding: embedding.map((x) => `${x}`),
         projectid: token,
@@ -35,6 +36,7 @@ export const POST = withAuth(
       return new Response("OK", { status: 200 });
     }
 
+    // If the file is not supported
     return new Response("Unsupported file type", { status: 415 });
   },
   { bodySchema: syncFileBodySchema },
@@ -42,10 +44,18 @@ export const POST = withAuth(
 
 export const GET = withAuth(
   async ({ params }) => {
+    // Get the embedding of the query
     const embedding = (await getSingleEmbedding(params.query))!;
 
-    const files = await db.vector.similarity("files", "embedding", embedding);
+    // Get the files that are similar to the embedding
+    const files = await db.vector.similarity(
+      "files",
+      "embedding",
+      embedding,
+      params.limit,
+    );
 
+    // Remove the embedding from the response
     return new Response(
       JSON.stringify(
         files.map((file) => ({
@@ -63,7 +73,7 @@ export const GET = withAuth(
   {
     paramsSchema: z.object({
       query: z.string(),
-      limit: z.string().default("5"),
+      limit: z.coerce.number().default(10),
     }),
   },
 );
