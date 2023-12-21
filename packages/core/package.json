@@ -1,7 +1,7 @@
 {
   "name": "@nearbyy/core",
   "private": false,
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
-    "release": "pnpm run ci && changeset publish",
+    "release": "pnpm run ci && changeset version && changeset publish",
     "ci": "pnpm build && pnpm lint && pnpm typecheck && pnpm format"
   },
   "devDependencies": {
