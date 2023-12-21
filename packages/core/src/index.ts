@@ -15,7 +15,7 @@ const uploadFile = async (fileUrl: string, projectId: string) => {
 };
 
 const queryDatabase = async (query: string, projectId: string) => {
-  const res = await fetch(`${API_URL}/file?query=${query}`, {
+  const res = await fetch(`${API_URL}/files?query=${query}`, {
     headers: {
       Authorization: `Bearer ${projectId}`,
     },

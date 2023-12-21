@@ -1,5 +1,14 @@
 # @nearbyy/core
 
+## 0.3.8
+
+### Patch Changes
+
+- typo fixed
+- test
+- updated api naming
+- initial commit
+
 ## 0.3.7
 
 ### Patch Changes
