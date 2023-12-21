@@ -2,7 +2,7 @@ import type { FileSearchClientResponse } from "./types";
 
 const API_URL = "https://nearbyy.com/api";
 
-const syncFile = async (fileUrl: string, projectId: string) => {
+const uploadFile = async (fileUrl: string, projectId: string) => {
   await fetch(`${API_URL}/files`, {
     headers: {
       Authorization: `Bearer ${projectId}`,
@@ -14,7 +14,7 @@ const syncFile = async (fileUrl: string, projectId: string) => {
   });
 };
 
-const searchFiles = async (query: string, projectId: string) => {
+const queryDatabase = async (query: string, projectId: string) => {
   const res = await fetch(`${API_URL}/file?query=${query}`, {
     headers: {
       Authorization: `Bearer ${projectId}`,
@@ -26,4 +26,4 @@ const searchFiles = async (query: string, projectId: string) => {
   return data;
 };
 
-export { syncFile, searchFiles };
+export { uploadFile, queryDatabase };
