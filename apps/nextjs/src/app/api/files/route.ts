@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import type { z } from "zod";
 import OpenAI from "openai";
 
-import { db, filesTable, sql } from "@nearbyy/db";
+import { db } from "@nearbyy/db";
 
 import { env } from "~/env";
 import { syncFileBodySchema } from "./types";
@@ -50,11 +50,7 @@ export const POST = async (req: NextRequest) => {
       input: textToEmbed,
     });
 
-    const neon = db({
-      directUrl: env.NEON_DIRECT_URL,
-    });
-
-    await neon.insert(filesTable).values({
+    await db.drizzle.insert(db.schema.files).values({
       embedding: embeddings_res.data[0]?.embedding.map((x) => `${x}`),
       projectid: token,
       text,
@@ -84,10 +80,6 @@ export const GET = async (req: NextRequest) => {
     return new Response("Bad Request", { status: 400 });
   }
 
-  const neon = db({
-    directUrl: env.NEON_DIRECT_URL,
-  });
-
   const embeddingStart = Date.now();
 
   const embeddings_res = await openai.embeddings.create({
@@ -95,23 +87,20 @@ export const GET = async (req: NextRequest) => {
     input: [query],
   });
 
+  const embeddings = embeddings_res.data[0]?.embedding ?? [];
+
   const embeddingEnd = Date.now();
 
   console.log("Embedding time: ", embeddingEnd - embeddingStart);
 
-  const embeddings = embeddings_res.data[0]?.embedding
-    .map((x) => `${x}`)
-    .toString();
-
-  const statement = sql`SELECT ${filesTable}.*, ${
-    filesTable.embedding
-  }::vector(1536) <=> '[${sql.raw(
-    embeddings ?? "",
-  )}]' AS distance FROM ${filesTable} ORDER BY distance LIMIT ${limit};`;
-
   const queryStart = Date.now();
 
-  const res = await neon.execute<{ id: string }>(statement);
+  const res = await db.vector.similarity(
+    "files",
+    "embedding",
+    embeddings,
+    limit,
+  );
 
   const queryEnd = Date.now();
 
@@ -119,18 +108,14 @@ export const GET = async (req: NextRequest) => {
 
   const response = new Response(
     JSON.stringify(
-      res.rows.map((v) => {
-        if (!Array.isArray(v) && typeof v.distance === "number") {
-          return {
-            ...v,
-            embedding: undefined,
-            distance: undefined,
-            _extras: {
-              distance: v.distance,
-            },
-          };
-        }
-      }),
+      res.map((file) => ({
+        ...file,
+        embedding: undefined,
+        distance: undefined,
+        _extras: {
+          distance: file.distance,
+        },
+      })),
     ),
     { status: 200 },
   );
