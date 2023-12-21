@@ -4,7 +4,6 @@ export interface FileSearchClientResponse {
   text: string;
   url: string;
   projectid: string;
-  embedding: number[];
   _extras: {
     distance: number;
   };
