@@ -1,15 +1,68 @@
+import { randomBytes } from "node:crypto";
 import type { NextRequest } from "next/server";
 import type { ZodSchema } from "zod";
+import { genSalt, hash } from "bcryptjs";
+
+import { db } from "@nearbyy/db";
 
 /**
  *
- * This will eventually be a function that validates the key
+ * This function takes an API key and validates it
+ * The key should be in the format of `project_${projectid}:${API_KEY}`
+ * It will return an object with a boolean `valid` and the `projectid`
  *
- * @param _key the key to validate
+ * @param key the key to validate
  * @returns
  */
-export const validateKey = (_key: string) => {
-  return true;
+export const validateKey = async (key: string) => {
+  const [project, bytes] = key.split(":");
+  const keys = await db.drizzle.query.keys.findMany({
+    where: db.helpers.eq(
+      db.schema.keys.projectid,
+      project!.replace("project_", ""),
+    ),
+  });
+
+  for (const key of keys) {
+    const hashed_key = await hash(bytes!, key.salt);
+
+    if (key.key === hashed_key) {
+      return {
+        valid: true,
+        projectid: key.projectid,
+      } as const;
+    }
+  }
+
+  return {
+    valid: false,
+    projectid: null,
+  } as const;
+};
+
+/**
+ * Calling this function with a projectid will generate a new key for that project
+ * It will return the key to be shown to the user, but won't be stored anywhere
+ *
+ * The key will be in the format of `project_${projectid}:${API_KEY}`
+ *
+ * The key's hash will be stored in the database
+ * @param projectid
+ * @returns
+ */
+export const generateKey = async (projectid: string) => {
+  const API_KEY = randomBytes(32).toString("hex");
+
+  const salt = await genSalt(10);
+  const hashedKey = await hash(API_KEY, salt);
+
+  await db.drizzle.insert(db.schema.keys).values({
+    key: hashedKey,
+    salt,
+    projectid,
+  });
+
+  return `project_${projectid}:${API_KEY}` as const;
 };
 
 function paramsToObject(entries: URLSearchParams) {
@@ -35,7 +88,7 @@ export const withAuth = <T extends ZodSchema<X>, U extends ZodSchema<Y>, X, Y>(
     req: NextRequest;
     body: T extends ZodSchema<infer R> ? R : unknown;
     params: U extends ZodSchema<infer R> ? R : unknown;
-    token: string;
+    projectid: string;
   }) => Promise<Response>,
   opts: {
     bodySchema?: T;
@@ -43,7 +96,7 @@ export const withAuth = <T extends ZodSchema<X>, U extends ZodSchema<Y>, X, Y>(
   } = {},
 ) => {
   return async (req: NextRequest) => {
-    const token = req.headers.get("Authorization");
+    const token = req.headers.get("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
       return new Response(
@@ -52,7 +105,7 @@ export const withAuth = <T extends ZodSchema<X>, U extends ZodSchema<Y>, X, Y>(
       );
     }
 
-    const valid = validateKey(token);
+    const { valid, projectid } = await validateKey(token);
 
     if (!valid) {
       return new Response(
@@ -87,7 +140,7 @@ export const withAuth = <T extends ZodSchema<X>, U extends ZodSchema<Y>, X, Y>(
       body: b ? b.data : null,
       // @ts-expect-error typescript thinks that p.data cant satisfy the schema
       params: p ? p.data : null,
-      token,
+      projectid,
       req,
     });
   };
