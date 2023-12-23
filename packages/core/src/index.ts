@@ -21,7 +21,7 @@ const queryDatabase = async (query: string, projectId: string) => {
     },
   });
 
-  const data = (await res.json()) as unknown as FileSearchClientResponse;
+  const data = (await res.json()) as unknown as FileSearchClientResponse[];
 
   return data;
 };
