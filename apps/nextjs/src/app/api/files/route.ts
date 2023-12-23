@@ -6,11 +6,8 @@ import { getSingleEmbedding } from "@nearbyy/embeddings";
 
 import { syncFileBodySchema } from "./types";
 
-export const runtime = "edge";
-export const preferredRegion = "iad1";
-
 export const POST = withAuth(
-  async ({ body, token }) => {
+  async ({ body, projectid }) => {
     // We download the file from the URL
     const file = await fetch(body.fileUrl);
     const fileBuffer = await file.arrayBuffer();
@@ -27,7 +24,7 @@ export const POST = withAuth(
       // Insert the file into the database
       await db.drizzle.insert(db.schema.files).values({
         embedding: embedding.map((x) => `${x}`),
-        projectid: token,
+        projectid,
         text,
         type: "markdown",
         url: body.fileUrl,
