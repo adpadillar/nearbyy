@@ -17,7 +17,7 @@ export const files = pgTable("files", {
 
 export const keys = pgTable("keys", {
   id: serial("id").primaryKey(),
-  key: text("key"),
-  salt: text("salt"),
-  projectid: text("projectid"),
-})
+  key: text("key").notNull(),
+  salt: text("salt").notNull(),
+  projectid: text("projectid").notNull(),
+});

@@ -1,6 +1,7 @@
 import type { z } from "zod";
 import { neon, neonConfig } from "@neondatabase/serverless";
 import { sql } from "drizzle-orm";
+import * as helpers from "drizzle-orm";
 import { drizzle as neonDrizzle } from "drizzle-orm/neon-http";
 
 import * as schema from "../schema";
@@ -43,6 +44,11 @@ export const db = {
    * Each validator CORRESPONDS to a table in `schema`.
    */
   validators,
+  /**
+   * All the drizzle helpers, like eq, sql, etc. Basically all the functions
+   * exported from drizzle-orm.
+   */
+  helpers,
   /**
    * The vector client. Allows you to query the database for similar embeddings.
    * This is a custom client, running custom pg-vector queries through Drizzle.

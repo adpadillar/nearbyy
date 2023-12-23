@@ -1,0 +1,1 @@
+ALTER TABLE "keys" ALTER COLUMN "projectid" SET NOT NULL;
