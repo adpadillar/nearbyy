@@ -14,3 +14,10 @@ export const files = pgTable("files", {
   type: text("type"),
   embedding: numeric("embedding").array(1536),
 });
+
+export const keys = pgTable("keys", {
+  id: serial("id").primaryKey(),
+  key: text("key"),
+  salt: text("salt"),
+  projectid: text("projectid"),
+})

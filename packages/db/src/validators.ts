@@ -24,3 +24,10 @@ export const files = z.object({
   embedding: z.array(z.number()),
   distance: z.number().optional(),
 });
+
+export const keys = z.object({
+  id: z.number(),
+  key: z.string(),
+  salt: z.string(),
+  projectid: z.string(),
+});

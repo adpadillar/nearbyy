@@ -15,6 +15,13 @@
       "when": 1703103706909,
       "tag": "0001_parched_tarot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1703292169065,
+      "tag": "0002_fresh_rachel_grey",
+      "breakpoints": true
     }
   ]
 }
