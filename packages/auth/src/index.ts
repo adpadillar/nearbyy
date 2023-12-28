@@ -83,7 +83,12 @@ function paramsToObject(entries: URLSearchParams) {
  * @param opts the validation options
  * @returns
  */
-export const withAuth = <T extends ZodSchema<X>, U extends ZodSchema<Y>, X, Y>(
+export const withKeyAuth = <
+  T extends ZodSchema<X>,
+  U extends ZodSchema<Y>,
+  X,
+  Y,
+>(
   handler: (ctx: {
     req: NextRequest;
     body: T extends ZodSchema<infer R> ? R : unknown;

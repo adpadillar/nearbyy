@@ -1,12 +1,12 @@
 import { z } from "zod";
 
-import { withAuth } from "@nearbyy/auth";
+import { withKeyAuth } from "@nearbyy/auth";
 import { db } from "@nearbyy/db";
 import { getSingleEmbedding } from "@nearbyy/embeddings";
 
 import { syncFileBodySchema } from "./types";
 
-export const POST = withAuth(
+export const POST = withKeyAuth(
   async ({ body, projectid }) => {
     // We download the file from the URL
     const file = await fetch(body.fileUrl);
@@ -39,7 +39,7 @@ export const POST = withAuth(
   { bodySchema: syncFileBodySchema },
 );
 
-export const GET = withAuth(
+export const GET = withKeyAuth(
   async ({ params }) => {
     // Get the embedding of the query
     const embedding = (await getSingleEmbedding(params.query))!;
