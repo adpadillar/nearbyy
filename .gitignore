@@ -48,3 +48,6 @@ yarn-error.log*
 
 # turbo
 .turbo
+
+# auto-generated documentation
+_typedoc

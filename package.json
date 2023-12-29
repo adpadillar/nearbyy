@@ -18,7 +18,8 @@
     "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "docs": "typedoc"
   },
   "devDependencies": {
     "@nearbyy/prettier-config": "workspace:^0.1.0",
@@ -27,5 +28,8 @@
     "turbo": "^1.11.2",
     "typescript": "^5.3.3"
   },
-  "prettier": "@nearbyy/prettier-config"
+  "prettier": "@nearbyy/prettier-config",
+  "dependencies": {
+    "typedoc": "^0.25.4"
+  }
 }

@@ -65,6 +65,11 @@ export const generateKey = async (projectid: string) => {
   return `project_${projectid}:${API_KEY}` as const;
 };
 
+/**
+ * Converts a URLSearchParams object to a Record<string, string>
+ * @param entries
+ * @returns
+ */
 function paramsToObject(entries: URLSearchParams) {
   const result: Record<string, string> = {};
   for (const [key, value] of entries) {
@@ -80,24 +85,108 @@ function paramsToObject(entries: URLSearchParams) {
  * validation options passed in
  *
  * @param handler the handler to wrap
- * @param opts the validation options
+ * @param validators the validation options
  * @returns
  */
-export const withKeyAuth = <
-  T extends ZodSchema<X>,
-  U extends ZodSchema<Y>,
-  X,
-  Y,
->(
+export const withKeyAuth = <T, U>(
   handler: (ctx: {
+    /**
+     * The Next.js request object
+     */
     req: NextRequest;
-    body: T extends ZodSchema<infer R> ? R : unknown;
-    params: U extends ZodSchema<infer R> ? R : unknown;
+    /**
+     * The parsed body of the request. Will have the type of the passed in body schema.
+     * If there is no body schema, this will be type `unknown` and will be `null`
+     * @example
+     * ### Valid request
+     * A valid request **will** have a **JSON** body with the correct properties and types
+     * specified in the body schema. The parsed body will be passed into the handler with the expected types.
+     * ```ts
+     * // If the validator is
+     * z.object({ fileUrl: z.string().url() })
+     *
+     * // Then a valid request would be
+     * { fileUrl: "https://example.com/file.md" }
+     *
+     * // This will be typed as
+     * { fileUrl: string; }
+     * ```
+     *
+     * @example
+     * ### Invalid request
+     * An invalid request **will not** have a **JSON** body with the correct properties and types
+     * specified in the body schema. Any missing properties or properties with the wrong type will be
+     * caught by the validator and will return a 400. The returned error has a message on where exactly
+     * the validation failed.
+     * ```ts
+     * // If the validator is
+     * z.object({ fileUrl: z.string().url() })
+     *
+     * // Then an invalid request would be
+     * { fileUrl: "hello world" }
+     *
+     * // Even though the fileUrl is a string, it is not a valid url and the validator will catch that
+     * // This will return a 400 with the message
+     *
+     * // Bad request
+     * // {Specific error message}
+     * ```
+     */
+    body: T;
+    /**
+     * The parsed params of the request. Will have the type of the passed in params schema.
+     * If there is no params schema, this will be type `unknown` and will be `null`
+     * @example
+     * ### Valid request
+     * A valid request **will** have the params specified in the params schema in the url.
+     * The parsed params will be passed into the handler with the expected types.
+     * ```ts
+     * // If the validator is
+     * z.object({ query: z.string(), limit: z.number() })
+     *
+     * // Then a valid request would be
+     * { query: "hello", limit: 10 }
+     *
+     * // This will be typed as
+     * { query: string; limit: number; }
+     * ```
+     *
+     * @example
+     * ### Invalid request
+     * An invalid request **will not** have the params specified in the params schema in the url.
+     * Any missing params or params with the wrong type will be caught by the validator and will return a 400.
+     * The returned error has a message on where exactly the validation failed.
+     * ```ts
+     * // If the validator is
+     * z.object({ query: z.string(), limit: z.number() })
+     *
+     * // Then an invalid request would be
+     * { query: "hello" }
+     *
+     * // This will return a 400 with the message
+     * // Bad request
+     * // {Specific error message}
+     * ```
+     */
+    params: U;
+    /**
+     * The projectid associated with the request's key
+     */
     projectid: string;
-  }) => Promise<Response>,
-  opts: {
-    bodySchema?: T;
-    paramsSchema?: U;
+  }) => Promise<Response> | Response,
+  validators: {
+    /**
+     * The body zod validator. A failed validation will return a 400
+     * An undefined validator will skip the validation
+     * @default undefined
+     */
+    bodyValidator?: ZodSchema<T>;
+    /**
+     * The params zod validator. A failed validation will return a 400
+     * An undefined validator will skip the validation
+     * @default undefined
+     */
+    paramsValidator?: ZodSchema<U>;
   } = {},
 ) => {
   return async (req: NextRequest) => {
@@ -121,30 +210,41 @@ export const withKeyAuth = <
 
     let b = null;
 
-    if (opts.bodySchema) {
-      const body = (await req.json()) as unknown;
-      b = opts.bodySchema.safeParse(body);
+    if (validators.bodyValidator) {
+      try {
+        const body = (await req.json()) as unknown;
+        b = validators.bodyValidator.safeParse(body);
 
-      if (!b.success) {
-        return new Response(`Bad request\n${b.error.message}`, { status: 400 });
+        if (!b.success) {
+          return new Response(`Bad request\n${b.error.message}`, {
+            status: 400,
+          });
+        }
+      } catch (e) {
+        return new Response(`Bad request\nMissing body`, { status: 400 });
       }
     }
 
     let p = null;
 
-    if (opts.paramsSchema) {
-      p = opts.paramsSchema.safeParse(paramsToObject(req.nextUrl.searchParams));
+    if (validators.paramsValidator) {
+      p = validators.paramsValidator.safeParse(
+        paramsToObject(req.nextUrl.searchParams),
+      );
 
       if (!p.success) {
-        return new Response(`Bad request\n${p.error.message}`, { status: 400 });
+        return new Response(
+          `Bad request: query parameters have the wrong format.\n${p.error.message}`,
+          {
+            status: 400,
+          },
+        );
       }
     }
 
     return handler({
-      // @ts-expect-error typescript thinks that b.data cant satisfy the schema
-      body: b ? b.data : null,
-      // @ts-expect-error typescript thinks that p.data cant satisfy the schema
-      params: p ? p.data : null,
+      body: (b ? b.data : null)!,
+      params: (p ? p.data : null)!,
       projectid,
       req,
     });
