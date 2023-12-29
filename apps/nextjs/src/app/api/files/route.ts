@@ -4,8 +4,13 @@ import { withKeyAuth } from "@nearbyy/auth";
 import { db } from "@nearbyy/db";
 import { getSingleEmbedding } from "@nearbyy/embeddings";
 
-import { syncFileBodySchema } from "./types";
-
+/**
+ * POST `/api/files`
+ *
+ * This endpoint takes a URL to a file, extracts the text from it, and stores it
+ * in the vector database. It will return a 200 if the file was successfully stored
+ * or a 415 if the file type is not supported
+ */
 export const POST = withKeyAuth(
   async ({ body, projectid }) => {
     // We download the file from the URL
@@ -36,9 +41,19 @@ export const POST = withKeyAuth(
     // If the file is not supported
     return new Response("Unsupported file type", { status: 415 });
   },
-  { bodySchema: syncFileBodySchema },
+  {
+    bodyValidator: z.object({
+      fileUrl: z.string().url(),
+    }),
+  },
 );
 
+/**
+ * GET `/api/files`
+ *
+ * This endpoint takes a query and returns the most similar files to that query
+ * in the vector database
+ */
 export const GET = withKeyAuth(
   async ({ params }) => {
     // Get the embedding of the query
@@ -68,9 +83,9 @@ export const GET = withKeyAuth(
     );
   },
   {
-    paramsSchema: z.object({
+    paramsValidator: z.object({
       query: z.string(),
-      limit: z.coerce.number().default(10),
+      limit: z.coerce.number().lte(100).gt(0).int().default(10),
     }),
   },
 );
