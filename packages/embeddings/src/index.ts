@@ -8,21 +8,43 @@ const client = new OpenAI({
  *
  * Uses OpenAI's API to embed a string into a 1536 dimensional vector
  *
- * @example ### Create an embedding
+ * @example
+ *
+ * ### Create an embedding
  *
  * ```ts
- * const embedding = await getSingleEmbedding("Hello, world!");
- * // [0.42, 0.12, 0.32, ...] (1536 dimensional vector)
+ * const { embedding, success } = await getSingleEmbedding("Hello, world!");
+ * if (success) {
+ *  console.log(embedding); // [0.1, 0.2, 0.3, ...]
+ * }
  * ```
  *
  * @param toEmbed the string to embed
  * @returns
  */
 export const getSingleEmbedding = async (toEmbed: string) => {
-  const embeddings = await client.embeddings.create({
-    model: "text-embedding-ada-002",
-    input: [toEmbed],
-  });
+  try {
+    const embeddings = await client.embeddings.create({
+      model: "text-embedding-ada-002",
+      input: [toEmbed],
+    });
 
-  return embeddings.data[0]?.embedding;
+    const embedding = embeddings.data[0]?.embedding;
+
+    if (!embedding) {
+      throw new Error("No embedding found");
+    }
+
+    return {
+      success: true,
+      embedding: embedding,
+      error: null,
+    } as const;
+  } catch (e) {
+    return {
+      success: false,
+      error: e,
+      embedding: null,
+    } as const;
+  }
 };
