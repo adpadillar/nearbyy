@@ -30,9 +30,6 @@ importers:
 
   apps/nextjs:
     dependencies:
-      '@nearbyy/api':
-        specifier: workspace:^0.1.0
-        version: link:../../packages/api
       '@nearbyy/auth':
         specifier: workspace:^
         version: link:../../packages/auth
@@ -118,40 +115,6 @@ importers:
       tailwindcss:
         specifier: 3.3.5
         version: 3.3.5
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
-
-  packages/api:
-    dependencies:
-      '@trpc/client':
-        specifier: next
-        version: 11.0.0-next-alpha.132(@trpc/server@11.0.0-next-alpha.132)
-      '@trpc/server':
-        specifier: next
-        version: 11.0.0-next-alpha.132
-      superjson:
-        specifier: 2.2.1
-        version: 2.2.1
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
-    devDependencies:
-      '@nearbyy/eslint-config':
-        specifier: workspace:^0.2.0
-        version: link:../../tooling/eslint
-      '@nearbyy/prettier-config':
-        specifier: workspace:^0.1.0
-        version: link:../../tooling/prettier
-      '@nearbyy/tsconfig':
-        specifier: workspace:^0.1.0
-        version: link:../../tooling/typescript
-      eslint:
-        specifier: ^8.56.0
-        version: 8.56.0
-      prettier:
-        specifier: ^3.1.1
-        version: 3.1.1
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -278,27 +241,6 @@ importers:
       openai:
         specifier: ^4.24.0
         version: 4.24.1
-    devDependencies:
-      '@nearbyy/eslint-config':
-        specifier: workspace:^0.2.0
-        version: link:../../tooling/eslint
-      '@nearbyy/prettier-config':
-        specifier: workspace:^0.1.0
-        version: link:../../tooling/prettier
-      '@nearbyy/tsconfig':
-        specifier: workspace:^0.1.0
-        version: link:../../tooling/typescript
-      eslint:
-        specifier: ^8.56.0
-        version: 8.56.0
-      prettier:
-        specifier: ^3.1.1
-        version: 3.1.1
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
-
-  packages/test:
     devDependencies:
       '@nearbyy/eslint-config':
         specifier: workspace:^0.2.0
