@@ -14,7 +14,6 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@nearbyy/api": "workspace:^0.1.0",
     "@nearbyy/auth": "workspace:^",
     "@nearbyy/db": "workspace:^",
     "@nearbyy/embeddings": "workspace:^",
