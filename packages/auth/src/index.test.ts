@@ -7,7 +7,7 @@ import { generateKey, validateKey } from "./index";
 
 const projectid = randomBytes(4).toString("hex");
 
-describe("auth", () => {
+describe("key auth", () => {
   let key: string;
 
   it("should create a key", async () => {
@@ -19,6 +19,19 @@ describe("auth", () => {
     key = API_KEY;
   });
 
+  it("should have the correct format", () => {
+    const [project, bytes] = key.split(":");
+
+    expect(bytes).toBeDefined();
+    expect(project).toBeDefined();
+
+    expect(project).toBe(`project_${projectid}`);
+    expect(bytes).toBeTypeOf("string");
+
+    expect(bytes).toHaveLength(64);
+    expect(key).toHaveLength(64 + `project_${projectid}:`.length);
+  });
+
   it("should validate a key", async () => {
     const { projectid: p, valid } = await validateKey(key);
 
@@ -27,10 +40,12 @@ describe("auth", () => {
   });
 
   it("should not validate a key", async () => {
-    const { valid, projectid } = await validateKey("project_1234:1234");
+    const { valid, projectid: p } = await validateKey(
+      `project_${projectid}:false_key`,
+    );
 
     expect(valid).toBe(false);
-    expect(projectid).toBe(null);
+    expect(p).toBe(null);
   });
 });
 
