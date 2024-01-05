@@ -20,12 +20,14 @@ export const env = createEnv({
   server: {
     NEON_DIRECT_URL: z.string().min(1),
     OPENAI_KEY: z.string().min(1),
+    CLERK_SECRET_KEY: z.string().min(1),
   },
   /**
    * Specify your client-side environment variables schema here.
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
    */
   client: {
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
   /**
