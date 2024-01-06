@@ -4,6 +4,9 @@ import { getSingleEmbedding } from "@nearbyy/embeddings";
 
 import { apiTypes } from "../apiTypes";
 
+export const runtime = "edge";
+export const preferredRegion = "iad1";
+
 /**
  * POST `/api/files`
  *
