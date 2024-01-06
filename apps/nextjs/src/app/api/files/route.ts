@@ -2,7 +2,7 @@ import { withKeyAuth } from "@nearbyy/auth";
 import { db } from "@nearbyy/db";
 import { getSingleEmbedding } from "@nearbyy/embeddings";
 
-import { apiTypes } from "../apiTypes";
+import { apiFilesTypes } from "./types";
 
 export const runtime = "edge";
 export const preferredRegion = "iad1";
@@ -48,7 +48,7 @@ export const POST = withKeyAuth({
     // If the file is not supported
     return new Response("Unsupported file type", { status: 415 });
   },
-  validators: apiTypes["/files"].POST,
+  validators: apiFilesTypes.POST,
 });
 
 /**
@@ -89,5 +89,5 @@ export const GET = withKeyAuth({
       { status: 200 },
     );
   },
-  validators: apiTypes["/files"].GET,
+  validators: apiFilesTypes.GET,
 });

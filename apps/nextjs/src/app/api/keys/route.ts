@@ -1,6 +1,6 @@
 import { generateKey, withAuth } from "@nearbyy/auth";
 
-import { apiTypes } from "../apiTypes";
+import { apiKeyTypes } from "./types";
 
 export const runtime = "edge";
 export const preferredRegion = "iad1";
@@ -11,5 +11,5 @@ export const GET = withAuth({
 
     return { status: 200, body: { key: res } };
   },
-  validators: apiTypes["/keys"].GET,
+  validators: apiKeyTypes.GET,
 });

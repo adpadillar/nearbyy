@@ -3,7 +3,8 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { getFromApiRoute } from "~/utils/fetchApi";
+import { apiStatusTypes } from "~/app/api/status/types";
+import { typesafeFetch } from "~/utils/fetchApi";
 
 interface StatusButtonProps {
   children?: React.ReactNode;
@@ -12,12 +13,14 @@ interface StatusButtonProps {
 const StatusButton: React.FC<StatusButtonProps> = () => {
   const { data, mutate } = useMutation({
     mutationFn: async () => {
-      const { success, value, error } = await getFromApiRoute({
-        route: "/status",
+      const { success, data, error } = await typesafeFetch({
+        route: "/api/status",
+        method: "GET",
+        schema: apiStatusTypes.GET,
       });
 
       if (!success) throw error;
-      return value;
+      return data;
     },
   });
 

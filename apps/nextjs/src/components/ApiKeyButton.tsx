@@ -3,7 +3,8 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { getFromApiRoute } from "~/utils/fetchApi";
+import { apiKeyTypes } from "~/app/api/keys/types";
+import { typesafeFetch } from "~/utils/fetchApi";
 
 interface ApiKeyButtonProps {
   children?: React.ReactNode;
@@ -12,13 +13,15 @@ interface ApiKeyButtonProps {
 const ApiKeyButton: React.FC<ApiKeyButtonProps> = () => {
   const { data, mutate, isPending } = useMutation({
     mutationFn: async (projectid: string) => {
-      const { success, value, error } = await getFromApiRoute({
-        route: "/keys",
-        values: { params: { projectid } },
+      const { data, success, error } = await typesafeFetch({
+        route: "/api/keys",
+        method: "GET",
+        params: { projectid },
+        schema: apiKeyTypes.GET,
       });
 
       if (!success) throw error;
-      return value;
+      return data;
     },
   });
 
