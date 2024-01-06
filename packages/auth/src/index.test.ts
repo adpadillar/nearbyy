@@ -1,4 +1,6 @@
-import { randomBytes } from "crypto";
+// @vitest-environment edge-runtime
+
+import { randomBytes } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
 
 import { db } from "@nearbyy/db";
