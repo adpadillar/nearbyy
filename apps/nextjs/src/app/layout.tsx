@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import "~/styles/globals.css";
 
+import ReactQueryProvider from "~/components/ReactQueryProvider";
 import { env } from "~/env";
 
 const fontSans = Inter({
@@ -30,11 +31,13 @@ export const metadata: Metadata = {
 export default function Layout(props: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={["font-sans", fontSans.variable].join(" ")}>
-          {props.children}
-        </body>
-      </html>
+      <ReactQueryProvider>
+        <html lang="en">
+          <body className={["font-sans", fontSans.variable].join(" ")}>
+            {props.children}
+          </body>
+        </html>
+      </ReactQueryProvider>
     </ClerkProvider>
   );
 }

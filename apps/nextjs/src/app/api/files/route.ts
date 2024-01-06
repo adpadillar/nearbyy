@@ -1,8 +1,8 @@
-import { z } from "zod";
-
 import { withKeyAuth } from "@nearbyy/auth";
 import { db } from "@nearbyy/db";
 import { getSingleEmbedding } from "@nearbyy/embeddings";
+
+import { apiTypes } from "../apiTypes";
 
 /**
  * POST `/api/files`
@@ -45,11 +45,7 @@ export const POST = withKeyAuth({
     // If the file is not supported
     return new Response("Unsupported file type", { status: 415 });
   },
-  validators: {
-    body: z.object({
-      fileUrl: z.string().url(),
-    }),
-  },
+  validators: apiTypes["/files"].POST,
 });
 
 /**
@@ -90,10 +86,5 @@ export const GET = withKeyAuth({
       { status: 200 },
     );
   },
-  validators: {
-    params: z.object({
-      query: z.string(),
-      limit: z.coerce.number().lte(100).gt(0).int().default(10),
-    }),
-  },
+  validators: apiTypes["/files"].GET,
 });

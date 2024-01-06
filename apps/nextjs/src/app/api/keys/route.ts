@@ -1,25 +1,12 @@
-import { z } from "zod";
-
 import { generateKey, withAuth } from "@nearbyy/auth";
+
+import { apiTypes } from "../apiTypes";
 
 export const GET = withAuth({
   handler: async ({ params }) => {
     const res = await generateKey(params.projectid);
 
-    return new Response(
-      JSON.stringify({
-        key: res,
-      }),
-      {
-        headers: {
-          "content-type": "application/json",
-        },
-      },
-    );
+    return { status: 200, body: { key: res } };
   },
-  validators: {
-    params: z.object({
-      projectid: z.string(),
-    }),
-  },
+  validators: apiTypes["/keys"].GET,
 });

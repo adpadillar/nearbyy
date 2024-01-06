@@ -110,16 +110,17 @@ export const withKeyAuth = <T, U>(opts: {
   };
 };
 
-export const withAuth = <T, U>(opts: {
+export const withAuth = <T, U, V>(opts: {
   handler: (ctx: {
     req: NextRequest;
     body: T;
     params: U;
     auth: ReturnType<typeof auth>;
-  }) => Promise<Response> | Response;
+  }) => { status: number; body: V } | Promise<{ status: number; body: V }>;
   validators?: {
     body?: ZodSchema<T>;
     params?: ZodSchema<U>;
+    return?: ZodSchema<V>;
   };
 }) => {
   const { handler, validators } = opts;
@@ -166,11 +167,18 @@ export const withAuth = <T, U>(opts: {
       );
     }
 
-    return handler({
+    const value = await handler({
       body: (b ? b.data : null)!,
       params: (p ? p.data : null)!,
       req,
       auth: authCtx,
+    });
+
+    return new Response(JSON.stringify(value.body), {
+      status: value.status,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   };
 };
