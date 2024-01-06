@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { UserButton } from "@clerk/nextjs";
+import ApiKeyButton from "components/ApiKeyButton";
 
 export const runtime = "edge";
 export const preferredRegion = "iad1";
@@ -13,6 +14,7 @@ const TestPage: NextPage<TestPageProps> = () => {
     <div>
       <h1>This is a page</h1>
       <UserButton afterSignOutUrl="/" />
+      <ApiKeyButton />
     </div>
   );
 };
