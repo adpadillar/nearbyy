@@ -38,6 +38,9 @@ export const env = createEnv({
     PORT: process.env.PORT,
     NEON_DIRECT_URL: process.env.NEON_DIRECT_URL,
     OPENAI_KEY: process.env.OPENAI_KEY,
+    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:
