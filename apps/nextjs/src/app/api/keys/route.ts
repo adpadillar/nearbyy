@@ -1,14 +1,9 @@
-import { z } from "zod";
-
 import { generateKey, withAuth } from "@nearbyy/auth";
+
+import { getSchema } from "./schema";
 
 export const runtime = "edge";
 export const preferredRegion = "iad1";
-
-export const getSchema = {
-  params: z.object({ projectid: z.string() }),
-  return: z.object({ key: z.string() }),
-};
 
 export const GET = withAuth({
   handler: async ({ params }) => {

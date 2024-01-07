@@ -3,7 +3,7 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { getSchema } from "~/app/api/status/route";
+import { getSchema } from "~/app/api/status/schema";
 import { typesafeFetch } from "~/utils/fetchApi";
 
 interface StatusButtonProps {

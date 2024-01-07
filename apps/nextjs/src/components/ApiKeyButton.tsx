@@ -3,7 +3,7 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { getSchema } from "~/app/api/keys/route";
+import { getSchema } from "~/app/api/keys/schema";
 import { typesafeFetch } from "~/utils/fetchApi";
 
 interface ApiKeyButtonProps {

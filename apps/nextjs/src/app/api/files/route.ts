@@ -1,17 +1,11 @@
-import { z } from "zod";
-
 import { withKeyAuth } from "@nearbyy/auth";
 import { db } from "@nearbyy/db";
 import { getSingleEmbedding } from "@nearbyy/embeddings";
 
+import { getSchema, postSchema } from "./schema";
+
 export const runtime = "edge";
 export const preferredRegion = "iad1";
-
-export const postSchema = {
-  body: z.object({
-    fileUrl: z.string(),
-  }),
-};
 
 export const POST = withKeyAuth({
   handler: async ({ body, projectid }) => {
@@ -49,25 +43,6 @@ export const POST = withKeyAuth({
   },
   schema: postSchema,
 });
-
-export const getSchema = {
-  params: z.object({
-    limit: z.coerce.number().gt(0).lte(100).int().default(10),
-    query: z.string(),
-  }),
-  response: z.array(
-    z.object({
-      id: z.number(),
-      text: z.string(),
-      type: z.string(),
-      url: z.string(),
-      _extras: z.object({
-        distance: z.number().optional(),
-        projectid: z.string(),
-      }),
-    }),
-  ),
-};
 
 export const GET = withKeyAuth({
   handler: async ({ params }) => {
