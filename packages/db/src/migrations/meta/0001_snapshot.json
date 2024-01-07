@@ -1,6 +1,6 @@
 {
-  "id": "5d899bd5-a572-4b32-b7e2-704e51107c12",
-  "prevId": "7fc8cae1-ca73-4454-95c1-5df417daa09f",
+  "id": "b2c9228c-f2d4-47e3-bafe-5c1850344a73",
+  "prevId": "673a1098-57c0-426e-a766-2d4ad37eba13",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -18,31 +18,65 @@
           "name": "text",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "url": {
           "name": "url",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "projectid": {
           "name": "projectid",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "type": {
           "name": "type",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "embedding": {
           "name": "embedding",
-          "type": "numeric[1536]",
+          "type": "double precision[1536]",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "keys": {
+      "name": "keys",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "salt": {
+          "name": "salt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "projectid": {
+          "name": "projectid",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},

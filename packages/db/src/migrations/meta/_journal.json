@@ -5,43 +5,15 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1703029709487,
-      "tag": "0000_great_dust",
+      "when": 1704668317322,
+      "tag": "0000_curly_sugar_man",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "5",
-      "when": 1703103706909,
-      "tag": "0001_parched_tarot",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1703292169065,
-      "tag": "0002_fresh_rachel_grey",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1703293463247,
-      "tag": "0003_calm_dorian_gray",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1703298034442,
-      "tag": "0004_fine_swarm",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1704662921386,
-      "tag": "0005_dashing_maestro",
+      "when": 1704668339451,
+      "tag": "0001_curious_terror",
       "breakpoints": true
     }
   ]
