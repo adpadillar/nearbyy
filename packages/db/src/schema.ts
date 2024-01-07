@@ -1,18 +1,12 @@
-// IMPORTANT:
-// This file and validators.ts must be kept in sync
-// If you add a new table, you must also add it's schema there
-// This is because types are inferred from these files,
-// if you don't keep them in sync, you'll get type errors
-
-import { numeric, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { doublePrecision, pgTable, serial, text } from "drizzle-orm/pg-core";
 
 export const files = pgTable("files", {
-  id: serial("id").primaryKey(),
-  text: text("text"),
-  url: text("url"),
-  projectid: text("projectid"),
-  type: text("type"),
-  embedding: numeric("embedding").array(1536),
+  id: serial("id").notNull().primaryKey(),
+  text: text("text").notNull(),
+  url: text("url").notNull(),
+  projectid: text("projectid").notNull(),
+  type: text("type").notNull(),
+  embedding: doublePrecision("embedding").array(1536).notNull(),
 });
 
 export const keys = pgTable("keys", {
