@@ -1,19 +1,18 @@
+import { z } from "zod";
+
 import { withKeyAuth } from "@nearbyy/auth";
 import { db } from "@nearbyy/db";
 import { getSingleEmbedding } from "@nearbyy/embeddings";
 
-import { apiFilesTypes } from "./types";
-
 export const runtime = "edge";
 export const preferredRegion = "iad1";
 
-/**
- * POST `/api/files`
- *
- * This endpoint takes a URL to a file, extracts the text from it, and stores it
- * in the vector database. It will return a 200 if the file was successfully stored
- * or a 415 if the file type is not supported
- */
+export const postSchema = {
+  body: z.object({
+    fileUrl: z.string(),
+  }),
+};
+
 export const POST = withKeyAuth({
   handler: async ({ body, projectid }) => {
     // We download the file from the URL
@@ -30,40 +29,56 @@ export const POST = withKeyAuth({
       const { embedding, success } = await getSingleEmbedding(text);
 
       if (!success) {
-        return new Response("Failed to generate embedding", { status: 500 });
+        return { status: 500, body: null };
       }
 
       // Insert the file into the database
       await db.drizzle.insert(db.schema.files).values({
-        embedding: embedding.map((x) => `${x}`),
+        embedding: embedding,
         projectid,
         text,
         type: "markdown",
         url: body.fileUrl,
       });
 
-      return new Response("OK", { status: 200 });
+      return { status: 200, body: null };
     }
 
     // If the file is not supported
-    return new Response("Unsupported file type", { status: 415 });
+    return { status: 415, body: null };
   },
-  validators: apiFilesTypes.POST,
+  schema: postSchema,
 });
 
-/**
- * GET `/api/files`
- *
- * This endpoint takes a query and returns the most similar files to that query
- * in the vector database
- */
+export const getSchema = {
+  params: z.object({
+    limit: z.coerce.number().gt(0).lte(100).int().default(10),
+    query: z.string(),
+  }),
+  response: z.array(
+    z.object({
+      id: z.number(),
+      text: z.string(),
+      type: z.string(),
+      url: z.string(),
+      _extras: z.object({
+        distance: z.number().optional(),
+        projectid: z.string(),
+      }),
+    }),
+  ),
+};
+
 export const GET = withKeyAuth({
   handler: async ({ params }) => {
     // Get the embedding of the query
     const { embedding, success } = await getSingleEmbedding(params.query);
 
     if (!success) {
-      return new Response("Failed to generate embedding", { status: 500 });
+      return {
+        status: 500,
+        body: [],
+      };
     }
 
     // Get the files that are similar to the embedding
@@ -74,20 +89,21 @@ export const GET = withKeyAuth({
       params.limit,
     );
 
-    // Remove the embedding from the response
-    return new Response(
-      JSON.stringify(
-        files.map((file) => ({
-          ...file,
-          embedding: undefined,
-          distance: undefined,
+    return {
+      status: 200,
+      body: files.map((file) => {
+        return {
+          id: file.id!,
+          text: file.text,
+          type: file.type,
+          url: file.url,
           _extras: {
             distance: file.distance,
+            projectid: file.projectid,
           },
-        })),
-      ),
-      { status: 200 },
-    );
+        };
+      }),
+    };
   },
-  validators: apiFilesTypes.GET,
+  schema: getSchema,
 });

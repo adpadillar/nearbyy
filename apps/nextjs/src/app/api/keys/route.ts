@@ -1,15 +1,20 @@
-import { generateKey, withAuth } from "@nearbyy/auth";
+import { z } from "zod";
 
-import { apiKeyTypes } from "./types";
+import { generateKey, withAuth } from "@nearbyy/auth";
 
 export const runtime = "edge";
 export const preferredRegion = "iad1";
 
+export const getSchema = {
+  params: z.object({ projectid: z.string() }),
+  return: z.object({ key: z.string() }),
+};
+
 export const GET = withAuth({
   handler: async ({ params }) => {
-    const res = await generateKey(params.projectid);
+    const key = await generateKey(params.projectid);
 
-    return { status: 200, body: { key: res } };
+    return { status: 200, body: { key } };
   },
-  validators: apiKeyTypes.GET,
+  schema: getSchema,
 });

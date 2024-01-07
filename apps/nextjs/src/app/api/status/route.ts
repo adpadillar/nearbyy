@@ -1,13 +1,19 @@
-import { withAuth } from "@nearbyy/auth";
+import { z } from "zod";
 
-import { apiStatusTypes } from "./types";
+import { withAuth } from "@nearbyy/auth";
 
 export const runtime = "edge";
 export const preferredRegion = "iad1";
 
+export const getSchema = {
+  return: z.object({
+    userid: z.string(),
+  }),
+};
+
 export const GET = withAuth({
   handler: async ({ auth }) => {
-    return { status: 200, body: { userid: auth.userId } };
+    return { status: 200, body: { userid: auth.userId ?? "" } };
   },
-  validators: apiStatusTypes.GET,
+  schema: getSchema,
 });
