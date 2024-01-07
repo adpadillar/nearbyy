@@ -3,7 +3,7 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { apiStatusTypes } from "~/app/api/status/types";
+import { getSchema } from "~/app/api/status/route";
 import { typesafeFetch } from "~/utils/fetchApi";
 
 interface StatusButtonProps {
@@ -16,7 +16,7 @@ const StatusButton: React.FC<StatusButtonProps> = () => {
       const { success, data, error } = await typesafeFetch({
         route: "/api/status",
         method: "GET",
-        schema: apiStatusTypes.GET,
+        schema: getSchema,
       });
 
       if (!success) throw error;

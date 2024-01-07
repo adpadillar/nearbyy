@@ -3,7 +3,7 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { apiKeyTypes } from "~/app/api/keys/types";
+import { getSchema } from "~/app/api/keys/route";
 import { typesafeFetch } from "~/utils/fetchApi";
 
 interface ApiKeyButtonProps {
@@ -17,7 +17,7 @@ const ApiKeyButton: React.FC<ApiKeyButtonProps> = () => {
         route: "/api/keys",
         method: "GET",
         params: { projectid },
-        schema: apiKeyTypes.GET,
+        schema: getSchema,
       });
 
       if (!success) throw error;
