@@ -17,21 +17,21 @@ export const withAuth = <
   }) =>
     | { status: number; body: z.infer<ResponseSchema> }
     | Promise<{ status: number; body: z.infer<ResponseSchema> }>;
-  validators?: {
+  schema?: {
     body?: BodySchema;
     params?: ParamsSchema;
     return?: ResponseSchema;
   };
 }) => {
-  const { handler, validators } = opts;
+  const { handler, schema } = opts;
 
   return async (req: NextRequest) => {
-    if (validators) {
+    if (schema) {
       let body: z.infer<BodySchema> = null;
-      if (validators.body) {
+      if (schema.body) {
         try {
           body = (await req.json()) as unknown;
-          validators.body.parse(body);
+          schema.body.parse(body);
         } catch (e) {
           return new Response(
             `Bad request\nBody was missing or in the wrong format`,
@@ -41,9 +41,9 @@ export const withAuth = <
       }
 
       let params: z.infer<ParamsSchema> = null;
-      if (validators.params) {
+      if (schema.params) {
         const paramsObject = paramsToObject(req.nextUrl.searchParams);
-        const parsedParams = validators.params.safeParse(paramsObject);
+        const parsedParams = schema.params.safeParse(paramsObject);
 
         if (!parsedParams.success) {
           return new Response(`Bad request\n${parsedParams.error.message}`, {
