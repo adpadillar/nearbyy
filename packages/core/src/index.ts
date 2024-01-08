@@ -4,7 +4,7 @@ export class NearbyyClient {
   API_KEY: string;
   API_URL: string;
 
-  constructor(private options: { API_KEY: string }) {
+  constructor(options: { API_KEY: string }) {
     this.API_KEY = options.API_KEY;
     this.API_URL = "https://nearbyy.com/api";
   }
