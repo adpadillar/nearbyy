@@ -9,9 +9,9 @@ export const preferredRegion = "iad1";
 
 export default async function HomePage() {
   return (
-    <main>
+    <main className="font-sans">
       <div className="flex h-screen flex-col items-center justify-center">
-        <div className="absolute z-50 flex flex-col items-center justify-center space-y-12">
+        <div className="absolute z-40 flex flex-col items-center justify-center space-y-12">
           <div className="flex flex-col items-center justify-center space-y-8">
             <h1 className="max-w-4xl text-center text-7xl font-bold text-white">
               AI Context Made Simple: Upload, Search, Access

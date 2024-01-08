@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 
 import "~/styles/globals.css";
 
+import Navigation from "~/components/Navigation";
 import ReactQueryProvider from "~/components/ReactQueryProvider";
 import { env } from "~/env";
-
-const fontSans = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -34,11 +31,9 @@ export default function Layout(props: { children: React.ReactNode }) {
       <ReactQueryProvider>
         <html lang="en">
           <body
-            className={
-              ["font-sans", fontSans.variable].join(" ") +
-              "min-h-screen  bg-[#1C1C1C]"
-            }
+            className={`min-h-screen bg-[#1C1C1C] ${GeistSans.variable} ${GeistMono.variable}`}
           >
+            <Navigation />
             {props.children}
           </body>
         </html>

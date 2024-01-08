@@ -6,6 +6,18 @@ interface SideBlobProps extends React.SVGProps<SVGSVGElement> {
   children?: React.ReactNode;
 }
 
+export const Box = (): JSX.Element => {
+  return (
+    <div className="h-[3647px] w-[3222px]">
+      <img
+        className="fixed left-0 top-0 h-[2678px] w-[1900px]"
+        alt="Group"
+        src="group-12.png"
+      />
+    </div>
+  );
+};
+
 const SideBlob: React.FC<SideBlobProps> = (props) => {
   return (
     <svg
