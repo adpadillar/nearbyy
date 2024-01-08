@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
 import "~/styles/globals.css";
 
-import Navigation from "~/components/Navigation";
 import ReactQueryProvider from "~/components/ReactQueryProvider";
 import { env } from "~/env";
 
@@ -30,10 +28,7 @@ export default function Layout(props: { children: React.ReactNode }) {
     <ClerkProvider>
       <ReactQueryProvider>
         <html lang="en">
-          <body
-            className={`min-h-screen bg-[#1C1C1C] ${GeistSans.variable} ${GeistMono.variable}`}
-          >
-            <Navigation />
+          <body className={`min-h-screen bg-[#1C1C1C] ${GeistSans.className}`}>
             {props.children}
           </body>
         </html>

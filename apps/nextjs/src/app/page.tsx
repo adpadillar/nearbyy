@@ -1,7 +1,6 @@
-// import { UserButton } from "@clerk/nextjs";
-
 import Link from "next/link";
 
+import Navigation from "~/components/Navigation";
 import SideBlob from "~/components/SideBlob";
 
 export const runtime = "edge";
@@ -9,7 +8,8 @@ export const preferredRegion = "iad1";
 
 export default async function HomePage() {
   return (
-    <main className="font-sans">
+    <main>
+      <Navigation />
       <div className="flex h-screen flex-col items-center justify-center">
         <div className="absolute z-40 flex flex-col items-center justify-center space-y-12">
           <div className="flex flex-col items-center justify-center space-y-8">
