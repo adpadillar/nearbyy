@@ -1,29 +1,38 @@
 import type { FileSearchClientResponse } from "./types";
 
-const API_URL = "https://nearbyy.com/api";
+export class NearbyyClient {
+  API_KEY: string;
+  API_URL: string;
 
-const uploadFile = async (fileUrl: string, projectId: string) => {
-  await fetch(`${API_URL}/files`, {
-    headers: {
-      Authorization: `Bearer ${projectId}`,
-    },
-    method: "POST",
-    body: JSON.stringify({
-      fileUrl,
-    }),
-  });
-};
+  constructor(private options: { API_KEY: string }) {
+    this.API_KEY = options.API_KEY;
+    this.API_URL = "https://nearbyy.com/api";
+  }
 
-const queryDatabase = async (query: string, API_KEY: string) => {
-  const res = await fetch(`${API_URL}/files?query=${query}`, {
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-    },
-  });
+  async uploadFile({ fileUrl }: { fileUrl: string }) {
+    await fetch(`${this.API_URL}/files`, {
+      headers: {
+        Authorization: `Bearer ${this.API_KEY}`,
+      },
+      method: "POST",
+      body: JSON.stringify({
+        fileUrl,
+      }),
+    });
+  }
 
-  const data = (await res.json()) as unknown as FileSearchClientResponse[];
+  async queryDatabase({ query, limit }: { query: string; limit?: number }) {
+    const res = await fetch(
+      `${this.API_URL}/files?query=${query}&limit=${limit ?? 10}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.API_KEY}`,
+        },
+      },
+    );
 
-  return data;
-};
+    const data = (await res.json()) as unknown as FileSearchClientResponse[];
 
-export { uploadFile, queryDatabase };
+    return data;
+  }
+}

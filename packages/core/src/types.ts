@@ -1,10 +1,10 @@
 export interface FileSearchClientResponse {
-  type: string;
   id: number;
   text: string;
+  type: string;
   url: string;
-  projectid: string;
   _extras: {
-    distance: number;
+    distance?: number;
+    projectid: string;
   };
 }
