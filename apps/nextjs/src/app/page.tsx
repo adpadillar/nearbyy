@@ -18,7 +18,7 @@ export default async function HomePage() {
             </h1>
 
             <p className="text-xl font-light text-[#F2F6FA] opacity-80">
-              Astro powers the world&apos;s fastest websites, client-side web
+              Extend your AI model capabilities with a simple API call
             </p>
           </div>
 
