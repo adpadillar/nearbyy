@@ -6,6 +6,7 @@ const publicApiRoutes = ["/api/status", "/api/files", "/api/keys"];
 
 // Public Routes: Means we call the middleware, but we still allow anonymous access
 // Ignored Routes: Means we don't call the middleware at all
+console.log("middleware called");
 export default authMiddleware({
   publicRoutes: ["/", ...publicApiRoutes],
   ignoredRoutes: [],
@@ -19,6 +20,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!brand|_next/static|_next/image|favicon.ico).*)",
   ],
 };
