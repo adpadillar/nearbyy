@@ -33,7 +33,12 @@ export default function Layout(props: { children: React.ReactNode }) {
     <ClerkProvider>
       <ReactQueryProvider>
         <html lang="en">
-          <body className={["font-sans", fontSans.variable].join(" ")}>
+          <body
+            className={
+              ["font-sans", fontSans.variable].join(" ") +
+              "min-h-screen  bg-[#1C1C1C]"
+            }
+          >
             {props.children}
           </body>
         </html>
