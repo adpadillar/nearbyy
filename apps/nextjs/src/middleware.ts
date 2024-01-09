@@ -2,7 +2,7 @@ import { authMiddleware } from "@clerk/nextjs";
 
 // We want to call authMiddleware with the public routes, so we
 // can call auth() on each of them.
-const publicApiRoutes = ["/:api*"];
+const publicApiRoutes = ["/api/:name*"];
 
 // Public Routes: Means we call the middleware, but we still allow anonymous access
 // Ignored Routes: Means we don't call the middleware at all

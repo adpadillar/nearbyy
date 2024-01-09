@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import { getSchema } from "~/app/api/keys/generate/schema";
 import { typesafeFetch } from "~/utils/fetchApi";
+import { queryClient } from "./ReactQueryProvider";
 
 interface ApiKeyButtonProps {
   children?: React.ReactNode;
@@ -22,6 +23,11 @@ const ApiKeyButton: React.FC<ApiKeyButtonProps> = () => {
 
       if (!success) throw error;
       return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["api-keys"],
+      });
     },
   });
 

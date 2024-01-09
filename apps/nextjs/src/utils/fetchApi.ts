@@ -19,7 +19,7 @@ export const typesafeFetch = async <
   Return,
 >(opts: {
   route: `/api/${string}`;
-  method: "GET" | "POST";
+  method: "GET" | "POST" | "DELETE";
   params?: Params;
   body?: Body;
   schema: {
