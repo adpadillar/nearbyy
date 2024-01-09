@@ -3,7 +3,7 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { getSchema } from "~/app/api/keys/schema";
+import { getSchema } from "~/app/api/keys/generate/schema";
 import { typesafeFetch } from "~/utils/fetchApi";
 
 interface ApiKeyButtonProps {
@@ -14,7 +14,7 @@ const ApiKeyButton: React.FC<ApiKeyButtonProps> = () => {
   const { data, mutate, isPending } = useMutation({
     mutationFn: async (projectid: string) => {
       const { data, success, error } = await typesafeFetch({
-        route: "/api/keys",
+        route: "/api/keys/generate",
         method: "GET",
         params: { projectid },
         schema: getSchema,
