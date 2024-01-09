@@ -60,7 +60,7 @@ export const validateKey = async (key: string) => {
  * @param projectid
  * @returns
  */
-export const generateKey = async (projectid: string) => {
+export const generateKey = async (projectid: string, userid: string) => {
   const bytes = crypto.getRandomValues(new Uint8Array(32));
   const API_KEY = Buffer.from(bytes).toString("hex");
 
@@ -71,6 +71,7 @@ export const generateKey = async (projectid: string) => {
     key: hashedKey,
     salt,
     projectid,
+    userid,
   });
 
   return `project_${projectid}:${API_KEY}` as const;
