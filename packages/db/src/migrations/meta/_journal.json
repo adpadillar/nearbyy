@@ -15,6 +15,13 @@
       "when": 1704668339451,
       "tag": "0001_curious_terror",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1704757943345,
+      "tag": "0002_confused_echo",
+      "breakpoints": true
     }
   ]
 }

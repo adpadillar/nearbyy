@@ -14,4 +14,5 @@ export const keys = pgTable("keys", {
   key: text("key").notNull(),
   salt: text("salt").notNull(),
   projectid: text("projectid").notNull(),
+  userid: text("userid").notNull(),
 });
