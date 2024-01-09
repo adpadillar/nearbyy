@@ -3,6 +3,7 @@ import { UserButton } from "@clerk/nextjs";
 import { GeistSans } from "geist/font/sans";
 
 import ApiKeyButton from "~/components/ApiKeyButton";
+import CurrentApiKeys from "~/components/CurrentApiKeys";
 import StatusButton from "~/components/StatusButton";
 
 export const runtime = "edge";
@@ -24,6 +25,8 @@ const TestPage: NextPage<TestPageProps> = () => {
           },
         }}
       />
+
+      <CurrentApiKeys />
 
       <ApiKeyButton />
       <StatusButton />
