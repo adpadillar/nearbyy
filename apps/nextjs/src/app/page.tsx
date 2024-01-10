@@ -9,7 +9,7 @@ export default async function HomePage() {
     <main>
       <Navigation />
       <div className="flex min-h-[80vh] items-center justify-center">
-        <h1 className="max-w-4xl text-center text-6xl font-extrabold leading-relaxed text-white">
+        <h1 className="max-w-4xl text-center text-[65px] font-extrabold leading-[5rem] tracking-[0.0005px] text-white">
           AI Context Made Simple: Upload, Search, Access
         </h1>
       </div>
