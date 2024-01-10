@@ -5,20 +5,16 @@ export const runtime = "edge";
 export const preferredRegion = "iad1";
 
 export default async function HomePage() {
-  // db
-
   return (
     <main>
       <Navigation />
-      <div
-      // className="flex min-h-screen w-screen flex-col items-center justify-center"
-      // style={{
-      //   backgroundImage: `url(/brand/pattern.svg)`,
-      //   backgroundSize: "cover",
-      //   backgroundPosition: "center",
-      // }}
-      >
-        <SideBlob className="absolute right-0" />
+      <div className="pt-20">
+        <h1 className="text-center text-2xl text-white">
+          AI Context Made Simple: Upload, Search, Access
+        </h1>
+
+        <SideBlob side="right" className="absolute right-0" />
+        <SideBlob side="left" className="absolute -bottom-40 left-0" />
       </div>
     </main>
   );
