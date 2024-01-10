@@ -28,6 +28,9 @@ export default function Layout(props: { children: React.ReactNode }) {
     <ClerkProvider>
       <ReactQueryProvider>
         <html lang="en">
+          <head>
+            <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+          </head>
           <body className={`min-h-screen bg-[#1C1C1C] ${GeistSans.className}`}>
             {props.children}
           </body>
