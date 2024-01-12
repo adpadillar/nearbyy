@@ -8,9 +8,14 @@ interface ShikiProps
   code: string;
   lang: Lang;
   theme: Theme;
-  className: string;
+  className?: string;
 }
 
+/**
+ *
+ * **THIS SERVER COMPONENT HAS TO RUN IN NODE.JS. Edge runtime is not supported.**
+ * @returns
+ */
 export default async function Shiki({
   code,
   lang,
@@ -23,9 +28,6 @@ export default async function Shiki({
     lang,
     theme,
   });
-
-  // log the first 10 characters of the html
-  console.log(html.slice(0, 50));
 
   return (
     <div

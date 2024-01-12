@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* Code highlighting */
+  --shiki-color-text: azure;
+  --shiki-color-background: black;
+  --shiki-token-constant: plum;
+  --shiki-token-string: orchid;
+  --shiki-token-comment: salmon;
+  --shiki-token-keyword: powderblue;
+  --shiki-token-parameter: seashell;
+  --shiki-token-function: dodgerblue;
+  --shiki-token-string-expression: burlywood;
+  --shiki-token-punctuation: linen;
+  --shiki-token-link: honeydew;
+}
