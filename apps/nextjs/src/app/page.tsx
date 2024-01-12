@@ -32,8 +32,14 @@ export default async function HomePage() {
           </pre>
         </div>
       </div>
-      <SideBlob side="right" className="absolute right-0 top-0" />
-      <SideBlob side="left" className="absolute -bottom-40 left-0" />
+      <SideBlob
+        side="right"
+        className="pointer-events-none absolute right-0 top-0"
+      />
+      <SideBlob
+        side="left"
+        className="pointer-events-none absolute -bottom-40 left-0"
+      />
     </main>
   );
 }
