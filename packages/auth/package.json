@@ -34,7 +34,7 @@
   },
   "prettier": "@nearbyy/prettier-config",
   "dependencies": {
-    "@clerk/nextjs": "^4.29.1",
+    "@clerk/nextjs": "^4.29.3",
     "@nearbyy/db": "workspace:^",
     "bcrypt-edge": "^0.0.3",
     "bcryptjs": "^2.4.3",
