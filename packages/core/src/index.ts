@@ -4,9 +4,9 @@ export class NearbyyClient {
   API_KEY: string;
   API_URL: string;
 
-  constructor(options: { API_KEY: string }) {
+  constructor(options: { API_KEY: string; API_URL?: string }) {
     this.API_KEY = options.API_KEY;
-    this.API_URL = "https://nearbyy.com/api";
+    this.API_URL = options.API_URL ?? "https://nearbyy.com/api";
   }
 
   async uploadFile({ fileUrl }: { fileUrl: string }) {

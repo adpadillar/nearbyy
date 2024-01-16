@@ -45,6 +45,7 @@ export const db = {
       tablename: T,
       fieldname: keyof (typeof schema)[T],
       embedding: number[],
+      projectid: string,
       limit = 10,
     ) => {
       const table = schema[tablename];
@@ -54,7 +55,7 @@ export const db = {
 
       const statement = sql`SELECT ${table}.*, ${field}::vector(1536) <=> '[${sql.raw(
         embeddings,
-      )}]' AS distance FROM ${table} ORDER BY distance LIMIT ${limit};`;
+      )}]' AS distance FROM ${table} WHERE projectid = ${projectid} ORDER BY distance LIMIT ${limit};`;
 
       const res = await client.execute(statement);
 

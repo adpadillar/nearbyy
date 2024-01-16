@@ -45,7 +45,7 @@ export const POST = withKeyAuth({
 });
 
 export const GET = withKeyAuth({
-  handler: async ({ params }) => {
+  handler: async ({ params, projectid }) => {
     // Get the embedding of the query
     const { embedding, success } = await getSingleEmbedding(params.query);
 
@@ -61,6 +61,7 @@ export const GET = withKeyAuth({
       "files",
       "embedding",
       embedding,
+      projectid,
       params.limit,
     );
 
