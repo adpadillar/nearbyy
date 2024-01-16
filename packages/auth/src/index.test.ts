@@ -13,7 +13,7 @@ describe("key auth", () => {
   let key: string;
 
   it("should create a key", async () => {
-    const API_KEY = await generateKey(projectid);
+    const API_KEY = await generateKey(projectid, "random-user-id");
 
     expect(API_KEY).toBeDefined();
     expect(API_KEY).toBeTypeOf("string");
