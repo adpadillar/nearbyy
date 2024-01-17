@@ -16,6 +16,10 @@ export default defineConfig({
           label: "Guides",
           autogenerate: { directory: "guides" },
         },
+        {
+          label: "Typescript SDK",
+          autogenerate: { directory: "typescript-sdk" },
+        },
       ],
     }),
   ],
