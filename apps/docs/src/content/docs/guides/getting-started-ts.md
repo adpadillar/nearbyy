@@ -1,6 +1,8 @@
 ---
 title: Getting Started with Typescript
 description: Setting up your first project with Nearbyy
+sidebar:
+  order: 1
 ---
 
 In this guide, you will be setting up your first Nearbyy project in Typescript. Make sure you have an account on [Nearbyy](https://nearbyy.com) before you begin.
@@ -58,9 +60,9 @@ Note that if you don't pass your API key, the client will try to use `process.en
 
 To upload a file, use the `uploadFile` method of the client. The `uploadFile` method takes a the `string fileUrl` of the file to be uploaded.
 
-```typescript title="example.ts" ""https://example.com/markdown-file.md""
+```typescript title="example.ts" ""https://example.com/garlic-properties.md""
 await client.uploadFile({
-  fileUrl: "https://example.com/markdown-file.md",
+  fileUrl: "https://example.com/garlic-properties.md", // Replace with your file URL
 });
 ```
 
@@ -78,3 +80,66 @@ Different file types are supported by Nearbyy. Our backend service will look at 
 
 :::tip[Your file type is not supported?]
 We plan to aggressively expand the list of supported file types. If you want to request support for a file type, please [contact us](https://nearbyy.com/contact).
+:::
+
+### Semantic Search
+
+Once you have uploaded a file, you can search for it using the `queryDatabase` method of the client. The `search` method takes a `string query` and returns `Promise<FileSearchClientResponse[]>`. We can also provide a `number limit` to limit the number of results returned. The default value of `limit` is `10`.
+
+```typescript title="example.ts" ""What are the benefits of eating garlic?""
+const files = await client.queryDatabase({
+  query: "What are the benefits of eating garlic?", // Replace with your query
+  limit: 5,
+});
+```
+
+The `FileSearchClientResponse` type is defined as follows:
+
+```typescript
+interface FileSearchClientResponse {
+  id: number;
+  text: string;
+  type: string;
+  url: string;
+  _extras: {
+    distance?: number; // The distance between the query and the result
+    projectid: string; // The ID of the project
+  };
+}
+```
+
+## Full example with GPT-4
+
+Once you have the results, you can feed them to your favorite LLM to generate text. This is a simple example using GPT-4:
+
+```typescript title="gpt.ts"
+import OpenAI from "openai";
+
+import { NearbyyClient } from "@nearbyy/core";
+
+const nearbyy = new NearbyyClient();
+const openai = new OpenAI();
+
+const question = "What are the benefits of eating garlic?";
+
+const files = await nearbyy.queryDatabase({
+  query: question,
+});
+
+const context = files.map((file) => file.text).join("\n\n");
+
+const prompt = `The following is context retrieved from a knowledge 
+base with all of the relevant information to answer a user's question. 
+Please ONLY use the context below to answer the question. Do not use
+any other information.\n\n${context}\n\nQ: ${question}\nA:`;
+
+const completion = await openai.chat.completions.create({
+  messages: [
+    { role: "system", content: prompt },
+    { role: "user", content: question },
+  ],
+  model: "gpt-4",
+});
+
+console.log(completion.choices[0]);
+```

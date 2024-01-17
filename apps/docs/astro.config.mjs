@@ -6,29 +6,18 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Nearbyy Docs",
-
       sidebar: [
         {
           label: "Guides",
-          items: [
-            { label: "Getting Started", link: "/guides/getting-started/" },
-          ],
+          autogenerate: { directory: "guides" },
         },
       ],
-
-      // sidebar: [
-      //   {
-      //     label: "Guides",
-      //     items: [
-      //       // Each item here is one entry in the navigation menu.
-      //       { label: "Example Guide", link: "/guides/example/" },
-      //     ],
-      //   },
-      //   {
-      //     label: "Reference",
-      //     autogenerate: { directory: "reference" },
-      //   },
-      // ],
     }),
   ],
+  redirects: {
+    "/": {
+      destination: "/guides/introduction",
+      status: 302,
+    },
+  },
 });
