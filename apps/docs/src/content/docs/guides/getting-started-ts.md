@@ -5,6 +5,10 @@ sidebar:
   order: 1
 ---
 
+:::caution[Nearbyy is currently in ALPHA]
+Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, please contact us.
+:::
+
 In this guide, you will be setting up your first Nearbyy project in Typescript. Make sure you have an account on [Nearbyy](https://nearbyy.com) before you begin.
 
 ## Creating a new project
