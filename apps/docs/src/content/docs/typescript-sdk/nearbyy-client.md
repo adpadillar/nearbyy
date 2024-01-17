@@ -2,8 +2,12 @@
 title: NearbyyClient
 description: NearbyyClient class reference
 sidebar:
-  order: 1
+  order: 2
 ---
+
+:::caution[Nearbyy is currently in ALPHA]
+Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, please contact us.
+:::
 
 The NearbyyClient class is the main class of the Nearbyy SDK. It is used to upload and retrieve files from the Nearbyy platform.
 
@@ -55,17 +59,6 @@ interface QueryDatabaseOptions {
   limit?: number;
 }
 
-interface FileSearchClientResponse {
-  id: number;
-  text: string;
-  type: string;
-  url: string;
-  _extras: {
-    distance: number;
-    projectid: string;
-  };
-}
-
 async queryDatabase(options: QueryDatabaseOptions): Promise<FileSearchClientResponse[]>
 ```
 
@@ -77,4 +70,4 @@ async queryDatabase(options: QueryDatabaseOptions): Promise<FileSearchClientResp
 
 #### Return value
 
-An array of `FileSearchClientResponse` objects.
+[`FileSearchClientResponse[]`](./file-search-client-response)

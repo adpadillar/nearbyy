@@ -42,7 +42,7 @@ To perform a semantic search, you need to send a `GET` request to the `/api/file
 - `query`: The query to search for.
 - `limit?`: The maximum number of results to return. (_between 1 and 100, default is 10_)
 
-If the request is successful, you will receive a `200` http status code. The response body will be a JSON object with the following fields:
+If the request is successful, you will receive a `200` http status code. The response body will be a JSON object of type [`FileSearchClientResponse[]`](../../typescript-sdk/file-search-client-response) with the following fields:
 
 ```json title="Response body"
 [

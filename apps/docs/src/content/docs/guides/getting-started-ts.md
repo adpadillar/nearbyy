@@ -48,7 +48,7 @@ NEARBYY_API_KEY=YOUR_API_KEY
 
 ## Creating a client
 
-To create a client, import the `NearbyyClient` class from the`@nearbyy/core` package and pass your API key to the constructor like shown below:
+To create a client, import the [`NearbyyClient`](../../typescript-sdk/nearbyy-client) class from the`@nearbyy/core` package and pass your API key to the constructor like shown below:
 
 ```typescript ""YOUR_API_KEY"" title="example.ts"
 import { NearbyyClient } from "@nearbyy/core";
@@ -62,7 +62,7 @@ Note that if you don't pass your API key, the client will try to use `process.en
 
 ### Uploading a file
 
-To upload a file, use the `uploadFile` method of the client. The `uploadFile` method takes a the `string fileUrl` of the file to be uploaded.
+To upload a file, use the [`uploadFile`](../../typescript-sdk/nearbyy-client#uploadfile) method of the client. The [`uploadFile`](../../typescript-sdk/nearbyy-client#uploadfile) method takes a the `string fileUrl` of the file to be uploaded.
 
 ```typescript title="example.ts" ""https://example.com/garlic-properties.md""
 await client.uploadFile({
@@ -88,28 +88,13 @@ We plan to aggressively expand the list of supported file types. If you want to 
 
 ### Semantic Search
 
-Once you have uploaded a file, you can search for it using the `queryDatabase` method of the client. The `search` method takes a `string query` and returns `Promise<FileSearchClientResponse[]>`. We can also provide a `number limit` to limit the number of results returned. The default value of `limit` is `10`.
+Once you have uploaded a file, you can search for it using the [`queryDatabase`](../../typescript-sdk/nearbyy-client#querydatabase) method of the client. The `search` method takes a `string query` and returns [`Promise<FileSearchClientResponse[]>`](../../typescript-sdk/file-search-client-response). We can also provide a `number limit` to limit the number of results returned. The default value of `limit` is `10`.
 
 ```typescript title="example.ts" ""What are the benefits of eating garlic?""
 const files = await client.queryDatabase({
   query: "What are the benefits of eating garlic?", // Replace with your query
   limit: 5,
 });
-```
-
-The `FileSearchClientResponse` type is defined as follows:
-
-```typescript
-interface FileSearchClientResponse {
-  id: number;
-  text: string;
-  type: string;
-  url: string;
-  _extras: {
-    distance?: number; // The distance between the query and the result
-    projectid: string; // The ID of the project
-  };
-}
 ```
 
 ## Full example with GPT-4

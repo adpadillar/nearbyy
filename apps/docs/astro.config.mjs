@@ -20,6 +20,10 @@ export default defineConfig({
           label: "Typescript SDK",
           autogenerate: { directory: "typescript-sdk" },
         },
+        {
+          label: "API",
+          autogenerate: { directory: "api-reference" },
+        },
       ],
     }),
   ],
