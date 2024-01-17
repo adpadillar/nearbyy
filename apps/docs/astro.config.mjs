@@ -6,6 +6,11 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "Nearbyy Docs",
+      logo: {
+        src: "./src/assets/logo.svg",
+        alt: "Nearbyy Logo",
+        replacesTitle: true,
+      },
       sidebar: [
         {
           label: "Guides",
