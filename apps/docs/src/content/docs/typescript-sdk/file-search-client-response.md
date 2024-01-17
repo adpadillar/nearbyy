@@ -5,6 +5,10 @@ sidebar:
   order: 3
 ---
 
+:::caution[Nearbyy is currently in ALPHA]
+Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, please contact us.
+:::
+
 ```ts
 interface FileSearchClientResponse {
   id: number;
