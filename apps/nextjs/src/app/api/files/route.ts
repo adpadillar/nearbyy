@@ -15,8 +15,8 @@ export const POST = withKeyAuth({
     const fileMimeString = file.headers.get("Content-Type") ?? "";
 
     // If the file is a markdown file
-    if (fileMimeString === "text/markdown") {
-      // Extract the text from the markdown file
+    if (fileMimeString.startsWith("text/")) {
+      // Extract the text from the text file
       const text = new TextDecoder().decode(fileBuffer);
 
       // Generate the embedding
@@ -31,7 +31,7 @@ export const POST = withKeyAuth({
         embedding: embedding,
         projectid,
         text,
-        type: "markdown",
+        type: fileMimeString,
         url: body.fileUrl,
       });
 
