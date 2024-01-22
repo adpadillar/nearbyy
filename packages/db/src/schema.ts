@@ -27,12 +27,11 @@ export const keys = pgTable("keys", {
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
   imageUrl: text("imageUrl").notNull(),
-  profileImageUrl: text("profileImageUrl").notNull(),
   firstName: text("firstName").notNull(),
   lastName: text("lastName").notNull(),
   fullName: text("fullName").notNull(),
-  createdAt: bigint("createdAt", { mode: "bigint" }),
-  updatedAt: bigint("updatedAt", { mode: "bigint" }),
+  createdAt: bigint("createdAt", { mode: "number" }),
+  updatedAt: bigint("updatedAt", { mode: "number" }),
   twoFactorEnabled: boolean("twoFactorEnabled").notNull(),
   primaryEmailAddressId: text("primaryEmailAddressId").notNull(),
 });
