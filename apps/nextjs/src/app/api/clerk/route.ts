@@ -22,25 +22,21 @@ async function getRawBody(readable: ReadableStream): Promise<Buffer> {
   return Buffer.concat(chunks);
 }
 
-async function verifyRequest(req: Request) {
+async function verifyRequest<T = unknown>(
+  req: Request,
+): Promise<{ valid: true; data: T } | { valid: false; data: null }> {
   const svixId = req.headers.get("svix-id") ?? req.headers.get("webhook-id");
   const svixTimestamp =
     req.headers.get("svix-timestamp") ?? req.headers.get("webhook-timestamp");
   const svixSignature =
     req.headers.get("svix-signature") ?? req.headers.get("webhook-signature");
 
-  console.log("received headers: ", { svixId, svixTimestamp, svixSignature });
-
   if (!svixId || !svixTimestamp || !svixSignature || !req.body) {
-    console.log("ERROR: missing headers");
-    return false;
+    return { valid: false, data: null };
   }
 
   const rawBody = await getRawBody(req.body);
   const rawBodyString = Buffer.from(rawBody).toString("utf-8");
-
-  console.log("raw body: ", rawBody);
-  console.log("raw body string: ", rawBodyString);
 
   const signedContent = `${svixId}.${svixTimestamp}.${rawBodyString}`;
   const secretBytes = Buffer.from(secret, "base64");
@@ -50,31 +46,25 @@ async function verifyRequest(req: Request) {
     .update(signedContent)
     .digest("base64");
 
-  console.log("our signature: ", signature);
-
   const signatures = svixSignature.split(" ");
   for (const sig of signatures) {
     const [_, sigValue] = sig.split(",");
     if (signature === sigValue) {
-      console.log("signature verified: ", sig);
-      return true;
+      return { valid: true, data: JSON.parse(rawBodyString) as T };
     }
   }
 
-  console.log("ERROR: signature not verified");
-  return false;
+  return { valid: false, data: null };
 }
 
 export const POST = async (req: Request) => {
-  const verified = await verifyRequest(req);
+  const { data: evt, valid } = await verifyRequest<WebhookEvent>(req);
 
-  if (!verified) {
+  if (!valid) {
     return new Response("invalid request", {
       status: 400,
     });
   }
-
-  const evt = (await req.json()) as WebhookEvent;
 
   switch (evt.type) {
     case "user.created":
