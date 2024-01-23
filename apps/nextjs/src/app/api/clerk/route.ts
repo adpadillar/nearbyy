@@ -54,7 +54,8 @@ async function verifyRequest(req: Request) {
 
   const signatures = svixSignature.split(" ");
   for (const sig of signatures) {
-    if (signature === sig) {
+    const [_, sigValue] = sig.split(",");
+    if (signature === sigValue) {
       console.log("signature verified: ", sig);
       return true;
     }
