@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 
 import UserButton from "./UserButton";
 
@@ -9,11 +8,12 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = () => {
   return (
-    <div className="flex flex-col space-y-4 text-white">
-      <UserButton />
+    <div className="flex flex-col space-y-8 text-white">
+      <div>
+        <UserButton />
+      </div>
 
-      <Link href="/dashboard">Home</Link>
-      <Link href="/dashboard/keys">Keys</Link>
+      <hr className="h-[0.1rem] w-full rounded-full bg-white" />
     </div>
   );
 };

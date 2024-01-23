@@ -17,12 +17,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="h-full w-full max-w-[24rem] overflow-scroll rounded-xl border-2 border-black bg-[#2C2C2C] p-8">
+      <div className="h-full w-full max-w-[26rem] overflow-scroll rounded-3xl border-2 border-black bg-[#2C2C2C] p-10">
         <Sidebar />
       </div>
-      <div className="relative w-full overflow-scroll rounded-l-[2rem] bg-[#EDEDED] px-24 py-16">
-        <div className="absolute left-12 top-[5%] h-[90%] w-[1px] bg-black"></div>
-        <div className="absolute left-8 top-[10%] h-8 w-8 rounded-full bg-black "></div>
+      <div className="relative w-full overflow-scroll rounded-bl-[2rem] rounded-tl-[4rem] bg-[#EDEDED] px-28 py-20">
+        <div className="absolute left-16 top-[5%] h-[100%] w-[1px] bg-black"></div>
+        <div className="absolute left-[3.125rem] top-[12%] h-7 w-7 rounded-full bg-black"></div>
         <div className="max-w-[48rem]">{children}</div>
       </div>
     </div>
