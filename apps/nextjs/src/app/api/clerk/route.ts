@@ -57,20 +57,18 @@ export const POST = async (req: NextRequest) => {
         });
 
         const emailsDb = db.drizzle
-          .select({ emailAdress: db.schema.emails.emailAddress })
+          .select({ id: db.schema.emails.id })
           .from(db.schema.emails)
           .where(db.helpers.eq(db.schema.emails.userId, evt.data.id));
         const emailsClerk = evt.data.email_addresses.map(
-          (element) => element.email_address,
+          (element) => element.id,
         );
 
         for (const i of await emailsDb) {
-          if (!emailsClerk.includes(i.emailAdress)) {
+          if (!emailsClerk.includes(i.id)) {
             await db.drizzle
               .delete(db.schema.emails)
-              .where(
-                db.helpers.eq(db.schema.emails.emailAddress, i.emailAdress),
-              );
+              .where(db.helpers.eq(db.schema.emails.id, i.id));
           }
 
           for (const i of evt.data.email_addresses) {
