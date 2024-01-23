@@ -17,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="h-full min-w-[24rem] overflow-scroll rounded-xl border-2 border-black bg-[#2C2C2C] p-8">
+      <div className="h-full w-full max-w-[24rem] overflow-scroll rounded-xl border-2 border-black bg-[#2C2C2C] p-8">
         <Sidebar />
       </div>
       <div className="relative w-full overflow-scroll rounded-l-[2rem] bg-[#EDEDED] px-24 py-16">
