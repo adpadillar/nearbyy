@@ -92,8 +92,9 @@ export const POST = async (req: NextRequest) => {
           }
         }
       }
-      return new Response("all good", {
-        status: 200,
-      });
+      break;
   }
+  return new Response("all good", {
+    status: 200,
+  });
 };
