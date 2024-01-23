@@ -1,22 +1,18 @@
 import type { WebhookEvent } from "@clerk/clerk-sdk-node";
-import type { IncomingMessage } from "http";
 import type { WebhookRequiredHeaders } from "svix";
-import { buffer } from "micro";
 import { Webhook } from "svix";
 
 import { db } from "@nearbyy/db";
 
 import { env } from "~/env";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 const secret = env.CLERK_SIGNING_KEY;
 
-export const POST = async (req: IncomingMessage) => {
+async function buffer(req: Request) {
+  return Buffer.from(await req.arrayBuffer());
+}
+
+export const POST = async (req: Request) => {
   const payload = (await buffer(req)).toString();
   const headers = req.headers as unknown as WebhookRequiredHeaders;
 
