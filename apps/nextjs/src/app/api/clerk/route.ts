@@ -1,10 +1,35 @@
 import type { WebhookEvent } from "@clerk/clerk-sdk-node";
-import type { NextRequest } from "next/server";
+import type { IncomingMessage } from "http";
+import type { WebhookRequiredHeaders } from "svix";
+import { buffer } from "micro";
+import { Webhook } from "svix";
 
 import { db } from "@nearbyy/db";
 
-export const POST = async (req: NextRequest) => {
-  const evt = (await req.json()) as WebhookEvent;
+import { env } from "~/env";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+const secret = env.CLERK_SIGNING_KEY;
+
+export const POST = async (req: IncomingMessage) => {
+  const payload = (await buffer(req)).toString();
+  const headers = req.headers as unknown as WebhookRequiredHeaders;
+
+  const wh = new Webhook(secret);
+  let evt;
+
+  try {
+    evt = wh.verify(payload, headers) as WebhookEvent;
+  } catch (err) {
+    return new Response("", {
+      status: 400,
+    });
+  }
   switch (evt.type) {
     case "user.created":
       {
