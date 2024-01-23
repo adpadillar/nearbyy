@@ -1,6 +1,5 @@
+import crypto from "crypto";
 import type { WebhookEvent } from "@clerk/clerk-sdk-node";
-import type { WebhookRequiredHeaders } from "svix";
-import { Webhook } from "svix";
 
 import { db } from "@nearbyy/db";
 
@@ -8,24 +7,59 @@ import { env } from "~/env";
 
 const secret = env.CLERK_SIGNING_KEY;
 
-async function buffer(req: Request) {
-  return Buffer.from(await req.arrayBuffer());
+async function verifyRequest(req: Request) {
+  const svixId = req.headers.get("svix-id") ?? req.headers.get("webhook-id");
+  const svixTimestamp =
+    req.headers.get("svix-timestamp") ?? req.headers.get("webhook-timestamp");
+  const svixSignature =
+    req.headers.get("svix-signature") ?? req.headers.get("webhook-signature");
+
+  console.log("received headers: ", { svixId, svixTimestamp, svixSignature });
+
+  if (!svixId || !svixTimestamp || !svixSignature || !req.body) {
+    console.log("ERROR: missing headers");
+    return false;
+  }
+
+  const body = await req.arrayBuffer();
+  const decoder = new TextDecoder();
+  const text = decoder.decode(body);
+
+  console.log("raw body: ", text);
+
+  const signedContent = `${svixId}.${svixTimestamp}.${text}`;
+  const secretBytes = new Buffer(secret.split("_")[1]!, "base64");
+
+  const signature = crypto
+    .createHmac("sha256", secretBytes)
+    .update(signedContent)
+    .digest("base64");
+
+  console.log("our signature: ", signature);
+
+  const signatures = svixSignature.split(" ");
+  for (const sig of signatures) {
+    if (signature === sig) {
+      console.log("signature verified: ", sig);
+      return true;
+    }
+  }
+
+  console.log("ERROR: signature not verified");
+  return false;
 }
 
 export const POST = async (req: Request) => {
-  const payload = (await buffer(req)).toString();
-  const headers = req.headers as unknown as WebhookRequiredHeaders;
+  const verified = await verifyRequest(req);
 
-  const wh = new Webhook(secret);
-  let evt;
-
-  try {
-    evt = wh.verify(payload, headers) as WebhookEvent;
-  } catch (err) {
-    return new Response("", {
+  if (!verified) {
+    return new Response("invalid request", {
       status: 400,
     });
   }
+
+  const evt = (await req.json()) as WebhookEvent;
+
   switch (evt.type) {
     case "user.created":
       {
@@ -45,7 +79,7 @@ export const POST = async (req: Request) => {
           await db.drizzle.insert(db.schema.emails).values({
             emailAddress: i.email_address,
             id: i.id,
-            isVerified: i.verification?.status == "verified",
+            isVerified: i.verification?.status === "verified",
             userId: evt.data.id,
           });
         }
@@ -98,7 +132,7 @@ export const POST = async (req: Request) => {
               .values({
                 emailAddress: i.email_address,
                 id: i.id,
-                isVerified: i.verification?.status == "verified",
+                isVerified: i.verification?.status === "verified",
                 userId: evt.data.id,
               })
               .onConflictDoUpdate({
@@ -106,7 +140,7 @@ export const POST = async (req: Request) => {
                 set: {
                   emailAddress: i.email_address,
                   id: i.id,
-                  isVerified: i.verification?.status == "verified",
+                  isVerified: i.verification?.status === "verified",
                   userId: evt.data.id,
                 },
               });
