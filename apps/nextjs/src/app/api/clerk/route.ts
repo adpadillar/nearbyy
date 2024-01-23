@@ -5,7 +5,22 @@ import { db } from "@nearbyy/db";
 
 import { env } from "~/env";
 
-const secret = env.CLERK_SIGNING_KEY;
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  interface ReadableStream<R = any> {
+    [Symbol.asyncIterator](): AsyncIterableIterator<R>;
+  }
+}
+
+const secret = env.CLERK_SIGNING_KEY.replace("whsec_", "");
+
+async function getRawBody(readable: ReadableStream): Promise<Buffer> {
+  const chunks = [];
+  for await (const chunk of readable) {
+    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
 
 async function verifyRequest(req: Request) {
   const svixId = req.headers.get("svix-id") ?? req.headers.get("webhook-id");
@@ -21,14 +36,14 @@ async function verifyRequest(req: Request) {
     return false;
   }
 
-  const body = await req.arrayBuffer();
-  const decoder = new TextDecoder();
-  const text = decoder.decode(body);
+  const rawBody = await getRawBody(req.body);
+  const rawBodyString = Buffer.from(rawBody).toString("utf-8");
 
-  console.log("raw body: ", text);
+  console.log("raw body: ", rawBody);
+  console.log("raw body string: ", rawBodyString);
 
-  const signedContent = `${svixId}.${svixTimestamp}.${text}`;
-  const secretBytes = new Buffer(secret.split("_")[1]!, "base64");
+  const signedContent = `${svixId}.${svixTimestamp}.${rawBodyString}`;
+  const secretBytes = Buffer.from(secret, "base64");
 
   const signature = crypto
     .createHmac("sha256", secretBytes)
