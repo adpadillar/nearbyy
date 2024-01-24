@@ -5,9 +5,10 @@ import { useUser } from "@clerk/nextjs";
 
 interface UserButtonProps {
   children?: React.ReactNode;
+  projectid?: string;
 }
 
-const UserButton: React.FC<UserButtonProps> = () => {
+const UserButton: React.FC<UserButtonProps> = ({ projectid }) => {
   const { isLoaded, isSignedIn, user } = useUser();
 
   if (!isLoaded) {
@@ -50,27 +51,6 @@ const UserButton: React.FC<UserButtonProps> = () => {
             alt={`Anonymous's profile`}
           />
         </picture>
-        <div className="px-4">
-          <h2 className="text-xl">Anonymous Project</h2>
-          <p className="flex items-center space-x-2 font-light opacity-[0.44]">
-            <span>#projectid</span>{" "}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="9"
-              height="7.5"
-              viewBox="0 0 6 5"
-              fill="none"
-            >
-              <path
-                d="M1 1L2.52855 3.7514C2.66077 3.98938 2.99798 4.00303 3.14899 3.77651L5 1"
-                stroke="white"
-                strokeOpacity="0.44"
-                strokeWidth="0.727273"
-                strokeLinecap="round"
-              />
-            </svg>
-          </p>
-        </div>
       </div>
     );
   }
@@ -89,7 +69,7 @@ const UserButton: React.FC<UserButtonProps> = () => {
       <div className="px-4">
         <h2 className="text-xl">Personal Account</h2>
         <p className="flex items-center space-x-2 font-light opacity-[0.44]">
-          <span>#projectid</span>{" "}
+          <span>{projectid ? `#${projectid}` : "select a project"}</span>{" "}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="9"

@@ -1,24 +1,31 @@
 import React from "react";
 import Link from "next/link";
 
+import { getProject } from "~/utils/server/getProject";
 import UserButton from "./UserButton";
 
 interface SidebarProps {
   children?: React.ReactNode;
 }
 
-const Sidebar: React.FC<SidebarProps> = () => {
+const Sidebar: React.FC<SidebarProps> = async () => {
+  const { found, project } = await getProject();
+
+  const LinkElement = found
+    ? Link
+    : (props: Record<string, unknown>) => <div {...props} />;
+
   return (
     <div className="flex flex-col space-y-8 text-white">
       <div>
-        <UserButton />
+        <UserButton projectid={found ? project.id : undefined} />
       </div>
 
-      <hr className="h-[0.1rem] w-full rounded-full bg-white" />
+      <hr className="pointer-events-none h-[0.1rem] w-full rounded-full bg-white" />
 
-      <div className="flex flex-col space-y-2">
+      <div className={`${found ? "" : "opacity-30"} flex flex-col space-y-2`}>
         <div className="flex">
-          <Link href="/dashboard" className="flex">
+          <LinkElement href={`/dashboard/${project.id}/`} className="flex">
             <div className="flex items-center space-x-3 rounded-full px-8 py-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -35,10 +42,10 @@ const Sidebar: React.FC<SidebarProps> = () => {
               </svg>
               <span>Home</span>
             </div>
-          </Link>
+          </LinkElement>
         </div>
         <div className="flex">
-          <Link href="/dashboard/files" className="flex">
+          <LinkElement href={`/dashboard/${project.id}/files`} className="flex">
             <div className="flex items-center space-x-3 rounded-full px-8 py-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -55,10 +62,10 @@ const Sidebar: React.FC<SidebarProps> = () => {
               </svg>
               <span>Files</span>
             </div>
-          </Link>
+          </LinkElement>
         </div>
         <div className="flex">
-          <Link href="/dashboard/keys" className="flex">
+          <LinkElement href={`/dashboard/${project.id}/keys`} className="flex">
             <div className="flex items-center space-x-3 rounded-full px-8 py-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -75,10 +82,13 @@ const Sidebar: React.FC<SidebarProps> = () => {
               </svg>
               <span>Keys</span>
             </div>
-          </Link>
+          </LinkElement>
         </div>
         <div className="flex">
-          <Link href="/dashboard/settings" className="flex">
+          <LinkElement
+            href={`/dashboard/${project.id}/settings`}
+            className="flex"
+          >
             <div className="flex items-center space-x-3 rounded-full px-8 py-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +105,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
               </svg>
               <span>Settings</span>
             </div>
-          </Link>
+          </LinkElement>
         </div>
       </div>
 
