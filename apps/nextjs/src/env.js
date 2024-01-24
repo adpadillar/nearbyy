@@ -21,6 +21,7 @@ export const env = createEnv({
     NEON_DIRECT_URL: z.string().min(1),
     OPENAI_KEY: z.string().min(1),
     CLERK_SECRET_KEY: z.string().min(1),
+    CLERK_SIGNING_KEY: z.string().min(1)
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -41,6 +42,8 @@ export const env = createEnv({
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    CLERK_SIGNING_KEY: process.env.CLERK_SIGNING_KEY,
+
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:
