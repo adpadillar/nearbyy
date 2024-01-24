@@ -5,26 +5,9 @@ import { db } from "@nearbyy/db";
 
 import { env } from "~/env";
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  interface ReadableStream<R = any> {
-    [Symbol.asyncIterator](): AsyncIterableIterator<R>;
-  }
-}
-
 const secret = env.CLERK_SIGNING_KEY.replace("whsec_", "");
 
-async function getRawBody(readable: ReadableStream): Promise<Buffer> {
-  const chunks = [];
-  for await (const chunk of readable) {
-    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
-  }
-  return Buffer.concat(chunks);
-}
-
-async function verifyRequest<T = unknown>(
-  req: Request,
-): Promise<{ valid: true; data: T } | { valid: false; data: null }> {
+async function verifyRequest<T = unknown>(req: Request) {
   const svixId = req.headers.get("svix-id") ?? req.headers.get("webhook-id");
   const svixTimestamp =
     req.headers.get("svix-timestamp") ?? req.headers.get("webhook-timestamp");
@@ -32,13 +15,12 @@ async function verifyRequest<T = unknown>(
     req.headers.get("svix-signature") ?? req.headers.get("webhook-signature");
 
   if (!svixId || !svixTimestamp || !svixSignature || !req.body) {
-    return { valid: false, data: null };
+    return { valid: false, data: null } as const;
   }
 
-  const rawBody = await getRawBody(req.body);
-  const rawBodyString = Buffer.from(rawBody).toString("utf-8");
+  const rawBody = await req.text();
 
-  const signedContent = `${svixId}.${svixTimestamp}.${rawBodyString}`;
+  const signedContent = `${svixId}.${svixTimestamp}.${rawBody}`;
   const secretBytes = Buffer.from(secret, "base64");
 
   const signature = crypto
@@ -50,11 +32,11 @@ async function verifyRequest<T = unknown>(
   for (const sig of signatures) {
     const [_, sigValue] = sig.split(",");
     if (signature === sigValue) {
-      return { valid: true, data: JSON.parse(rawBodyString) as T };
+      return { valid: true, data: JSON.parse(rawBody) as T } as const;
     }
   }
 
-  return { valid: false, data: null };
+  return { valid: false, data: null } as const;
 }
 
 export const POST = async (req: Request) => {
