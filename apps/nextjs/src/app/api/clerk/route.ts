@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import type { WebhookEvent } from "@clerk/clerk-sdk-node";
 
-import { db } from "@nearbyy/db";
+import { devDb, db as prodDb } from "@nearbyy/db";
 
 import { env } from "~/env";
 
@@ -39,7 +39,21 @@ async function verifyRequest<T = unknown>(req: Request) {
   return { valid: false, data: null } as const;
 }
 
+type Environment = "DEVELOPMENT" | "PRODUCTION";
+
 export const POST = async (req: Request) => {
+  const environment = req.headers.get(
+    "x-nearbyy-environment",
+  ) as Environment | null;
+
+  if (!environment) {
+    return new Response("invalid request", {
+      status: 400,
+    });
+  }
+
+  const db = environment === "PRODUCTION" ? prodDb : devDb;
+
   const { data: evt, valid } = await verifyRequest<WebhookEvent>(req);
 
   if (!valid) {
