@@ -46,8 +46,8 @@ const ApiKeyButton: React.FC<ApiKeyButtonProps> = () => {
 
   return (
     <div>
-      <pre className="rounded-md bg-gray-800 px-4 py-2 text-white">
-        API Key: {data.key}
+      <pre className="rounded-md bg-gray-900 p-4 text-white">
+        <code className="text-sm">{data.key}</code>
       </pre>
     </div>
   );

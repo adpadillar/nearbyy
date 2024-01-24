@@ -2,13 +2,18 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { migrate } from "drizzle-orm/neon-http/migrator";
 
-export const client = neon(process.env.NEON_DIRECT_URL!);
+const prodClient = neon(process.env.NEON_DIRECT_URL!);
+const devClient = neon(process.env.NEON_DIRECT_URL_DEV!);
 
-export const db = drizzle(client);
+const prodDb = drizzle(prodClient);
+const devDb = drizzle(devClient);
 
 async function main() {
   try {
-    await migrate(db, {
+    await migrate(prodDb, {
+      migrationsFolder: "src/migrations",
+    });
+    await migrate(devDb, {
       migrationsFolder: "src/migrations",
     });
     console.log("Tables migrated!");
