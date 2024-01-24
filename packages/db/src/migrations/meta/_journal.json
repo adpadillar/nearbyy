@@ -36,6 +36,13 @@
       "when": 1705876451852,
       "tag": "0004_premium_darkstar",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1706062382073,
+      "tag": "0005_kind_sleeper",
+      "breakpoints": true
     }
   ]
 }
