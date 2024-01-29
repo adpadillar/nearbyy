@@ -8,7 +8,7 @@ import SideBlob from "~/components/SideBlob";
 export const runtime = "edge";
 export const preferredRegion = "iad1";
 
-export default async function HomePage() {
+export const HomePage = () => {
   return (
     <main>
       <Navigation />
@@ -50,4 +50,6 @@ export default async function HomePage() {
       />
     </main>
   );
-}
+};
+
+export default HomePage;
