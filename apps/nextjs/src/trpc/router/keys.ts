@@ -12,10 +12,18 @@ export const keysRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // TODO:
-      // make sure the logged in user owns the project
+      const project = await ctx.drizzle.query.projects.findFirst({
+        where: ctx.helpers.and(
+          ctx.helpers.eq(ctx.schema.projects.externalId, input.projectId),
+          ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
+        ),
+      });
 
-      const key = await generateKey(input.projectId, ctx.session.userId!);
+      if (!project) {
+        throw new Error("Project not found");
+      }
+
+      const key = await generateKey(project.id, ctx.session.userId!);
       return { key };
     }),
   listForProject: protectedProcedure
