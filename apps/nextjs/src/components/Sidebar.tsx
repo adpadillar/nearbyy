@@ -2,9 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-import { api } from "~/trpc/react";
+import { useProjectId } from "./ProjectIdContext";
 import UserButton from "./UserButton";
 
 interface SidebarProps {
@@ -12,12 +11,7 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = () => {
-  const path = usePathname();
-  const urlParts = path.split("/");
-  const projectid = urlParts[urlParts.indexOf("dashboard") + 1];
-  const { data: found } = api.projects.existsFromCurrentUser.useQuery(
-    projectid ?? "",
-  );
+  const { exists: found, id: projectid } = useProjectId();
 
   const LinkElement = found
     ? Link
