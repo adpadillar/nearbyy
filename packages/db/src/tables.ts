@@ -3,12 +3,11 @@ import {
   boolean,
   doublePrecision,
   pgTable,
-  serial,
   text,
 } from "drizzle-orm/pg-core";
 
 export const files = pgTable("files", {
-  id: serial("id").notNull().primaryKey(),
+  id: text("id").primaryKey(),
   text: text("text").notNull(),
   url: text("url").notNull(),
   projectid: text("projectid").notNull(),
@@ -17,7 +16,7 @@ export const files = pgTable("files", {
 });
 
 export const keys = pgTable("keys", {
-  id: serial("id").primaryKey(),
+  id: text("id").primaryKey(),
   key: text("key").notNull(),
   salt: text("salt").notNull(),
   projectid: text("projectid").notNull(),

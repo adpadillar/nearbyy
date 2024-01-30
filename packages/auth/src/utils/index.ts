@@ -72,6 +72,7 @@ export const generateKey = async (projectid: string, userid: string) => {
     salt,
     projectid,
     userid,
+    id: crypto.randomUUID(),
   });
 
   return `project_${projectid}:${API_KEY}` as const;
