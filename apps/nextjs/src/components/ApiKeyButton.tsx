@@ -1,33 +1,20 @@
 "use client";
 
 import React from "react";
-import { useMutation } from "@tanstack/react-query";
 
-import { getSchema } from "~/app/api/keys/generate/schema";
-import { typesafeFetch } from "~/utils/fetchApi";
-import { queryClient } from "./ReactQueryProvider";
+import { api } from "~/trpc/react";
+import { useProjectId } from "./ProjectIdContext";
 
 interface ApiKeyButtonProps {
   children?: React.ReactNode;
 }
 
 const ApiKeyButton: React.FC<ApiKeyButtonProps> = () => {
-  const { data, mutate, isPending } = useMutation({
-    mutationFn: async (projectid: string) => {
-      const { data, success, error } = await typesafeFetch({
-        route: "/api/keys/generate",
-        method: "GET",
-        params: { projectid },
-        schema: getSchema,
-      });
-
-      if (!success) throw error;
-      return data;
-    },
+  const utils = api.useUtils();
+  const { id } = useProjectId();
+  const { data, mutate, isLoading } = api.keys.generateForProject.useMutation({
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["api-keys"],
-      });
+      await utils.keys.listForProject.invalidate();
     },
   });
 
@@ -36,9 +23,13 @@ const ApiKeyButton: React.FC<ApiKeyButtonProps> = () => {
       <div>
         <button
           className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          onClick={() => mutate("nextjs")}
+          onClick={() =>
+            mutate({
+              projectId: id,
+            })
+          }
         >
-          {isPending ? "Loading..." : "Get API Key"}
+          {isLoading ? "Loading..." : "Get API Key"}
         </button>
       </div>
     );
