@@ -4,6 +4,18 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const projectRouter = createTRPCRouter({
+  existsFromCurrentUser: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const project = await ctx.drizzle.query.projects.findFirst({
+        where: ctx.helpers.and(
+          ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
+          ctx.helpers.eq(ctx.schema.projects.externalId, input),
+        ),
+      });
+
+      return !!project;
+    }),
   getFromCurrentUser: protectedProcedure.query(async ({ ctx }) => {
     const projects = await ctx.drizzle.query.projects.findMany({
       where: ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),

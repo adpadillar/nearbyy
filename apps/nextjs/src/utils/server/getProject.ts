@@ -15,8 +15,6 @@ export const getProject = async () => {
   // Get the project ID from the URL, it's the one after /dashboard/
   const projectid = urlParts[urlParts.indexOf("dashboard") + 1];
 
-  console.log("Project ID", projectid);
-
   if (!projectid) {
     return {
       found: false,

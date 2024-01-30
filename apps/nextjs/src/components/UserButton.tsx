@@ -1,17 +1,26 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+
+import { api } from "~/trpc/react";
 
 interface UserButtonProps {
   children?: React.ReactNode;
   projectid?: string;
 }
 
-const UserButton: React.FC<UserButtonProps> = ({ projectid }) => {
+const UserButton: React.FC<UserButtonProps> = () => {
+  const path = usePathname();
+  const urlParts = path.split("/");
+  const projectid = urlParts[urlParts.indexOf("dashboard") + 1];
   const { isLoaded, isSignedIn, user } = useUser();
+  const { data, isLoading } = api.projects.existsFromCurrentUser.useQuery(
+    projectid ?? "",
+  );
 
-  if (!isLoaded) {
+  if (!isLoaded || isLoading) {
     return (
       <div className="flex items-center space-x-2">
         <div className="h-16 w-16 animate-pulse rounded-full bg-black/20" />
@@ -69,7 +78,7 @@ const UserButton: React.FC<UserButtonProps> = ({ projectid }) => {
       <div className="px-4">
         <h2 className="text-xl">Personal Account</h2>
         <p className="flex items-center space-x-2 font-light opacity-[0.44]">
-          <span>{projectid ? `#${projectid}` : "select a project"}</span>{" "}
+          <span>{data ? `#${projectid}` : "select a project"}</span>{" "}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="9"

@@ -1,7 +1,7 @@
 import React from "react";
 import { Toaster } from "react-hot-toast";
 
-import Sidebar from "~/components/Sidebar.server";
+import Sidebar from "~/components/Sidebar";
 
 interface LayoutProps {
   children: React.ReactNode;
