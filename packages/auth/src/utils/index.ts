@@ -23,10 +23,7 @@ export const validateKey = async (key: string) => {
   }
 
   const keys = await db.drizzle.query.keys.findMany({
-    where: db.helpers.eq(
-      db.schema.keys.projectid,
-      project.replace("project_", ""),
-    ),
+    where: db.helpers.eq(db.schema.keys.projectid, project),
   });
 
   for (const key of keys) {
@@ -52,7 +49,7 @@ export const validateKey = async (key: string) => {
  * Calling this function with a projectid will generate a new key for that project
  * It will return the key to be shown to the user, but won't be stored anywhere.
  *
- * The key will be in the format of `project_${projectid}:${API_KEY}`.
+ * The key will be in the format of `${projectid}:${API_KEY}`.
  *
  * The key's hash will be stored in the database.
  *
@@ -61,7 +58,7 @@ export const validateKey = async (key: string) => {
  * @returns
  */
 export const generateKey = async (projectid: string, userid: string) => {
-  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  const bytes = crypto.getRandomValues(new Uint8Array(24));
   const API_KEY = Buffer.from(bytes).toString("hex");
 
   const salt = genSalt(10);
@@ -75,7 +72,8 @@ export const generateKey = async (projectid: string, userid: string) => {
     id: crypto.randomUUID(),
   });
 
-  return `project_${projectid}:${API_KEY}` as const;
+  // The key will be in the format of `${projectid}:${API_KEY}`
+  return `${projectid}:${API_KEY}` as const;
 };
 
 /**

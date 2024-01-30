@@ -1,13 +1,15 @@
 // @vitest-environment edge-runtime
+// For some reason, the `bcrypt-edge` package is not available in the test environment
+// We need to go to the node_modules folder and check the package.json
+// and add a `main` field to the `package.json` file
 
-import { randomBytes } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
 
 import { db } from "@nearbyy/db";
 
 import { generateKey, validateKey } from "./index";
 
-const projectid = randomBytes(4).toString("hex");
+const projectid = crypto.randomUUID();
 
 describe("key auth", () => {
   let key: string;
@@ -27,11 +29,11 @@ describe("key auth", () => {
     expect(bytes).toBeDefined();
     expect(project).toBeDefined();
 
-    expect(project).toBe(`project_${projectid}`);
+    expect(project).toBe(projectid);
     expect(bytes).toBeTypeOf("string");
 
-    expect(bytes).toHaveLength(64);
-    expect(key).toHaveLength(64 + `project_${projectid}:`.length);
+    expect(bytes).toHaveLength(48);
+    expect(key).toHaveLength(48 + `${projectid}:`.length);
   });
 
   it("should validate a key", async () => {
@@ -42,9 +44,7 @@ describe("key auth", () => {
   });
 
   it("should not validate a key", async () => {
-    const { valid, projectid: p } = await validateKey(
-      `project_${projectid}:false_key`,
-    );
+    const { valid, projectid: p } = await validateKey(`${projectid}:false_key`);
 
     expect(valid).toBe(false);
     expect(p).toBe(null);
