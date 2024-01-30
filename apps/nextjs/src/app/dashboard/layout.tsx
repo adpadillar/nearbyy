@@ -1,4 +1,5 @@
 import React from "react";
+import { Toaster } from "react-hot-toast";
 
 import Sidebar from "~/components/Sidebar.server";
 
@@ -17,6 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         backgroundRepeat: "no-repeat",
       }}
     >
+      <Toaster position="bottom-right" />
       <div className="h-full w-full max-w-[26rem] overflow-scroll rounded-3xl border-2 border-black bg-[#2C2C2C] p-10">
         <Sidebar />
       </div>

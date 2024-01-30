@@ -25,7 +25,7 @@ const Sidebar: React.FC<SidebarProps> = async () => {
 
       <div className={`${found ? "" : "opacity-30"} flex flex-col space-y-2`}>
         <div className="flex">
-          <LinkElement href={`/dashboard/${project.id}/`} className="flex">
+          <LinkElement href={`/dashboard/${project?.id}/`} className="flex">
             <div className="flex items-center space-x-3 rounded-full px-8 py-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +45,10 @@ const Sidebar: React.FC<SidebarProps> = async () => {
           </LinkElement>
         </div>
         <div className="flex">
-          <LinkElement href={`/dashboard/${project.id}/files`} className="flex">
+          <LinkElement
+            href={`/dashboard/${project?.id}/files`}
+            className="flex"
+          >
             <div className="flex items-center space-x-3 rounded-full px-8 py-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = async () => {
           </LinkElement>
         </div>
         <div className="flex">
-          <LinkElement href={`/dashboard/${project.id}/keys`} className="flex">
+          <LinkElement href={`/dashboard/${project?.id}/keys`} className="flex">
             <div className="flex items-center space-x-3 rounded-full px-8 py-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = async () => {
         </div>
         <div className="flex">
           <LinkElement
-            href={`/dashboard/${project.id}/settings`}
+            href={`/dashboard/${project?.id}/settings`}
             className="flex"
           >
             <div className="flex items-center space-x-3 rounded-full px-8 py-1">
