@@ -33,16 +33,27 @@ export const keysRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
+      if (!input.projectId) {
+        return {
+          keys: [],
+        };
+      }
+
       // Find all keys for the project and the logged in user
-      const keys = await ctx.drizzle.query.keys.findMany({
+      const userProjects = await ctx.drizzle.query.projects.findMany({
         where: ctx.helpers.and(
-          ctx.helpers.eq(ctx.schema.keys.projectid, input.projectId),
-          ctx.helpers.eq(ctx.schema.keys.userid, ctx.session.userId!),
+          ctx.helpers.eq(ctx.schema.projects.externalId, input.projectId),
+          ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
         ),
+        with: { keys: true },
       });
 
+      const project = userProjects.find(
+        (p) => p.externalId === input.projectId,
+      )!;
+
       return {
-        keys: keys.map((k) => ({ id: k.id })),
+        keys: project.keys.map((k) => ({ id: k.id })),
       };
     }),
   deleteKey: protectedProcedure
