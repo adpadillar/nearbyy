@@ -41,12 +41,6 @@ const ProjectIdProvider: React.FC<ProjectIdProviderProps> = ({ children }) => {
         id: projectId,
       }}
     >
-      <pre className="text-white">
-        {JSON.stringify({
-          exists: exists ?? false,
-          id: projectId,
-        })}
-      </pre>
       {children}
     </ProjectIdContext.Provider>
   );
