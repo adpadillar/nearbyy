@@ -1,0 +1,15 @@
+{
+  "extends": "@nearbyy/tsconfig/base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "paths": {
+      "@/components": ["./src/components"],
+      "@/utils": ["./src/lib/utils.ts"]
+    }
+  },
+  "include": ["*.ts", "src"],
+  "exclude": ["node_modules"],
+  "typedocOptions": {
+    "entryPoints": "src/index.ts"
+  }
+}

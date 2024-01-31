@@ -5,6 +5,7 @@ import { GeistSans } from "geist/font/sans";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/styles/globals.css";
+import "@nearbyy/ui/dist/output.css";
 
 import { cache } from "react";
 import { headers } from "next/headers";
