@@ -3,11 +3,16 @@ import Link from "next/link";
 import { GeistMono } from "geist/font/mono";
 
 import Navigation from "~/components/Navigation";
+import Pricing from "~/components/Pricing";
 import Shiki from "~/components/Shiki.server";
 import SideBlob from "~/components/SideBlob";
+import { env } from "~/env";
 
 export default async function HomePage() {
-  const res = await fetch("http://localhost:3000/example/example-home.ts");
+  const res = await fetch(
+    `${env.VERCEL_URL ?? "http://localhost:3000"}/example/example-home.ts`,
+  );
+
   const text = (await res.text()) as string;
   return (
     <main>
@@ -19,7 +24,7 @@ export default async function HomePage() {
         height={943}
         className="pointer-events-none absolute right-[17px] top-[5.5rem] opacity-50"
       />
-      <div className="   flex min-h-[80vh] flex-col items-center justify-center space-y-9 pt-56">
+      <div className=" flex min-h-[80vh] flex-col items-center justify-center space-y-9 pt-56">
         <h1 className="max-w-4xl text-center text-[65px] font-extrabold leading-[78px] -tracking-[3px] text-white">
           AI Context Made Simple: Upload, Search, Access
         </h1>
@@ -49,6 +54,9 @@ export default async function HomePage() {
             ></Shiki>
           </div>
         </div>
+      </div>
+      <div className="flex flex-col items-center justify-center pb-32 pt-48">
+        <Pricing path="/dashboard"></Pricing>
       </div>
 
       <SideBlob
