@@ -1,10 +1,15 @@
 "use client";
 
-import type { ColumnDef, SortingState } from "@tanstack/react-table";
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+} from "@tanstack/react-table";
 import React from "react";
 import {
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -12,6 +17,7 @@ import {
 
 import {
   Button,
+  Input,
   Table,
   TableBody,
   TableCell,
@@ -32,6 +38,9 @@ export function DataTable<TData, TValue>({
   pagination = true,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
 
   const table = useReactTable({
     data,
@@ -40,11 +49,23 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: pagination ? getPaginationRowModel() : undefined,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    state: { sorting },
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: { sorting, columnFilters },
   });
 
   return (
     <div className="rounded-md border">
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter keys by id..."
+          value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("id")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
