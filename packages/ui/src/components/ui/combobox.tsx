@@ -53,7 +53,6 @@ export function Combobox<T extends string>({
             />
           </svg>
         </button>
-        {/* <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" /> */}
       </PopoverTrigger>
       <PopoverContent>
         <Command>
@@ -72,8 +71,8 @@ export function Combobox<T extends string>({
               >
                 <Check
                   className={cn(
-                    "mr-2 h-4 w-4",
-                    value === opt.value ? "opacity-100" : "opacity-0",
+                    "tw-mr-2 tw-h-4 tw-w-4",
+                    value === opt.value ? "tw-opacity-100" : "tw-opacity-0",
                   )}
                 />
                 {opt.label}
