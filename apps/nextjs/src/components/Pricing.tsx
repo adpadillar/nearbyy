@@ -9,7 +9,7 @@ interface PricingProps {
 
 const Pricing: React.FC<PricingProps> = ({ path }) => {
   return (
-    <div className="flex max-w-5xl flex-col items-center space-y-4 ">
+    <div className="flex max-w-[70rem] flex-col items-center space-y-4 ">
       {/* Title and subtitle */}
       <div className="flex flex-col items-center">
         <h1 className="text-6xl font-bold text-white">Worry about your app</h1>
@@ -49,7 +49,7 @@ const Pricing: React.FC<PricingProps> = ({ path }) => {
             subTitle: "For those with teams or more than 2 gigs of files",
             price: "$10",
             timeLabel: "/month",
-            linkText: "Get started",
+            linkText: "Get started!",
             path: path,
             list: [
               "100GB of storage",
@@ -68,7 +68,7 @@ const Pricing: React.FC<PricingProps> = ({ path }) => {
             header: "Unlimited Apps(s)",
             headerStyle: "primary",
             subTitle:
-              "Need more gigs? More devs? More help convincing your boss?",
+              "Need more gigs? More devs? More help convincing your boss? Hit us up",
             price: "Custom",
             path: path,
             linkText: "Schedule a call",

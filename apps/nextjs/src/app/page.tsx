@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { GeistMono } from "geist/font/mono";
 
+import BackgroundPricing from "~/components/BackgroundPricing";
 import Navigation from "~/components/Navigation";
 import Pricing from "~/components/Pricing";
 import Shiki from "~/components/Shiki.server";
@@ -55,8 +56,9 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center pb-32 pt-48">
+      <div className=" relative flex flex-col items-center justify-center pb-32 pt-48">
         <Pricing path="/dashboard"></Pricing>
+        <BackgroundPricing className=" pointer-events-none absolute bottom-0 left-2 right-0 top-32" />
       </div>
 
       <SideBlob
