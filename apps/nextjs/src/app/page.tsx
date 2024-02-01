@@ -58,7 +58,7 @@ export default async function HomePage() {
       </div>
       <div className=" relative flex flex-col items-center justify-center  pb-32 pt-48">
         <Pricing path="/dashboard" />
-        <BackgroundPricing className="absolute bottom-0 left-0 right-0 top-0 w-full" />
+        {/* <BackgroundPricing className="absolute bottom-0 left-0 right-0 top-0 w-full" /> */}
       </div>
 
       <SideBlob
@@ -82,6 +82,21 @@ export default async function HomePage() {
         side="left_3"
         className="pointer-events-none absolute right-0 top-0"
       /> */}
+
+      <div
+        className="w-full "
+        style={{
+          position: "absolute",
+          width: "1246px",
+          height: "497px",
+          left: "100px",
+          top: "1537px",
+          background:
+            "linear-gradient(66.22deg, rgba(255, 0, 0, 0.3) 33.46%, rgba(20, 0, 255, 0.3) 48.83%)",
+          filter: "blur(178.125px)",
+          borderRadius: "377.981px",
+        }}
+      ></div>
     </main>
   );
 }
