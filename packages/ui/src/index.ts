@@ -8,6 +8,7 @@ export * from "./components/ui/popover";
 export * from "./components/ui/combobox";
 export * from "./components/ui/table";
 export * from "./components/ui/input";
+export * from "./components/ui/dropdown-menu";
 
 // utils
 export * from "./lib/utils";
