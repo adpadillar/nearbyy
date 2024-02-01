@@ -7,6 +7,11 @@ export const projectRouter = createTRPCRouter({
   existsFromCurrentUser: protectedProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
+      if (!input) {
+        // No need to throw an error, just return false
+        return false;
+      }
+
       const project = await ctx.drizzle.query.projects.findFirst({
         where: ctx.helpers.and(
           ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
