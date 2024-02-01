@@ -2,6 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { NextPage } from "next";
+import { ArrowUpDown } from "lucide-react";
 import toast from "react-hot-toast";
 
 import {
@@ -43,7 +44,17 @@ export const columns: ColumnDef<Key>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Created At",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created at
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const key = row.original;
       return <div>{new Date(key.createdAt).toLocaleString()}</div>;
