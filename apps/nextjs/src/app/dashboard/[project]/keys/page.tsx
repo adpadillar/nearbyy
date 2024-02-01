@@ -142,7 +142,7 @@ const TestPage: NextPage<TestPageProps> = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <DataTable columns={columns} data={data.keys} />
+      <DataTable columns={columns} data={data.keys} pagination={false} />
     </div>
   );
 };
