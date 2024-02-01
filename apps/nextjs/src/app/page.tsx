@@ -56,9 +56,9 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-      <div className=" relative flex flex-col items-center justify-center pb-32 pt-48">
-        <Pricing path="/dashboard"></Pricing>
-        <BackgroundPricing className=" pointer-events-none absolute bottom-0 left-2 right-0 top-32" />
+      <div className=" relative flex flex-col items-center justify-center  pb-32 pt-48">
+        <Pricing path="/dashboard" />
+        <BackgroundPricing className="absolute bottom-0 left-0 right-0 top-0 w-full" />
       </div>
 
       <SideBlob
