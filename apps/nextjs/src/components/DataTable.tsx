@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border">
-      <div className="flex items-center py-4">
+      <div className="flex items-center px-4 py-4">
         <Input
           placeholder="Filter keys by id..."
           value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
