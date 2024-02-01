@@ -4,9 +4,13 @@ import {
   doublePrecision,
   pgTable,
   text,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 export const files = pgTable("files", {
+  createdAt: timestamp("createdAt", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
   id: text("id").primaryKey(),
   text: text("text").notNull(),
   url: text("url").notNull(),
@@ -16,6 +20,9 @@ export const files = pgTable("files", {
 });
 
 export const keys = pgTable("keys", {
+  createdAt: timestamp("createdAt", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
   id: text("id").primaryKey(),
   key: text("key").notNull(),
   salt: text("salt").notNull(),
@@ -37,6 +44,9 @@ export const users = pgTable("users", {
 });
 
 export const emails = pgTable("emails", {
+  createdAt: timestamp("createdAt", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
   id: text("id").primaryKey(),
   emailAddress: text("emailAddress").notNull(),
   userId: text("userId").notNull(),
@@ -44,6 +54,9 @@ export const emails = pgTable("emails", {
 });
 
 export const projects = pgTable("projects", {
+  createdAt: timestamp("createdAt", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
   id: text("id").primaryKey(),
   externalId: text("externalId").notNull(),
   name: text("name").notNull(),

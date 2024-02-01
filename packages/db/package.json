@@ -13,7 +13,7 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
     "generate": "drizzle-kit generate:pg --out ./src/migrations --breakpoints --schema=./src/schema.ts",
-    "migrate": "pnpm with-env tsx src/migrations/migrate",
+    "migrate": "echo 'ERROR: Missing migrate script. For now migrate manually in Neon Dashboard'; exit 1",
     "studio": "pnpm with-env drizzle-kit studio --port 3333",
     "with-env": "dotenv -e ../../.env --"
   },
