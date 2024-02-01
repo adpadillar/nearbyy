@@ -9,7 +9,7 @@ interface PricingProps {
 
 const Pricing: React.FC<PricingProps> = ({ path }) => {
   return (
-    <div className="flex max-w-[70rem] flex-col items-center space-y-4 ">
+    <div className="z-20 flex max-w-[70rem] flex-col items-center space-y-4 ">
       {/* Title and subtitle */}
       <div className="flex flex-col items-center">
         <h1 className="text-6xl font-bold text-white">Worry about your app</h1>

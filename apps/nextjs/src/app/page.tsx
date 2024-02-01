@@ -26,7 +26,7 @@ export default async function HomePage() {
         className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 w-full opacity-50"
       />
       <div className=" flex min-h-[80vh] flex-col items-center justify-center space-y-9 pt-56">
-        <h1 className="max-w-4xl text-center text-[65px] font-extrabold leading-[78px] -tracking-[3px] text-white">
+        <h1 className="z-10 max-w-4xl text-center text-[65px] font-extrabold leading-[78px] -tracking-[3px] text-white">
           AI Context Made Simple: Upload, Search, Access
         </h1>
         <h2 className="text-center text-2xl font-thin text-white">
@@ -58,6 +58,19 @@ export default async function HomePage() {
       </div>
       <div className=" relative flex flex-col items-center justify-center  pb-32 pt-48">
         <Pricing path="/dashboard" />
+        {/* Pricing blob */}
+        <div
+          className="w-[80%]"
+          style={{
+            position: "absolute",
+            height: "497px",
+            bottom: "80px",
+            background:
+              "linear-gradient(66.22deg, rgba(255, 0, 0, 0.3) 33.46%, rgba(20, 0, 255, 0.3) 48.83%)",
+            filter: "blur(178.125px)",
+            borderRadius: "377.981px",
+          }}
+        />
         {/* <BackgroundPricing className="absolute bottom-0 left-0 right-0 top-0 w-full" /> */}
       </div>
 
@@ -83,7 +96,7 @@ export default async function HomePage() {
         className="pointer-events-none absolute right-0 top-0"
       /> */}
 
-      <div
+      {/* <div
         className="w-full "
         style={{
           position: "absolute",
@@ -96,7 +109,7 @@ export default async function HomePage() {
           filter: "blur(178.125px)",
           borderRadius: "377.981px",
         }}
-      ></div>
+      ></div> */}
     </main>
   );
 }
