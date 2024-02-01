@@ -23,7 +23,7 @@ export default async function HomePage() {
         src="/brand/background_pattern.svg"
         width={1446}
         height={943}
-        className="pointer-events-none absolute right-[17px] top-[5.5rem] opacity-50"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 w-full opacity-50"
       />
       <div className=" flex min-h-[80vh] flex-col items-center justify-center space-y-9 pt-56">
         <h1 className="max-w-4xl text-center text-[65px] font-extrabold leading-[78px] -tracking-[3px] text-white">
@@ -51,7 +51,7 @@ export default async function HomePage() {
               code={text}
               lang="ts"
               theme="css-variables"
-              className=" w-[40rem] rounded-md p-8"
+              className=" w-[50vw] min-w-[40rem] rounded-md p-8"
             ></Shiki>
           </div>
         </div>
