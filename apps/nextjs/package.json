@@ -26,6 +26,7 @@
     "@trpc/react-query": "^10.45.0",
     "@trpc/server": "^10.45.0",
     "geist": "^1.2.0",
+    "lucide-react": "^0.319.0",
     "next": "^14.0.3",
     "openai": "^4.24.0",
     "react": "18.2.0",

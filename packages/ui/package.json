@@ -11,6 +11,7 @@
   "files": [
     "dist/*.css"
   ],
+  "types": "./src/**/*.{tsx,ts}",
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
@@ -31,7 +32,11 @@
   "eslintConfig": {
     "extends": [
       "@nearbyy/eslint-config/base"
-    ]
+    ],
+    "rules": {
+      "import/consistent-type-specifier-style": "off",
+      "@typescript-eslint/no-empty-interface": "off"
+    }
   },
   "prettier": "@nearbyy/prettier-config",
   "dependencies": {
