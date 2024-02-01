@@ -6,12 +6,15 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 import { auth } from "@clerk/nextjs";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@nearbyy/db";
+
+import type { AppRouter } from "./root";
 
 /**
  * 1. CONTEXT
@@ -108,3 +111,19 @@ const enforceUserIsAuthed = t.middleware(({ next, ctx }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+/**
+ * Inference helpers for input types
+ * @example
+ * type PostByIdInput = RouterInputs['post']['byId']
+ *      ^? { id: number }
+ **/
+export type RouterInputs = inferRouterInputs<AppRouter>;
+
+/**
+ * Inference helpers for output types
+ * @example
+ * type AllPostsOutput = RouterOutputs['post']['all']
+ *      ^? Post[]
+ **/
+export type RouterOutputs = inferRouterOutputs<AppRouter>;

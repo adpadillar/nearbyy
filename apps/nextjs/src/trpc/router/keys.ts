@@ -53,7 +53,11 @@ export const keysRouter = createTRPCRouter({
       )!;
 
       return {
-        keys: project.keys.map((k) => ({ id: k.id })),
+        keys: project.keys.map((k) => ({
+          id: k.id,
+          description: k.description,
+          createdAt: k.createdAt,
+        })),
       };
     }),
   deleteKey: protectedProcedure
