@@ -20,10 +20,10 @@ export default async function HomePage() {
       <Navigation />
       <Image
         alt="background_image"
-        src="/brand/background_pattern.svg"
+        src="/brand/gridLandingBg.svg"
         width={1446}
         height={943}
-        className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 w-full opacity-50"
+        className="pointer-events-none absolute bottom-0 top-20 w-full pl-2 pr-2 opacity-50"
       />
       <div className=" flex min-h-[80vh] flex-col items-center justify-center space-y-9 pt-56">
         <h1 className="z-10 max-w-4xl text-center text-[65px] font-extrabold leading-[78px] -tracking-[3px] text-white">
@@ -46,17 +46,17 @@ export default async function HomePage() {
           </pre>
         </div>
         <div className="pt-8">
-          <div className=" relative z-10 rounded-md bg-gradient-to-br from-red-600 to-cyan-500 p-[0.1rem]  shadow-2xl">
+          <div className=" relative z-10 rounded-2xl bg-gradient-to-br from-[#166AE8] to-red-600 p-[0.1rem] shadow-2xl  ">
             <Shiki
               code={text}
               lang="ts"
               theme="css-variables"
-              className=" w-[50vw] min-w-[40rem] rounded-md p-8"
+              className=" w-[50vw] min-w-[40rem] rounded-2xl p-8"
             ></Shiki>
           </div>
         </div>
       </div>
-      <div className=" relative flex flex-col items-center justify-center  pb-32 pt-48">
+      <div className=" relative flex flex-col items-center justify-center  pb-64 pt-52">
         <Pricing path="/dashboard" />
         {/* Pricing blob */}
         <div
