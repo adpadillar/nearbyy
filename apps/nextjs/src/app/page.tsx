@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { GeistMono } from "geist/font/mono";
 
-import BackgroundPricing from "~/components/BackgroundPricing";
+import Footer from "~/components/Footer";
 import Navigation from "~/components/Navigation";
 import Pricing from "~/components/Pricing";
 import Shiki from "~/components/Shiki.server";
@@ -95,7 +95,38 @@ export default async function HomePage() {
         side="left_3"
         className="pointer-events-none absolute right-0 top-0"
       /> */}
-
+      <div className="relative z-10">
+        <Footer
+          content={[
+            {
+              header: "Resources",
+              bulletpoints: [
+                { text: "Documentation", path: "/dashboard" },
+                { text: "Starter templates", path: "/dashboard" },
+                { text: "Themes", path: "/dashboard" },
+                { text: "Integrations", path: "/dashboard" },
+              ],
+            },
+            {
+              header: "About",
+              bulletpoints: [
+                { text: "Press", path: "/dashboard" },
+                { text: "Telemetry", path: "/dashboard" },
+                { text: "Partner with us!", path: "/dashboard" },
+              ],
+            },
+            {
+              header: "More links",
+              bulletpoints: [
+                { text: "Blog", path: "/dashboard" },
+                { text: "Swag Shop", path: "/dashboard" },
+                { text: "Wallpapers", path: "/dashboard" },
+                { text: "Studio", path: "/dashboard" },
+              ],
+            },
+          ]}
+        />
+      </div>
       {/* <div
         className="w-full "
         style={{
