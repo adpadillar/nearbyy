@@ -56,15 +56,15 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-      <div className=" relative flex flex-col items-center justify-center  pb-64 pt-52">
+      <div className=" relative flex flex-col items-center justify-center  pb-72 pt-52">
         <Pricing path="/dashboard" />
         {/* Pricing blob */}
         <div
           className="w-[80%]"
           style={{
             position: "absolute",
-            height: "497px",
-            bottom: "80px",
+            height: "527px",
+            bottom: "200px",
             background:
               "linear-gradient(66.22deg, rgba(255, 0, 0, 0.3) 33.46%, rgba(20, 0, 255, 0.3) 48.83%)",
             filter: "blur(178.125px)",
@@ -95,7 +95,7 @@ export default async function HomePage() {
         side="left_3"
         className="pointer-events-none absolute right-0 top-0"
       /> */}
-      <div className="relative z-10">
+      <div className="relative z-10 flex">
         <Footer
           content={[
             {
@@ -127,6 +127,7 @@ export default async function HomePage() {
           ]}
         />
       </div>
+
       {/* <div
         className="w-full "
         style={{
