@@ -15,9 +15,9 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ content }) => {
   return (
     <div className="relative h-96 w-full overflow-hidden bg-[#1A1A1A] p-16">
-      <div className="absolute -right-10 bottom-0 z-0">
+      <div className="absolute -right-10 bottom-0 z-0 min-h-[24rem] min-w-[24rem]">
         <Image
-          className=" w-full"
+          className="w-full"
           src="/brand/bgFooter.svg"
           width={298}
           height={43}
