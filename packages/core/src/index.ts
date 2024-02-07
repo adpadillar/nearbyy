@@ -1,11 +1,11 @@
 import type { FileSearchClientResponse } from "./types";
 
 export class NearbyyClient {
-  API_KEY: string;
+  API_KEY: string | undefined;
   API_URL: string;
 
-  constructor(options: { API_KEY: string; API_URL?: string }) {
-    this.API_KEY = options.API_KEY;
+  constructor(options: { API_KEY?: string; API_URL?: string }) {
+    this.API_KEY = options.API_KEY ?? process.env.NEARBYY_API_KEY ?? undefined;
     this.API_URL = options.API_URL ?? "https://nearbyy.com/api";
   }
 
