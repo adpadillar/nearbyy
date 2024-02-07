@@ -33,6 +33,8 @@ export const POST = withKeyAuth({
         text,
         type: fileMimeString,
         url: body.fileUrl,
+        id: crypto.randomUUID(),
+        createdAt: new Date(),
       });
 
       return { status: 200, body: null };
@@ -65,11 +67,13 @@ export const GET = withKeyAuth({
       params.limit,
     );
 
+    console.log(files);
+
     return {
       status: 200,
       body: files.map((file) => {
         return {
-          id: file.id!,
+          id: file.id,
           text: file.text,
           type: file.type,
           url: file.url,

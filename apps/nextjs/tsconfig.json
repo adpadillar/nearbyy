@@ -7,15 +7,11 @@
       "@/components/*": ["../../packages/ui/src/components/*"],
       "@/utils": ["../../packages/ui/src/lib/utils.ts"]
     },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "plugins": [{ "name": "next" }],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": [".", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", ".next"],
   "typedocOptions": {
     "entryPoints": "src/app/api/**/*.{ts,tsx}"
   }

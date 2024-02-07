@@ -7,7 +7,7 @@ export const getSchema = {
   }),
   response: z.array(
     z.object({
-      id: z.number(),
+      id: z.string(),
       text: z.string(),
       type: z.string(),
       url: z.string(),
