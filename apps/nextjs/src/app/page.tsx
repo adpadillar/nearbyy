@@ -5,10 +5,7 @@ import { GeistMono } from "geist/font/mono";
 import Navigation from "~/components/Navigation";
 import SideBlob from "~/components/SideBlob";
 
-export const runtime = "edge";
-export const preferredRegion = "iad1";
-
-export const HomePage = () => {
+const HomePage = () => {
   return (
     <main>
       <Navigation />
