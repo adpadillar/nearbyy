@@ -24,16 +24,8 @@ describe("key auth", () => {
   });
 
   it("should have the correct format", () => {
-    const [project, bytes] = key.split(":");
-
-    expect(bytes).toBeDefined();
-    expect(project).toBeDefined();
-
-    expect(project).toBe(projectid);
-    expect(bytes).toBeTypeOf("string");
-
-    expect(bytes).toHaveLength(48);
-    expect(key).toHaveLength(48 + `${projectid}:`.length);
+    expect(key).toBeTypeOf("string");
+    expect(key).toHaveLength(48);
   });
 
   it("should validate a key", async () => {
@@ -44,7 +36,9 @@ describe("key auth", () => {
   });
 
   it("should not validate a key", async () => {
-    const { valid, projectid: p } = await validateKey(`${projectid}:false_key`);
+    const bytes = crypto.getRandomValues(new Uint8Array(24));
+    const randomFalseKey = Buffer.from(bytes).toString("hex");
+    const { valid, projectid: p } = await validateKey(randomFalseKey);
 
     expect(valid).toBe(false);
     expect(p).toBe(null);
