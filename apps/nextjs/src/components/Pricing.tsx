@@ -12,12 +12,12 @@ const Pricing: React.FC<PricingProps> = ({ path }) => {
     <div className="z-20 flex max-w-[70rem] flex-col items-center space-y-4 ">
       {/* Title and subtitle */}
       <div className="flex flex-col items-center">
-        <h1 className="text-6xl font-bold text-white">Worry about your app</h1>
+        <h1 className="text-6xl font-bold text-white">Empower Your Growth,</h1>
         <h1 className=" inline-block bg-gradient-to-r from-red-600 to-[#166AE8] bg-clip-text text-6xl  font-bold text-transparent">
-          not your bill.
+          explore pricing.
         </h1>
         <h2 className="pb-10 pt-6 font-normal text-white text-opacity-70 ">
-          We wanted pricing to be as simple as possible. No calculator needed.
+          Start building something great, minus the pricing puzzle
         </h2>
       </div>
 
@@ -25,19 +25,19 @@ const Pricing: React.FC<PricingProps> = ({ path }) => {
         {/* BOX 1 */}
         <PricingCard
           content={{
-            header: "2GB App",
+            header: "Hobby Plan",
             headerStyle: "primary",
-            subTitle: "Everything you need to start uploading!",
-            price: "$0",
+            subTitle: "The best plan to start prototyping your app for free!",
+            price: "0 USD",
             timeLabel: "/month",
             linkText: "Get started",
             path: path,
             list: [
-              "2GB of storage *",
-              "Unlimited uploads and downloads",
-              "(Probably) cheaper than a cup of coffee",
+              "Up to 250 files*",
+              "20k queries/month",
+              "1 developer/project",
             ],
-            note: "* Storage shared between all apps",
+            note: "*Or 1 GB, whichever comes first",
             linkStyle: "primary",
           }}
         ></PricingCard>
@@ -45,39 +45,41 @@ const Pricing: React.FC<PricingProps> = ({ path }) => {
         {/* BOX 2 */}
         <PricingCard
           content={{
-            header: "100GB App",
-            subTitle: "For those with teams or more than 2 gigs of files",
-            price: "$10",
+            header: "Pro Plan",
+            subTitle:
+              "All the tools and features you need for launching your app",
+            price: "19 USD",
             timeLabel: "/month",
             linkText: "Get started!",
             path: path,
             list: [
-              "100GB of storage",
-              "Up to 10 developers",
-              "Regions",
-              "Private Files",
+              "Up to 5000 files",
+              "1M queries/month",
+              "5 developers/project",
+              "Custom GPTs",
             ],
             linkStyle: "secondary",
-            topLabelText: "Theo´s fav",
+            topLabelText: "Coming Soon",
           }}
         ></PricingCard>
 
         {/* BOX 3 */}
         <PricingCard
           content={{
-            header: "Unlimited Apps(s)",
+            header: "Enterprise",
             headerStyle: "primary",
             subTitle:
-              "Need more gigs? More devs? More help convincing your boss? Hit us up",
-            price: "Custom",
+              "Is Pro not Pro enough? More files, more devs, and usage based pricing",
+            price: "Custom*",
             path: path,
             linkText: "Schedule a call",
             list: [
-              "Usage based pricing",
-              "Unlimited storage & devs",
+              "Everything in Pro",
+              "After that, usage based pricing",
               "Dedicated support",
-              "Theo will hit you up sometimes",
             ],
+            topLabelText: "Coming Soon",
+            note: "*Starts at 199 USD/month",
           }}
         ></PricingCard>
       </div>
