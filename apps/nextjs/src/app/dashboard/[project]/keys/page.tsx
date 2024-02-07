@@ -16,12 +16,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
 } from "@nearbyy/ui";
 
 import type { RouterOutputs } from "~/trpc/trpc";
@@ -31,7 +25,7 @@ import { api } from "~/trpc/react";
 
 type Key = RouterOutputs["keys"]["listForProject"]["keys"][number];
 
-export const columns: ColumnDef<Key>[] = [
+const columns: ColumnDef<Key>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -71,6 +65,7 @@ export const columns: ColumnDef<Key>[] = [
   {
     id: "delete",
     header: "Delete",
+    enableHiding: false,
     cell: ({ row }) => {
       const key = row.original;
       // Cell renderer IS a react component. We can use hooks here
@@ -137,22 +132,7 @@ const TestPage: NextPage<TestPageProps> = () => {
       <p className="pt-2 text-lg opacity-[0.67]">
         View and manage your Nearbyy keys
       </p>
-      <div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline">Create a key</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create a new Nearbyy API Key</DialogTitle>
-              <DialogDescription>
-                Describe what a Nearbyy API Key is for... And what does creating
-                one entail
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
-      </div>
+
       <DataTable columns={columns} data={data.keys} pagination={false} />
     </div>
   );

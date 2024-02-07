@@ -5,6 +5,7 @@ import { generateKey } from "@nearbyy/auth";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const keysRouter = createTRPCRouter({
+  // Generates a key for a project
   generateForProject: protectedProcedure
     .input(
       z.object({
@@ -12,6 +13,7 @@ export const keysRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      // Find the project we want to create a key for
       const project = await ctx.drizzle.query.projects.findFirst({
         where: ctx.helpers.and(
           ctx.helpers.eq(ctx.schema.projects.externalId, input.projectId),
@@ -19,10 +21,12 @@ export const keysRouter = createTRPCRouter({
         ),
       });
 
+      // If it does not exist, user does not have a project with that ID
       if (!project) {
         throw new Error("Project not found");
       }
 
+      // Generate an API key for the project
       const key = await generateKey(project.id, ctx.session.userId!);
       return { key };
     }),
