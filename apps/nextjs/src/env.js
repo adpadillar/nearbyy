@@ -19,9 +19,11 @@ export const env = createEnv({
    */
   server: {
     NEON_DIRECT_URL: z.string().min(1),
+    NEON_DIRECT_URL_DEV: z.string().min(1),
     OPENAI_KEY: z.string().min(1),
     CLERK_SECRET_KEY: z.string().min(1),
-    CLERK_SIGNING_KEY: z.string().min(1)
+    CLERK_SIGNING_KEY: z.string().min(1),
+    CLERK_SIGNING_KEY_DEV: z.string().min(1),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -38,11 +40,13 @@ export const env = createEnv({
     VERCEL_URL: process.env.VERCEL_URL,
     PORT: process.env.PORT,
     NEON_DIRECT_URL: process.env.NEON_DIRECT_URL,
+    NEON_DIRECT_URL_DEV: process.env.NEON_DIRECT_URL_DEV,
     OPENAI_KEY: process.env.OPENAI_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SIGNING_KEY: process.env.CLERK_SIGNING_KEY,
+    CLERK_SIGNING_KEY_DEV: process.env.CLERK_SIGNING_KEY_DEV,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },

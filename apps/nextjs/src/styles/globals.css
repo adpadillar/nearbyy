@@ -3,16 +3,15 @@
 @tailwind utilities;
 
 :root {
-  /* Code highlighting */
-  --shiki-color-text: azure;
-  --shiki-color-background: black;
-  --shiki-token-constant: plum;
-  --shiki-token-string: orchid;
-  --shiki-token-comment: salmon;
-  --shiki-token-keyword: powderblue;
-  --shiki-token-parameter: seashell;
-  --shiki-token-function: dodgerblue;
-  --shiki-token-string-expression: burlywood;
-  --shiki-token-punctuation: linen;
-  --shiki-token-link: honeydew;
+  --shiki-color-text: #ffffff;
+  --shiki-color-background: #161616; /* Dark gray background */
+  --shiki-token-constant: #4dc9fe; /* Light blue constant */
+  --shiki-token-string: #ff5454; /* Light red string */
+  --shiki-token-comment: #7c7c7c;
+  --shiki-token-keyword: #aba9f1; /* Light blue keyword */
+  --shiki-token-parameter: #72ff85; /* Light green parameter */
+  --shiki-token-function: #ff85a0; /* Light pink function */
+  --shiki-token-string-expression: #fff48f ; /* Light yellow string expression */
+  --shiki-token-punctuation: #ffffff;
+  --shiki-token-link: #7cfff7; /* Light cyan link */
 }

@@ -5,9 +5,7 @@ import { devDb, db as prodDb } from "@nearbyy/db";
 
 import { env } from "~/env";
 
-const secret = env.CLERK_SIGNING_KEY.replace("whsec_", "");
-
-async function verifyRequest<T = unknown>(req: Request) {
+async function verifyRequest<T = unknown>(req: Request, secret: string) {
   const svixId = req.headers.get("svix-id") ?? req.headers.get("webhook-id");
   const svixTimestamp =
     req.headers.get("svix-timestamp") ?? req.headers.get("webhook-timestamp");
@@ -52,9 +50,17 @@ export const POST = async (req: Request) => {
     });
   }
 
+  const secret =
+    environment === "PRODUCTION"
+      ? env.CLERK_SIGNING_KEY
+      : env.CLERK_SIGNING_KEY_DEV;
+
   const db = environment === "PRODUCTION" ? prodDb : devDb;
 
-  const { data: evt, valid } = await verifyRequest<WebhookEvent>(req);
+  const { data: evt, valid } = await verifyRequest<WebhookEvent>(
+    req,
+    secret.replace("whsec_", ""),
+  );
 
   if (!valid) {
     return new Response("invalid request", {
