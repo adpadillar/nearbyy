@@ -145,5 +145,3 @@ export default async function HomePage() {
     </main>
   );
 }
-
-export default HomePage;
