@@ -7,13 +7,26 @@ import Navigation from "~/components/Navigation";
 import Pricing from "~/components/Pricing";
 import Shiki from "~/components/Shiki.server";
 import SideBlob from "~/components/SideBlob";
-import { env } from "~/env";
+
+const text = `import { NearbyyClient } from "@nearbyy/core";
+
+// Create a new NearbyyClient instance
+const client = new NearbyyClient({
+  API_KEY: "YOUR_API_KEY",
+});
+
+// Upload a file
+await client.uploadFile({
+  fileUrl: "https://example.com/image.jpg",
+});
+
+// Query for similar text
+await client.queryDatabase({
+  query: "This is some cool text",
+});
+`;
 
 export default async function HomePage() {
-  const host = env.VERCEL_URL ?? "localhost:3000";
-  const res = await fetch(`http://${host}/example/example-home.ts`);
-
-  const text = (await res.text()) as string;
   return (
     <main>
       <Navigation />
