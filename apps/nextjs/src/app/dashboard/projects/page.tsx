@@ -1,5 +1,8 @@
 import React from "react";
 
+import CreateNewProjectButton from "~/components/NewProjectButton";
+import ProjectList from "~/components/ProjectList";
+
 interface ProjectsProps {
   children?: React.ReactNode;
 }
@@ -11,6 +14,10 @@ const Projects: React.FC<ProjectsProps> = () => {
       <p className="pt-2 text-lg opacity-[0.67]">
         Select a project from the following list
       </p>
+      <div className="grid grid-cols-3 gap-4">
+        <ProjectList />
+        <CreateNewProjectButton />
+      </div>
     </div>
   );
 };

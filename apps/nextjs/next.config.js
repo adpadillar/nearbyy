@@ -10,6 +10,7 @@ const config = {
     "@nearbyy/db",
     "@nearbyy/embeddings",
     "@nearbyy/auth",
+    "@nearbyy/ui",
   ],
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },

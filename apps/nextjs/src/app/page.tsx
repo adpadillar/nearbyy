@@ -7,14 +7,26 @@ import Navigation from "~/components/Navigation";
 import Pricing from "~/components/Pricing";
 import Shiki from "~/components/Shiki.server";
 import SideBlob from "~/components/SideBlob";
-import { env } from "~/env";
+
+const text = `import { NearbyyClient } from "@nearbyy/core";
+
+// Create a new NearbyyClient instance
+const client = new NearbyyClient({
+  API_KEY: "YOUR_API_KEY",
+});
+
+// Upload a file
+await client.uploadFile({
+  fileUrl: "https://example.com/image.jpg",
+});
+
+// Query for similar text
+await client.queryDatabase({
+  query: "This is some cool text",
+});
+`;
 
 export default async function HomePage() {
-  const res = await fetch(
-    `${env.VERCEL_URL ?? "http://localhost:3000"}/example/example-home.ts`,
-  );
-
-  const text = (await res.text()) as string;
   return (
     <main>
       <Navigation />
@@ -93,7 +105,7 @@ export default async function HomePage() {
       />
       <SideBlob
         side="left_3"
-        className="pointer-events-none absolute right-0 top-0"
+        className="pointer-events-none absolute right-0 top-0" 
       /> */}
       <div className="relative z-10 flex">
         <Footer

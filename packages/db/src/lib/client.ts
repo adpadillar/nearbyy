@@ -60,12 +60,11 @@ const createCustomDatabase = ({ directUrl }: { directUrl: string }) => {
 
         const res = await client.execute(statement);
 
-        // parse all the rows
+        // Cast the result to the correct type
         const validator = db.validator(tablename);
-        const wrappedValidator = validator.array();
-        const parsed = wrappedValidator.parse(res.rows);
+        type Row = z.infer<typeof validator>;
 
-        return parsed;
+        return res.rows as Row[];
       },
     },
   };

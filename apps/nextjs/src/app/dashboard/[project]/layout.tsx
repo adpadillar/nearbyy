@@ -10,7 +10,7 @@ const Layout: React.FC<LayoutProps> = async ({ children }) => {
   const { found } = await getProject();
 
   if (!found) {
-    return <div>Project not found</div>;
+    return <div>404 Project</div>;
   }
 
   return <>{children}</>;

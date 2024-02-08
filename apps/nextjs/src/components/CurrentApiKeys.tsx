@@ -1,30 +1,18 @@
 "use client";
 
 import React from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { getSchema } from "~/app/api/keys/list/schema";
-import { deleteSchema } from "~/app/api/keys/revoke/schema";
-import { typesafeFetch } from "~/utils/fetchApi";
-import { queryClient } from "./ReactQueryProvider";
+import { api } from "~/trpc/react";
+import { useProjectId } from "./ProjectIdContext";
 
 interface CurrentApiKeysProps {
   children?: React.ReactNode;
 }
 
 const CurrentApiKeys: React.FC<CurrentApiKeysProps> = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["api-keys"],
-    queryFn: async () => {
-      const res = await typesafeFetch({
-        route: "/api/keys/list",
-        schema: getSchema,
-        method: "GET",
-      });
-
-      if (!res.success) throw res.error;
-      return res.data;
-    },
+  const { id } = useProjectId();
+  const { data, isLoading } = api.keys.listForProject.useQuery({
+    projectId: id,
   });
 
   if (isLoading) return <div>Loading...</div>;
@@ -46,34 +34,28 @@ const CurrentApiKeys: React.FC<CurrentApiKeysProps> = () => {
 };
 
 interface DeleteButtonProps {
-  id: number;
+  id: string;
 }
 
 const DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => {
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (id: number) => {
-      const res = await typesafeFetch({
-        route: "/api/keys/revoke",
-        method: "DELETE",
-        schema: deleteSchema,
-        params: { id },
-      });
-
-      if (!res.success) throw res.error;
-      return res.data;
-    },
+  const utils = api.useUtils();
+  const { mutate, isLoading } = api.keys.deleteKey.useMutation({
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["api-keys"] });
+      await utils.keys.listForProject.invalidate();
     },
   });
 
   return (
     <button
-      disabled={isPending}
-      onClick={() => mutate(id)}
+      disabled={isLoading}
+      onClick={() =>
+        mutate({
+          keyId: id,
+        })
+      }
       className="rounded-md bg-red-600 px-4 py-2 text-white"
     >
-      {isPending ? "Deleting..." : "Delete"}
+      {isLoading ? "Deleting..." : "Delete"}
     </button>
   );
 };

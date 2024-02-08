@@ -1,80 +1,49 @@
-import { genSaltSync as genSalt, hashSync as hash } from "bcrypt-edge";
+import { hashSync as hash } from "bcrypt-edge";
 
 import { db } from "@nearbyy/db";
 
-/**
- *
- * This function takes an API key and validates it
- * The key should be in the format of `project_${projectid}:${API_KEY}`
- * It will return an object with a boolean `valid` and the `projectid`
- *
- * @param key the key to validate in the format of `project_${projectid}:${API_KEY}`
- * @returns
- */
-export const validateKey = async (key: string) => {
-  const [project, bytes] = key.split(":");
+// This is a random salt applied to all keys.
+// After thinking about or previous salting aproaches,
+// turns out we don't really need a salt. Removing a dynamic
+// salt allows us to O(1) key lookups, stripping out project
+// information from the key, and still keeping it safe.
+const GLOBAL_SALT = "$2a$10$9yZ5QsZDPRmGKbJfeSCsM.";
 
-  if (!project || !bytes) {
-    // Invalid key format
+export const validateKey = async (key: string) => {
+  const hashed_key = hash(key, GLOBAL_SALT);
+
+  const db_key = await db.drizzle.query.keys.findFirst({
+    where: db.helpers.eq(db.schema.keys.key, hashed_key),
+  });
+
+  if (!db_key) {
     return {
       valid: false,
       projectid: null,
     } as const;
   }
 
-  const keys = await db.drizzle.query.keys.findMany({
-    where: db.helpers.eq(
-      db.schema.keys.projectid,
-      project.replace("project_", ""),
-    ),
-  });
-
-  for (const key of keys) {
-    // TODO: This can be sped up when there is a lot
-    // of keys in a single project
-    const hashed_key = hash(bytes, key.salt);
-
-    if (key.key === hashed_key) {
-      return {
-        valid: true,
-        projectid: key.projectid,
-      } as const;
-    }
-  }
-
   return {
-    valid: false,
-    projectid: null,
+    valid: true,
+    projectid: db_key.projectid,
   } as const;
 };
 
-/**
- * Calling this function with a projectid will generate a new key for that project
- * It will return the key to be shown to the user, but won't be stored anywhere.
- *
- * The key will be in the format of `project_${projectid}:${API_KEY}`.
- *
- * The key's hash will be stored in the database.
- *
- *
- * @param projectid
- * @returns
- */
 export const generateKey = async (projectid: string, userid: string) => {
-  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  const bytes = crypto.getRandomValues(new Uint8Array(24));
   const API_KEY = Buffer.from(bytes).toString("hex");
 
-  const salt = genSalt(10);
-  const hashedKey = hash(API_KEY, salt);
+  const hashedKey = hash(API_KEY, GLOBAL_SALT);
 
   await db.drizzle.insert(db.schema.keys).values({
     key: hashedKey,
-    salt,
+    salt: GLOBAL_SALT,
     projectid,
     userid,
+    id: crypto.randomUUID(),
   });
 
-  return `project_${projectid}:${API_KEY}` as const;
+  return API_KEY;
 };
 
 /**
