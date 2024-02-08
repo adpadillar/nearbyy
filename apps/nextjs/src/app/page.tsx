@@ -10,11 +10,8 @@ import SideBlob from "~/components/SideBlob";
 import { env } from "~/env";
 
 export default async function HomePage() {
-  const url = env.VERCEL_URL ?? "http://localhost:3000";
-  console.log("url", url);
-  const res = await fetch(
-    `${env.VERCEL_URL ?? "http://localhost:3000"}/example/example-home.ts`,
-  );
+  const host = env.VERCEL_URL ?? "localhost:3000";
+  const res = await fetch(`http://${host}/example/example-home.ts`);
 
   const text = (await res.text()) as string;
   return (
