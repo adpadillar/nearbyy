@@ -35,7 +35,7 @@ export default async function HomePage() {
         src="/brand/gridLandingBg.svg"
         width={1446}
         height={943}
-        className="pointer-events-none absolute bottom-0 top-20 w-full pl-2 pr-2 opacity-50"
+        className="pointer-events-none absolute bottom-0 top-20 w-full select-none pl-2 pr-2 opacity-50"
       />
       <div className=" flex min-h-[80vh] flex-col items-center justify-center space-y-9 pt-56">
         <h1 className="z-10 max-w-4xl text-center text-[65px] font-extrabold leading-[78px] -tracking-[3px] text-white">
