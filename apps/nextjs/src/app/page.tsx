@@ -12,7 +12,6 @@ import { env } from "~/env";
 export default async function HomePage() {
   const res = await fetch(
     `${env.VERCEL_URL ?? "http://localhost:3000"}/example/example-home.ts`,
-    { cache: "no-store" },
   );
 
   const text = (await res.text()) as string;
