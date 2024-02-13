@@ -1,5 +1,5 @@
 export interface FileSearchClientResponse {
-  id: number;
+  id: string;
   text: string;
   type: string;
   url: string;
@@ -8,3 +8,17 @@ export interface FileSearchClientResponse {
     projectid: string;
   };
 }
+
+export type FileEndpointPostResponse =
+  | {
+      success: true;
+      error: null;
+      ids: string[];
+      rejectedUrls?: undefined;
+    }
+  | {
+      success: false;
+      error: string;
+      ids: string[];
+      rejectedUrls: string[];
+    };

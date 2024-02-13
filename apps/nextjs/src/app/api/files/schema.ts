@@ -20,7 +20,32 @@ export const getSchema = {
 };
 
 export const postSchema = {
+  body: z
+    .object({
+      fileUrl: z.string(),
+      fileUrls: z.undefined().optional(),
+    })
+    .or(
+      z.object({
+        fileUrls: z.array(z.string()),
+        fileUrl: z.undefined().optional(),
+      }),
+    ),
+  response: z.object({
+    success: z.boolean(),
+    error: z.string().nullable(),
+    ids: z.array(z.string()),
+    rejectedUrls: z.array(z.string()).optional(),
+  }),
+};
+
+export const deleteSchema = {
   body: z.object({
-    fileUrl: z.string(),
+    ids: z.array(z.string()),
+  }),
+  response: z.object({
+    success: z.boolean(),
+    error: z.string().optional(),
+    rejectedIds: z.array(z.string()).optional(),
   }),
 };
