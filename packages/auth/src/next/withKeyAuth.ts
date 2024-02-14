@@ -31,7 +31,11 @@ export const withKeyAuth = <
     // If the token is missing
     if (!token) {
       return new Response(
-        `Unauthorized\nDid you forget to add the Bearer token?`,
+        JSON.stringify({
+          success: false,
+          error: "Unauthorized\nNo token provided. Please provide a valid one",
+          data: null,
+        }),
         { status: 401 },
       );
     }
@@ -42,7 +46,11 @@ export const withKeyAuth = <
     // If the token is invalid
     if (!valid) {
       return new Response(
-        `Unauthorized\nThis is an unvalid token. Please provide a valid one`,
+        JSON.stringify({
+          success: false,
+          error: "Unauthorized\nInvalid token. Please provide a valid one",
+          data: null,
+        }),
         { status: 401 },
       );
     }
@@ -56,7 +64,11 @@ export const withKeyAuth = <
           schema.body.parse(body);
         } catch (e) {
           return new Response(
-            `Bad request\nBody was missing or in the wrong format`,
+            JSON.stringify({
+              success: false,
+              error: "Bad request\nInvalid body",
+              data: null,
+            }),
             { status: 400 },
           );
         }
@@ -68,9 +80,16 @@ export const withKeyAuth = <
         const parsedParams = schema.params.safeParse(paramsObject);
 
         if (!parsedParams.success) {
-          return new Response(`Bad request\n${parsedParams.error.message}`, {
-            status: 400,
-          });
+          return new Response(
+            JSON.stringify({
+              success: false,
+              error: "Bad request\nInvalid params",
+              data: null,
+            }),
+            {
+              status: 400,
+            },
+          );
         }
 
         params = parsedParams.data as unknown;
