@@ -12,9 +12,10 @@
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --",
     "release": "pnpm run ci && changeset version && changeset publish",
     "ci": "pnpm build && pnpm lint && pnpm typecheck && pnpm format",
-    "test": "vitest"
+    "test": "pnpm with-env vitest"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
@@ -25,7 +26,8 @@
     "prettier": "^3.1.1",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "vitest": "^1.1.0"
+    "vitest": "^1.1.0",
+    "dotenv-cli": "^7.3.0"
   },
   "eslintConfig": {
     "extends": [

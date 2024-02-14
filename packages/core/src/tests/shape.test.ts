@@ -12,7 +12,7 @@ describe("API shape test", () => {
   const createdIds: string[] = [];
 
   const nearbyy = new NearbyyClient({
-    API_KEY: "bfcb05a68395618f4a5c7ab11f654bb8158cecc01b28e9b5",
+    API_KEY: process.env.NEARBYY_TESTING_KEY!,
     API_URL: "http://localhost:3000/api", // Test with the local server
   });
 
