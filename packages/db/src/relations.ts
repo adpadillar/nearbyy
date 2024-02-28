@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 
-import { emails, files, keys, projects, users } from "./tables";
+import { chunks, emails, files, keys, projects, users } from "./tables";
 
 // Relations
 export const filesRelations = relations(files, ({ one }) => {
@@ -45,10 +45,28 @@ export const emailsRelations = relations(emails, ({ one }) => {
 export const projectsRelations = relations(projects, ({ many, one }) => {
   return {
     files: many(files),
+    chunks: many(chunks),
     keys: many(keys),
     owner: one(users, {
       fields: [projects.owner],
       references: [users.id],
+    }),
+  };
+});
+
+export const chunksRelations = relations(chunks, ({ one }) => {
+  return {
+    project: one(projects, {
+      fields: [chunks.projectId],
+      references: [projects.id],
+    }),
+    file: one(files, {
+      fields: [chunks.fileId],
+      references: [files.id],
+    }),
+    nextChunk: one(chunks, {
+      fields: [chunks.nextChunkId],
+      references: [chunks.id],
     }),
   };
 });
