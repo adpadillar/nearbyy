@@ -1,3 +1,5 @@
+import type { Tiktoken, TiktokenEncoding } from "js-tiktoken";
+import { getEncoding } from "js-tiktoken";
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -48,3 +50,21 @@ export const getSingleEmbedding = async (toEmbed: string) => {
     } as const;
   }
 };
+
+export class Tokenizer {
+  encoding: TiktokenEncoding;
+  tiktoken: Tiktoken;
+
+  constructor(encoding: TiktokenEncoding = "cl100k_base") {
+    this.encoding = encoding;
+    this.tiktoken = getEncoding(encoding);
+  }
+
+  encode(text: string) {
+    return this.tiktoken.encode(text);
+  }
+
+  decode(tokens: number[]) {
+    return this.tiktoken.decode(tokens);
+  }
+}
