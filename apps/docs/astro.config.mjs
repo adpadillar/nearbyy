@@ -7,7 +7,8 @@ export default defineConfig({
     starlight({
       title: "Nearbyy Docs",
       logo: {
-        src: "./src/assets/logo.svg",
+        dark: "./src/assets/logo.svg",
+        light: "./src/assets/logo-dark.svg",
         alt: "Nearbyy Logo",
         replacesTitle: true,
       },
