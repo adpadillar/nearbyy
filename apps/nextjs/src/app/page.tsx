@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import TailwindBreakpoints from "~/components/debug/TailwindBreakpoints";
+// import TailwindBreakpoints from "~/components/debug/TailwindBreakpoints";
 import Footer from "~/components/Footer";
 import ValueProposition from "~/components/landing/sections/ValueProposition";
 import Navigation from "~/components/Navigation";
@@ -28,7 +28,7 @@ await client.queryDatabase({
 export default async function HomePage() {
   return (
     <main>
-      <TailwindBreakpoints />
+      {/* <TailwindBreakpoints /> */}
       <Navigation />
       <Image
         alt="background_image"
