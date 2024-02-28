@@ -88,6 +88,9 @@ importers:
       '@trpc/server':
         specifier: ^10.45.0
         version: 10.45.0
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.0
       geist:
         specifier: ^1.2.0
         version: 1.2.0(next@14.0.4)

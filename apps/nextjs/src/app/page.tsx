@@ -1,11 +1,10 @@
 import Image from "next/image";
-import Link from "next/link";
-import { GeistMono } from "geist/font/mono";
 
+import TailwindBreakpoints from "~/components/debug/TailwindBreakpoints";
 import Footer from "~/components/Footer";
+import ValueProposition from "~/components/landing/sections/ValueProposition";
 import Navigation from "~/components/Navigation";
 import Pricing from "~/components/Pricing";
-import Shiki from "~/components/Shiki.server";
 import SideBlob from "~/components/SideBlob";
 
 const text = `import { NearbyyClient } from "@nearbyy/core";
@@ -29,45 +28,16 @@ await client.queryDatabase({
 export default async function HomePage() {
   return (
     <main>
+      <TailwindBreakpoints />
       <Navigation />
       <Image
         alt="background_image"
         src="/brand/gridLandingBg.svg"
         width={1446}
         height={943}
-        className="pointer-events-none absolute bottom-0 top-20 w-full pl-2 pr-2 opacity-50"
+        className="pointer-events-none absolute bottom-0 top-20 w-full select-none pl-2 pr-2 opacity-50"
       />
-      <div className=" flex min-h-[80vh] flex-col items-center justify-center space-y-9 pt-56">
-        <h1 className="z-10 max-w-4xl text-center text-[65px] font-extrabold leading-[78px] -tracking-[3px] text-white">
-          AI Context Made Simple: Upload, Search, Access
-        </h1>
-        <h2 className="text-center text-2xl font-thin text-white">
-          Extend your AI model capabilities with a simple API call
-        </h2>
-        <div className=" relative z-10 flex space-x-4 pt-6">
-          <Link
-            href="/dashboard"
-            className="flex items-center justify-center rounded-[28px] border-2 border-black bg-black/[0.44] px-10 py-4 text-xl font-extralight text-white"
-          >
-            get started!
-          </Link>
-          <pre
-            className={`${GeistMono.className} flex items-center justify-center rounded-[18px] border-2 border-black bg-black/[0.44] px-10 py-4 text-lg  text-white`}
-          >
-            npm install @nearbyy/core
-          </pre>
-        </div>
-        <div className="pt-8">
-          <div className=" relative z-10 rounded-2xl bg-gradient-to-br from-[#166AE8] to-red-600 p-[0.1rem] shadow-2xl  ">
-            <Shiki
-              code={text}
-              lang="ts"
-              theme="css-variables"
-              className=" w-[50vw] min-w-[40rem] rounded-2xl p-8"
-            ></Shiki>
-          </div>
-        </div>
-      </div>
+      <ValueProposition text={text} />
       <div className=" relative flex flex-col items-center justify-center  pb-72 pt-52">
         <Pricing path="/dashboard" />
         {/* Pricing blob */}
