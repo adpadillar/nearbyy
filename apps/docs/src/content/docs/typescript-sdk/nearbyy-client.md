@@ -6,7 +6,7 @@ sidebar:
 ---
 
 :::caution[Nearbyy is currently in ALPHA]
-Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, please contact us.
+Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, [please contact us here](mailto:adpadillar25@gmail.com).
 :::
 
 The NearbyyClient class is the main class of the Nearbyy SDK. It is used to upload and retrieve files from the Nearbyy platform.
@@ -37,37 +37,45 @@ constructor(options: NearbyyClientOptions)
 Uploads a file to the Nearbyy platform.
 
 ```typescript title="uploadFile.ts"
-interface UploadFileOptions {
-  fileUrl: string;
-}
-
-async uploadFile(options: UploadFileOptions): Promise<void>
+async uploadFile(body: FileEndpointPostBody): Promise<FileEndpointPostResponse>
 ```
 
 #### Parameters
 
-- `options`: The options to use when uploading the file.
-  - `fileUrl`: The URL of the file to be uploaded.
+- [`FileEndpointPostBody`](../../api-reference/types#fileendpointpostbody): The body of the request.
+
+#### Returns
+
+- [`Promise<FileEndpointPostResponse>`](../../api-reference/types#fileendpointpostresponse): The response from the server.
 
 ### queryDatabase
 
 Performs a semantic search on the Nearbyy platform.
 
 ```typescript title="queryDatabase.ts"
-interface QueryDatabaseOptions {
-  query: string;
-  limit?: number;
-}
-
-async queryDatabase(options: QueryDatabaseOptions): Promise<FileSearchClientResponse[]>
+async queryDatabase(params: FileEndpointGetParams): Promise<FileEndpointGetResponse>
 ```
 
 #### Parameters
 
-- `options`: The options to use when querying the database.
-  - `query`: The query to search for.
-  - `limit?`: The maximum number of results to return. (_between 1 and 100, default is 10_)
+- [`FileEndpointGetParams`](../../api-reference/types#fileendpointgetparams): The parameters of the request.
 
-#### Return value
+#### Returns
 
-[`FileSearchClientResponse[]`](./file-search-client-response)
+- [`Promise<FileEndpointGetResponse>`](../../api-reference/types#fileendpointgetresponse): The response from the server.
+
+### deleteFile
+
+Deletes a file from the Nearbyy platform.
+
+```typescript title="deleteFile.ts"
+async deleteFile(params: FileEndpointDeleteParams): Promise<FileEndpointDeleteResponse>
+```
+
+#### Parameters
+
+- [`FileEndpointDeleteParams`](../../api-reference/types#fileendpointdeleteparams): The parameters of the request.
+
+#### Returns
+
+- [`Promise<FileEndpointDeleteResponse>`](../../api-reference/types#fileendpointdeleteresponse): The response from the server.
