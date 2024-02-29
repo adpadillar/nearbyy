@@ -11,6 +11,7 @@ const MIME_TYPES = {
   docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   txt: "text/plain",
   md: "text/markdown",
+  html: "text/html",
 };
 
 export class TextExtractor {
