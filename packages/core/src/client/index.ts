@@ -7,6 +7,10 @@ import type {
   FileEndpointPostResponse,
 } from "../api";
 
+interface _FileUploader {
+  upload(files: File[]): Promise<string[]>;
+}
+
 export class NearbyyClient {
   API_KEY: string | undefined;
   API_URL: string;

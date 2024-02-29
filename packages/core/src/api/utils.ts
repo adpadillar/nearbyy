@@ -28,3 +28,5 @@ export const createResponseSchema = <
     errorResponseSchema.merge(z.object({ data: schemaIfError })),
   ]);
 };
+
+export type EndpointResponse = z.infer<ReturnType<typeof createResponseSchema>>;
