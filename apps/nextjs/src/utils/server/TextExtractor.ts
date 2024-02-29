@@ -1,23 +1,48 @@
+import { extractRawText } from "mammoth";
 import { getDocument } from "pdfjs-dist";
 
+// This tells webpack to include the worker file in the bundle
+// pdfjs-dist will try to access this file, and it will not be
+// available if it's not included in the bundle
 import "pdfjs-dist/build/pdf.worker.min";
 
+const MIME_TYPES = {
+  pdf: "application/pdf",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  txt: "text/plain",
+  md: "text/markdown",
+  html: "text/html",
+};
+
 export class TextExtractor {
-  buffer: ArrayBuffer;
+  arrayBuffer: ArrayBuffer;
   mimeType: string;
 
-  constructor({ buffer, mimeType }: { buffer: ArrayBuffer; mimeType: string }) {
-    this.buffer = buffer;
+  constructor({
+    arrayBuffer: buffer,
+    mimeType,
+  }: {
+    arrayBuffer: ArrayBuffer;
+    mimeType: string;
+  }) {
+    this.arrayBuffer = buffer;
     this.mimeType = mimeType;
   }
 
   extractFromText() {
-    const text = new TextDecoder().decode(this.buffer);
+    const text = new TextDecoder().decode(this.arrayBuffer);
     return text;
   }
 
+  async extractFromDocx() {
+    const text = await extractRawText({
+      buffer: Buffer.from(this.arrayBuffer),
+    });
+    return text.value;
+  }
+
   async extractFromPdf() {
-    const doc = await getDocument(this.buffer).promise;
+    const doc = await getDocument(this.arrayBuffer).promise;
     const textArray: string[] = [];
 
     for (let i = 0; i < doc.numPages; i++) {
@@ -39,12 +64,18 @@ export class TextExtractor {
   }
 
   async extract() {
-    if (this.mimeType.startsWith("text/")) {
+    console.log(this.mimeType);
+
+    if (this.mimeType === MIME_TYPES.txt || this.mimeType === MIME_TYPES.md) {
       return { text: this.extractFromText(), error: null } as const;
     }
 
-    if (this.mimeType === "application/pdf") {
+    if (this.mimeType === MIME_TYPES.pdf) {
       return { text: await this.extractFromPdf(), error: null } as const;
+    }
+
+    if (this.mimeType === MIME_TYPES.docx) {
+      return { text: await this.extractFromDocx(), error: null } as const;
     }
 
     return { text: null, error: "Unsupported file type" } as const;

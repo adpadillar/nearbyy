@@ -88,7 +88,7 @@ export const POST = withKeyAuth({
       const fileMimeString = file.headers.get("Content-Type") ?? "";
 
       const textExtractor = new TextExtractor({
-        buffer: fileBuffer,
+        arrayBuffer: fileBuffer,
         mimeType: fileMimeString,
       });
 
