@@ -6,32 +6,18 @@ import type {
   FileEndpointPostBody,
   FileEndpointPostResponse,
 } from "../api";
-import type { FileUploader } from "./uploaders";
+
+interface _FileUploader {
+  upload(files: File[]): Promise<string[]>;
+}
 
 export class NearbyyClient {
   API_KEY: string | undefined;
   API_URL: string;
-  uploader: FileUploader | null;
 
-  constructor(options: {
-    API_KEY?: string;
-    API_URL?: string;
-    uploader?: FileUploader;
-  }) {
+  constructor(options: { API_KEY?: string; API_URL?: string }) {
     this.API_KEY = options.API_KEY ?? process.env.NEARBYY_API_KEY ?? undefined;
     this.API_URL = options.API_URL ?? "https://nearbyy.com/api";
-    this.uploader = options.uploader ?? null;
-  }
-
-  async getFileUrl(files: File[]) {
-    if (!this.uploader) {
-      throw new Error(
-        "No file uploader provided. Provide a file uploader in the client constructor.",
-      );
-    }
-
-    const urls = await this.uploader.upload(files);
-    return urls;
   }
 
   async deleteFile(payload: FileEndpointDeleteBody) {
