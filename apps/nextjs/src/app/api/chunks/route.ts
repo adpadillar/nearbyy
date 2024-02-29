@@ -2,16 +2,16 @@ import type { NextRequest } from "next/server";
 
 import { chunking } from "@nearbyy/embeddings";
 
-export const GET = async (req: NextRequest) => {
-  const body = await req.text();
+export const POST = async (req: NextRequest) => {
+  const body = (await req.json()) as unknown;
 
-  console.log(body);
+  const parsedBody = body as { text: string };
 
-  return new Response(body);
+  const chunks = chunking(parsedBody.text);
 
-  const chunks = chunking(body.text);
-
-  console.log(chunks);
-
-  return new Response(JSON.stringify(chunks, null, 2));
+  return new Response(JSON.stringify(chunks), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };
