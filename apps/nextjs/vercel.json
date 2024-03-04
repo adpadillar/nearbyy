@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/files": {
+    "app/**/*": {
       "memory": 1024
     }
   }
