@@ -67,6 +67,9 @@ importers:
       '@nearbyy/embeddings':
         specifier: workspace:^
         version: link:../../packages/embeddings
+      '@nearbyy/pdf':
+        specifier: 0.0.1
+        version: 0.0.1
       '@nearbyy/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -106,9 +109,6 @@ importers:
       openai:
         specifier: ^4.24.0
         version: 4.28.4
-      pdf2json:
-        specifier: github:kylerob/pdf2json#fix-createScratchCanvas-import
-        version: github.com/kylerob/pdf2json/2af2f1fa49ae3b9d6f98f57805c3a414a1beaaf4
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -2509,6 +2509,14 @@ packages:
   /@medv/finder@3.2.0:
     resolution: {integrity: sha512-JmU7JIBwyL8RAzefvzALT4sP2M0biGk8i2invAgpQmma/QgfsaqoHIvJ7S0YC8n9hUVG8X3Leul2nGa06PvhbQ==}
     dev: false
+
+  /@nearbyy/pdf@0.0.1:
+    resolution: {integrity: sha512-8nPZIALnG6K/eA017Kgdfru/9ht4btLlrfcPaz7b9UtJBqlkVw66HlJnkhH8fpRrNHIN2OcGPfJZaRj0cRXj4Q==}
+    engines: {node: '>=18.12.1', npm: '>=8.19.2'}
+    hasBin: true
+    dev: false
+    bundledDependencies:
+      - '@xmldom/xmldom'
 
   /@neon-rs/load@0.0.4:
     resolution: {integrity: sha512-kTPhdZyTQxB+2wpiRcFWrDcejc4JI6tkPuS7UZCG4l6Zvc5kU/gGQ/ozvHTh1XR5tS+UlfAfGuPajjzQjCiHCw==}
@@ -12940,13 +12948,3 @@ packages:
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: false
-
-  github.com/kylerob/pdf2json/2af2f1fa49ae3b9d6f98f57805c3a414a1beaaf4:
-    resolution: {tarball: https://codeload.github.com/kylerob/pdf2json/tar.gz/2af2f1fa49ae3b9d6f98f57805c3a414a1beaaf4}
-    name: pdf2json
-    version: 3.0.5
-    engines: {node: '>=18.12.1', npm: '>=8.19.2'}
-    hasBin: true
-    dev: false
-    bundledDependencies:
-      - '@xmldom/xmldom'

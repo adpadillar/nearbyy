@@ -1,5 +1,6 @@
 import { extractRawText } from "mammoth";
-import PDF from "pdf2json";
+
+import PDF from "@nearbyy/pdf";
 
 const MIME_TYPES = {
   pdf: "application/pdf",
