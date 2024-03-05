@@ -1,6 +1,8 @@
 // Importing env files here to validate on build
 import "./src/env.js";
 
+import CopyPlugin from "copy-webpack-plugin";
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -24,6 +26,10 @@ const config = {
   ],
   experimental: {
     serverComponentsExternalPackages: ["pdf2json"],
+  },
+  webpack: {
+    externals: ["pdf2json"],
+    plugins: [CopyPlugin],
   },
 };
 
