@@ -22,6 +22,9 @@ const config = {
       permanent: false,
     },
   ],
+  experimental: {
+    serverComponentsExternalPackages: ["pdf2json"],
+  },
 };
 
 export default config;

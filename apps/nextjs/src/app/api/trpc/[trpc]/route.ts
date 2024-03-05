@@ -4,9 +4,6 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "~/trpc/root";
 import { createTRPCContext } from "~/trpc/trpc";
 
-export const runtime = "edge";
-export const preferredRegion = "iad1";
-
 /**
  * Configure basic CORS headers
  * You should extend this to match your needs

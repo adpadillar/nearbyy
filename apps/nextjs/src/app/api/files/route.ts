@@ -12,9 +12,6 @@ import { getSingleEmbedding } from "@nearbyy/embeddings";
 
 import { TextExtractor } from "~/utils/server/TextExtractor";
 
-export const runtime = "edge";
-export const preferredRegion = "iad1";
-
 export const DELETE = withKeyAuth({
   handler: async ({ body, projectid }) => {
     const deletion = await db.drizzle
@@ -91,7 +88,7 @@ export const POST = withKeyAuth({
       const fileMimeString = file.headers.get("Content-Type") ?? "";
 
       const textExtractor = new TextExtractor({
-        buffer: fileBuffer,
+        arrayBuffer: fileBuffer,
         mimeType: fileMimeString,
       });
 

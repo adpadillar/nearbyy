@@ -94,11 +94,12 @@ When you upload a file, our backend service will download it from the `fileUrl` 
 
 Different file types are supported by Nearbyy. Our backend service will look at the `Content-Type` header of the file to determine how to process it. The following table shows the supported file types:
 
-| File Type | MIME Type       |
-| --------- | --------------- |
-| Markdown  | `text/markdown` |
-| Text      | `text/plain`    |
-| Other     | `text/*`        |
+| File Type | MIME Type                                                                 |
+| --------- | ------------------------------------------------------------------------- |
+| Markdown  | `text/markdown`                                                           |
+| Text      | `text/plain`                                                              |
+| PDF       | `application/pdf`                                                         |
+| Docx      | `application/vnd.openxmlformats-officedocument.wordprocessingml.document` |
 
 :::tip[Your file type is not supported?]
 We plan to aggressively expand the list of supported file types. If you want to request support for a file type, please [contact us](mailto:adpadillar25@gmail.com).
