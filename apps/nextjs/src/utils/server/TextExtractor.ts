@@ -1,8 +1,6 @@
 import { extractRawText } from "mammoth";
 import PDF from "pdf2json";
 
-import "pdf2json/base/shared/util.js";
-
 const MIME_TYPES = {
   pdf: "application/pdf",
   docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -39,7 +37,6 @@ export class TextExtractor {
   }
 
   async extractFromPdf() {
-    console.log("extracting from pdf");
     const PDFParser = new PDF();
     PDFParser.parseBuffer(Buffer.from(this.arrayBuffer));
 
@@ -61,8 +58,6 @@ export class TextExtractor {
   }
 
   async extract() {
-    console.log(this.mimeType);
-
     if (this.mimeType === MIME_TYPES.txt || this.mimeType === MIME_TYPES.md) {
       return { text: this.extractFromText(), error: null } as const;
     }
