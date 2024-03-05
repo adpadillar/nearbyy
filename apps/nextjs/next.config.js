@@ -3,6 +3,10 @@ import "./src/env.js";
 
 import CopyPlugin from "copy-webpack-plugin";
 
+const dontBundlePdf2Json = new CopyPlugin({
+  patterns: ["node_modules/pdf2json/**/*"],
+});
+
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -29,7 +33,7 @@ const config = {
   },
   webpack: {
     externals: ["pdf2json"],
-    plugins: [CopyPlugin],
+    plugins: [dontBundlePdf2Json],
   },
 };
 
