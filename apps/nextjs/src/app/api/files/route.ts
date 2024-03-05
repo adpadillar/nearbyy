@@ -92,6 +92,7 @@ export const POST = withKeyAuth({
         mimeType: fileMimeString,
       });
 
+      console.log("Extracting text");
       const { error, text } = await textExtractor.extract();
 
       if (error) {
