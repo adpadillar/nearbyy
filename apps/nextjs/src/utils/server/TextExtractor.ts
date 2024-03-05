@@ -1,6 +1,8 @@
 import { extractRawText } from "mammoth";
 import PDF from "pdf2json";
 
+import "pdf2json/base/shared/util.js";
+
 const MIME_TYPES = {
   pdf: "application/pdf",
   docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
