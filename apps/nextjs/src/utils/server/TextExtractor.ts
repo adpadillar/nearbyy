@@ -1,6 +1,9 @@
-import { extractRawText } from "mammoth";
+import "./pdf2json";
 
-import PDF from "@nearbyy/pdf";
+import { extractRawText } from "mammoth";
+import PDF from "pdf2json";
+
+import type { PatchedPdfParser } from "./pdf2json";
 
 const MIME_TYPES = {
   pdf: "application/pdf",
@@ -38,24 +41,24 @@ export class TextExtractor {
   }
 
   async extractFromPdf() {
-    const PDFParser = new PDF();
+    const PDFParser = new PDF(null, 1);
+    const PatchedPDFParser = PDFParser as unknown as PatchedPdfParser;
     PDFParser.parseBuffer(Buffer.from(this.arrayBuffer));
 
-    const v = new Promise<string>((resolve) => {
-      PDFParser.on("pdfParser_dataReady", (data) => {
-        const v = data.Pages.map((p) => {
-          return p.Texts.map((t) => {
-            return t.R.map((r) => r.T);
-          });
-        });
+    const v = new Promise<string>((resolve, reject) => {
+      PDFParser.on("pdfParser_dataError", (err) => {
+        reject(err);
+      });
 
-        const str = v.flat(2).join(" ");
-        const decodedStr = decodeURIComponent(str);
-        resolve(decodedStr);
+      PDFParser.on("pdfParser_dataReady", () => {
+        const text = PatchedPDFParser.getRawTextContent();
+        resolve(text);
       });
     });
 
-    return v;
+    const res = await v;
+
+    return res;
   }
 
   async extract() {

@@ -67,9 +67,6 @@ importers:
       '@nearbyy/embeddings':
         specifier: workspace:^
         version: link:../../packages/embeddings
-      '@nearbyy/pdf':
-        specifier: 0.0.1
-        version: 0.0.1
       '@nearbyy/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -109,6 +106,9 @@ importers:
       openai:
         specifier: ^4.24.0
         version: 4.28.4
+      pdf2json:
+        specifier: ^3.0.5
+        version: 3.0.5
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -2509,14 +2509,6 @@ packages:
   /@medv/finder@3.2.0:
     resolution: {integrity: sha512-JmU7JIBwyL8RAzefvzALT4sP2M0biGk8i2invAgpQmma/QgfsaqoHIvJ7S0YC8n9hUVG8X3Leul2nGa06PvhbQ==}
     dev: false
-
-  /@nearbyy/pdf@0.0.1:
-    resolution: {integrity: sha512-8nPZIALnG6K/eA017Kgdfru/9ht4btLlrfcPaz7b9UtJBqlkVw66HlJnkhH8fpRrNHIN2OcGPfJZaRj0cRXj4Q==}
-    engines: {node: '>=18.12.1', npm: '>=8.19.2'}
-    hasBin: true
-    dev: false
-    bundledDependencies:
-      - '@xmldom/xmldom'
 
   /@neon-rs/load@0.0.4:
     resolution: {integrity: sha512-kTPhdZyTQxB+2wpiRcFWrDcejc4JI6tkPuS7UZCG4l6Zvc5kU/gGQ/ozvHTh1XR5tS+UlfAfGuPajjzQjCiHCw==}
@@ -9915,6 +9907,14 @@ packages:
   /pathval@1.1.1:
     resolution: {integrity: sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==}
     dev: true
+
+  /pdf2json@3.0.5:
+    resolution: {integrity: sha512-Un1yLbSlk/zfwrltgguskExIioXZlFSFwsyXU0cnBorLywbTbcdzmJJEebh+U2cFCtR7y8nDs5lPHAe7ldxjZg==}
+    engines: {node: '>=18.12.1', npm: '>=8.19.2'}
+    hasBin: true
+    dev: false
+    bundledDependencies:
+      - '@xmldom/xmldom'
 
   /periscopic@3.1.0:
     resolution: {integrity: sha512-vKiQ8RRtkl9P+r/+oefh25C3fhybptkHKCZSPlcXiJux2tJF55GnEj3BVn4A5gKfq9NWWXXrxkHBwVPUfH0opw==}
