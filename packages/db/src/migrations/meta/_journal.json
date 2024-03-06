@@ -64,6 +64,20 @@
       "when": 1706753181289,
       "tag": "0008_sturdy_zarek",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1709164133552,
+      "tag": "0009_wealthy_makkari",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1709164170776,
+      "tag": "0010_moaning_rocket_racer",
+      "breakpoints": true
     }
   ]
 }

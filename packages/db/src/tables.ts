@@ -2,6 +2,7 @@ import {
   bigint,
   boolean,
   doublePrecision,
+  integer,
   pgTable,
   text,
   timestamp,
@@ -62,4 +63,26 @@ export const projects = pgTable("projects", {
   name: text("name").notNull(),
   description: text("description"),
   owner: text("owner").notNull(),
+});
+
+// Chunk has to include
+// -> Text
+// -> File it belongs to
+// -> Project it belongs to
+// -> Order of the chunk
+// -> Next chunk if chunk was split
+// -> Embedding of the chunk
+// -> Token length of the chunk
+export const chunks = pgTable("chunks", {
+  createdAt: timestamp("createdAt", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  id: text("id").primaryKey(),
+  text: text("text").notNull(),
+  fileId: text("fileId").notNull(),
+  projectId: text("projectId").notNull(),
+  order: integer("order").notNull(),
+  nextChunkId: text("nextChunkId"),
+  embedding: doublePrecision("embedding").array(1536).notNull(),
+  tokenLength: integer("tokenLength").notNull(),
 });

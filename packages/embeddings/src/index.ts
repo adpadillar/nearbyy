@@ -1,3 +1,5 @@
+import type { Tiktoken, TiktokenEncoding } from "js-tiktoken";
+import { getEncoding } from "js-tiktoken";
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -47,4 +49,43 @@ export const getSingleEmbedding = async (toEmbed: string) => {
       embedding: null,
     } as const;
   }
+};
+
+export class Tokenizer {
+  encoding: TiktokenEncoding;
+  tiktoken: Tiktoken;
+
+  constructor(encoding: TiktokenEncoding = "cl100k_base") {
+    this.encoding = encoding;
+    this.tiktoken = getEncoding(encoding);
+  }
+
+  encode(text: string) {
+    return this.tiktoken.encode(text);
+  }
+
+  decode(tokens: number[]) {
+    return this.tiktoken.decode(tokens);
+  }
+
+  static _encode(text: string, encoding: TiktokenEncoding = "cl100k_base") {
+    const tiktoken = getEncoding(encoding);
+    return tiktoken.encode(text);
+  }
+
+  static _decode(tokens: number[], encoding: TiktokenEncoding = "cl100k_base") {
+    const tiktoken = getEncoding(encoding);
+    return tiktoken.decode(tokens);
+  }
+}
+
+export const chunking = (text: string) => {
+  const parts = text.split("\n").filter((value) => value !== "");
+
+  const tokenizer = new Tokenizer();
+
+  const tokenChunks = parts.map((str) => tokenizer.encode(str));
+  const textChunks = tokenChunks.map((tokens) => tokenizer.decode(tokens));
+
+  return textChunks;
 };

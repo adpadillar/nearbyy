@@ -28,6 +28,7 @@
   },
   "prettier": "@nearbyy/prettier-config",
   "dependencies": {
+    "js-tiktoken": "^1.0.10",
     "openai": "^4.24.0"
   }
 }
