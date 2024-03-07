@@ -79,13 +79,29 @@ export class Tokenizer {
   }
 }
 
-export const chunking = (text: string) => {
-  const parts = text.split("\n").filter((value) => value !== "");
-
+export const chunking = (text: string, length: number, overlap: number) => {
   const tokenizer = new Tokenizer();
+  const tokenizedString = tokenizer.encode(text);
+  const tokenChunks = [];
+  let chunk = [];
 
-  const tokenChunks = parts.map((str) => tokenizer.encode(str));
-  const textChunks = tokenChunks.map((tokens) => tokenizer.decode(tokens));
+  // const tokenChunks =  tokenizedString.splice
+  for (let i = 0; i <= tokenizedString.length; i++) {
+    if (i % length === 0) {
+      if (i !== 0) {
+        tokenChunks.push(chunk);
+        chunk = [];
+      }
+      chunk.push(tokenizedString[i]);
+    } else {
+      chunk.push(tokenizedString[i]);
+    }
+  }
+  tokenChunks.push(chunk);
 
-  return textChunks;
+  return tokenChunks;
 };
+
+// const parts = text.split("\n").filter((value) => value !== "");
+// const tokenChunks = parts.map((str) => tokenizer.encode(str));
+// const textChunks = tokenChunks.map((tokens) => tokenizer.decode(tokens));
