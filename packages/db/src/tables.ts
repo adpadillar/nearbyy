@@ -78,11 +78,12 @@ export const chunks = pgTable("chunks", {
     .notNull()
     .defaultNow(),
   id: text("id").primaryKey(),
-  text: text("text").notNull(),
   fileId: text("fileId").notNull(),
   projectId: text("projectId").notNull(),
-  order: integer("order").notNull(),
   nextChunkId: text("nextChunkId"),
-  embedding: doublePrecision("embedding").array(1536).notNull(),
+  order: integer("order").notNull(),
+  tokens: integer("tokens").array().notNull(),
   tokenLength: integer("tokenLength").notNull(),
+  embedding: doublePrecision("embedding").array(1536).notNull(),
+  text: text("text").notNull(),
 });
