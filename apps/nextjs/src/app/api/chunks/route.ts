@@ -7,9 +7,7 @@ export const POST = async (req: NextRequest) => {
 
   const parsedBody = body as { text: string };
 
-  const chunks = chunking(parsedBody.text, 100, 0);
-  const l = chunks.map((c) => c.length);
-  console.log(l);
+  const chunks = chunking(parsedBody.text, 100, 10);
 
   return new Response(JSON.stringify(chunks), {
     headers: {
