@@ -17,7 +17,6 @@ export const files = pgTable("files", {
   url: text("url").notNull(),
   projectid: text("projectid").notNull(),
   type: text("type").notNull(),
-  embedding: doublePrecision("embedding").array(1536).notNull(),
 });
 
 export const keys = pgTable("keys", {

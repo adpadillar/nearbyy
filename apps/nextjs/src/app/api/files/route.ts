@@ -8,7 +8,7 @@ import {
   fileEndpointPostResponse,
 } from "@nearbyy/core";
 import { db } from "@nearbyy/db";
-import { getSingleEmbedding } from "@nearbyy/embeddings";
+import { chunking, getSingleEmbedding } from "@nearbyy/embeddings";
 
 import { TextExtractor } from "~/utils/server/TextExtractor";
 
@@ -98,17 +98,25 @@ export const POST = withKeyAuth({
         return Promise.reject(new Error(error));
       }
 
-      const { embedding, success } = await getSingleEmbedding(text);
-
-      if (!success) {
-        return Promise.reject(new Error("Could not generate embedding"));
-      }
-
       const fileId = crypto.randomUUID();
       // store the assigned UUID to the file URL
       urlToUUID[fileUrl] = fileId;
+
+      const resChunking = await chunking(text, 100, 10);
+      await db.drizzle.insert(db.schema.chunks).values(
+        resChunking.map((chunk) => ({
+          id: crypto.randomUUID(),
+          fileId: fileId,
+          projectId: projectid,
+          order: chunk.order,
+          tokens: chunk.tokens,
+          tokenLength: chunk.tokenLength,
+          embedding: chunk.embedding,
+          text: chunk.text,
+        })),
+      );
+
       await db.drizzle.insert(db.schema.files).values({
-        embedding: embedding,
         projectid,
         text,
         type: fileMimeString,
