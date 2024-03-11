@@ -50,21 +50,23 @@ const createCustomDatabase = ({ directUrl }: { directUrl: string }) => {
         VectorKey extends keyof helpers.InferSelectModel<Table>,
       >({
         table: tablename,
-        vector: { column: fieldname, embedding },
+        vector,
         where,
         limit,
       }: {
         table: TableKey;
         vector: {
-          column: VectorKey;
-          embedding: TableTypes[VectorKey] extends number[] ? number[] : never;
+          [key in VectorKey]: TableTypes[VectorKey] extends number[]
+            ? number[]
+            : never;
         };
         where: Record<FilterKey, TableTypes[FilterKey]>;
         limit: number;
       }) => {
         const table = tables[tablename];
+        const fieldname = Object.keys(vector)[0] as VectorKey;
         const field = table[fieldname];
-
+        const embedding = vector[fieldname];
         const keys = Object.keys(where) as FilterKey[];
 
         const whereClause = sql.join(

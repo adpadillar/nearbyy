@@ -23,9 +23,9 @@ export const GET = withKeyAuth({
 
     // Get the chunks that are similar to the embedding
     const chunks = await db.vector.similarity({
-      limit: 10,
       table: "chunks",
-      vector: { column: "embedding", embedding },
+      limit: params.limit,
+      vector: { embedding: embedding },
       where: { projectId: projectid },
     });
 
