@@ -8,7 +8,7 @@ import {
   fileEndpointPostResponse,
 } from "@nearbyy/core";
 import { db } from "@nearbyy/db";
-import { getSingleEmbedding } from "@nearbyy/embeddings";
+import { chunking } from "@nearbyy/embeddings";
 
 import { TextExtractor } from "~/utils/server/TextExtractor";
 
@@ -98,17 +98,25 @@ export const POST = withKeyAuth({
         return Promise.reject(new Error(error));
       }
 
-      const { embedding, success } = await getSingleEmbedding(text);
-
-      if (!success) {
-        return Promise.reject(new Error("Could not generate embedding"));
-      }
-
       const fileId = crypto.randomUUID();
       // store the assigned UUID to the file URL
       urlToUUID[fileUrl] = fileId;
+
+      const resChunking = await chunking(text, 100, 10);
+      await db.drizzle.insert(db.schema.chunks).values(
+        resChunking.map((chunk) => ({
+          id: crypto.randomUUID(),
+          fileId: fileId,
+          projectId: projectid,
+          order: chunk.order,
+          tokens: chunk.tokens,
+          tokenLength: chunk.tokenLength,
+          embedding: chunk.embedding,
+          text: chunk.text,
+        })),
+      );
+
       await db.drizzle.insert(db.schema.files).values({
-        embedding: embedding,
         projectid,
         text,
         type: fileMimeString,
@@ -185,49 +193,13 @@ export const POST = withKeyAuth({
 });
 
 export const GET = withKeyAuth({
-  handler: async ({ params, projectid }) => {
-    // Get the embedding of the query
-    const { embedding, success } = await getSingleEmbedding(params.query);
-
-    if (!success) {
-      return {
-        status: 500,
-        body: {
-          data: null,
-          success: false,
-          error: "Could not generate embedding",
-        },
-      } as const;
-    }
-
-    // Get the files that are similar to the embedding
-    const files = await db.vector.similarity(
-      "files",
-      "embedding",
-      embedding,
-      projectid,
-      params.limit,
-    );
-
+  handler: async () => {
     return {
-      status: 200,
+      status: 500,
       body: {
-        success: true,
-        error: null,
-        data: {
-          items: files.map((file) => {
-            return {
-              id: file.id,
-              text: file.text,
-              type: file.type,
-              url: file.url,
-              _extras: {
-                distance: file.distance,
-                projectid: file.projectid,
-              },
-            };
-          }),
-        },
+        data: null,
+        success: false,
+        error: "Route not implemented yet",
       },
     } as const;
   },

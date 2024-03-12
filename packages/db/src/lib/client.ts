@@ -42,21 +42,43 @@ const createCustomDatabase = ({ directUrl }: { directUrl: string }) => {
     },
     helpers,
     vector: {
-      similarity: async <T extends keyof typeof tables>(
-        tablename: T,
-        fieldname: keyof (typeof tables)[T],
-        embedding: number[],
-        projectid: string,
-        limit = 10,
-      ) => {
+      similarity: async <
+        TableKey extends keyof typeof tables,
+        Table extends (typeof tables)[TableKey],
+        TableTypes extends helpers.InferSelectModel<Table>,
+        FilterKey extends keyof helpers.InferSelectModel<Table>,
+        VectorKey extends keyof helpers.InferSelectModel<Table>,
+      >({
+        table: tablename,
+        vector,
+        where,
+        limit,
+      }: {
+        table: TableKey;
+        vector: {
+          [key in VectorKey]: TableTypes[VectorKey] extends number[]
+            ? number[]
+            : never;
+        };
+        where: Record<FilterKey, TableTypes[FilterKey]>;
+        limit: number;
+      }) => {
         const table = tables[tablename];
+        const fieldname = Object.keys(vector)[0] as VectorKey;
         const field = table[fieldname];
+        const embedding = vector[fieldname];
+        const keys = Object.keys(where) as FilterKey[];
+
+        const whereClause = sql.join(
+          keys.map((key) => sql`${table[key]} = ${where[key]}`),
+          sql` AND `,
+        );
 
         const embeddings = embedding.toString();
 
         const statement = sql`SELECT ${table}.*, ${field}::vector(1536) <=> '[${sql.raw(
           embeddings,
-        )}]' AS distance FROM ${table} WHERE projectid = ${projectid} ORDER BY distance LIMIT ${limit};`;
+        )}]' AS distance FROM ${table} WHERE ${whereClause} ORDER BY distance LIMIT ${limit};`;
 
         const res = await client.execute(statement);
 

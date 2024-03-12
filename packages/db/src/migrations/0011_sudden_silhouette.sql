@@ -1,0 +1,1 @@
+ALTER TABLE "chunks" ADD COLUMN "tokens" integer[] NOT NULL;

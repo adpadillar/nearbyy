@@ -91,12 +91,22 @@ const calculateChunkAmount = (
   return Math.ceil(1 + (tokensLength - length) / (length - overlap));
 };
 
-export const chunking = (text: string, length: number, overlap: number) => {
+interface Chunk {
+  order: number;
+  embedding: number[];
+  tokens: number[];
+  tokenLength: number;
+  text: string;
+}
+
+export const chunking = async (
+  text: string,
+  length: number,
+  overlap: number,
+) => {
   const tokenizer = new Tokenizer();
   const tokenizedString = tokenizer.encode(text);
-  let chunk: number[] = [];
-  const textChunks = [];
-  let chunkString = "";
+  const chunkArray: Promise<Chunk>[] = [];
 
   const chunkCount = calculateChunkAmount(
     tokenizedString.length,
@@ -105,6 +115,8 @@ export const chunking = (text: string, length: number, overlap: number) => {
   );
 
   for (let i = 0; i < chunkCount; i++) {
+    const chunk: number[] = [];
+
     // // define a variable for storing the current token
     // // this get's redefined each chunk
     let currentToken: number | undefined;
@@ -127,44 +139,32 @@ export const chunking = (text: string, length: number, overlap: number) => {
         break;
       }
     }
-    // we decode the current chunk and append the result to the textChunks
-    chunkString = tokenizer.decode(chunk);
-    textChunks.push({
-      text: chunkString,
-      tokenLenght: chunk.length,
+    const promise = new Promise<Chunk>((res, rej) => {
+      const strToken = tokenizer.decode(chunk);
+      const embedding = getSingleEmbedding(strToken);
+      embedding
+        .then((r) => {
+          if (r.success) {
+            res({
+              order: i,
+              embedding: r.embedding,
+              tokens: chunk,
+              tokenLength: chunk.length,
+              text: strToken,
+            });
+          } else {
+            const error = new Error("Oh oh! something went worng");
+            rej(error);
+          }
+        })
+        .catch(() => {
+          const error = new Error("Oh oh! something went worng");
+          rej(error);
+        });
     });
-    // clear current chunk
-    chunk = [];
+
+    chunkArray.push(promise);
   }
-  return textChunks;
+
+  return await Promise.all(chunkArray);
 };
-
-// const tokenChunks =  tokenizedString.splice
-//   for (let i = 0; i <chunkCount; i++) {
-//     if (i % length === 0) {
-//       if (i !== 0) {
-//         chunkString = tokenizer.decode(chunk);
-//         textChunks.push({
-//           text: chunkString,
-//           tokenLenght: chunk.length,
-//         });
-//         chunk = [];
-//         i = i - overlap - 1;
-//       }
-//       chunk.push(tokenizedString[i]!);
-//     } else {
-//       chunk.push(tokenizedString[i]!);
-//     }
-//   }
-//   chunkString = tokenizer.decode(chunk);
-//   textChunks.push({
-//     text: chunkString,
-//     tokenLenght: chunk.length,
-//   });
-
-//   return textChunks;
-// };
-
-// const parts = text.split("\n").filter((value) => value !== "");
-// const tokenChunks = parts.map((str) => tokenizer.encode(str));
-// const textChunks = tokenChunks.map((tokens) => tokenizer.decode(tokens));
