@@ -48,7 +48,8 @@ export class TextExtractor {
 
       PDFParser.on("pdfParser_dataReady", () => {
         const text = PDFParser.getRawTextContent();
-        resolve(text);
+
+        resolve(text.replaceAll("\u0000", ""));
       });
     });
 

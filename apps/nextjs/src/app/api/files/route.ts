@@ -130,9 +130,14 @@ export const POST = withKeyAuth({
 
     const results = await Promise.allSettled(promises);
 
+    let errors = "";
     const rejectedIndexes = results
       .map((res, idx) => {
-        if (res.status === "rejected") return idx;
+        if (res.status === "rejected") {
+          errors += `Error uploading file at index ${idx}: ${res.reason}\n`;
+          return idx;
+        }
+
         return -1;
       })
       .filter((idx) => idx !== -1);
@@ -155,7 +160,7 @@ export const POST = withKeyAuth({
         status: 500,
         body: {
           success: false,
-          error: "All files could not be uploaded",
+          error: `All files could not be uploaded: ${errors}`,
           data: {
             ids: fulfilledIds,
             rejectedUrls,
