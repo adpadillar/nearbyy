@@ -1,5 +1,4 @@
 import { extractRawText } from "mammoth";
-
 import PDF from "pdf2json";
 
 const MIME_TYPES = {
