@@ -1,9 +1,6 @@
-import "./pdf2json";
-
 import { extractRawText } from "mammoth";
-import PDF from "pdf2json";
 
-import type { PatchedPdfParser } from "./pdf2json";
+import PDF from "pdf2json";
 
 const MIME_TYPES = {
   pdf: "application/pdf",
@@ -42,7 +39,7 @@ export class TextExtractor {
 
   async extractFromPdf() {
     const PDFParser = new PDF(null, 1);
-    const PatchedPDFParser = PDFParser as unknown as PatchedPdfParser;
+
     PDFParser.parseBuffer(Buffer.from(this.arrayBuffer));
 
     const v = new Promise<string>((resolve, reject) => {
@@ -51,13 +48,12 @@ export class TextExtractor {
       });
 
       PDFParser.on("pdfParser_dataReady", () => {
-        const text = PatchedPDFParser.getRawTextContent();
+        const text = PDFParser.getRawTextContent();
         resolve(text);
       });
     });
 
     const res = await v;
-
     return res;
   }
 

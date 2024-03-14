@@ -25,6 +25,14 @@ const client = new OpenAI({
  * @returns
  */
 export const getSingleEmbedding = async (toEmbed: string) => {
+  if (!toEmbed) {
+    return {
+      success: false,
+      error: new Error("No string to embed"),
+      embedding: null,
+    } as const;
+  }
+
   try {
     const embeddings = await client.embeddings.create({
       model: "text-embedding-ada-002",
@@ -34,7 +42,11 @@ export const getSingleEmbedding = async (toEmbed: string) => {
     const embedding = embeddings.data[0]?.embedding;
 
     if (!embedding) {
-      throw new Error("No embedding found");
+      return {
+        success: false,
+        error: new Error("No embedding found"),
+        embedding: null,
+      } as const;
     }
 
     return {
@@ -45,7 +57,7 @@ export const getSingleEmbedding = async (toEmbed: string) => {
   } catch (e) {
     return {
       success: false,
-      error: e,
+      error: new Error("Unexpected error while generating the embedding"),
       embedding: null,
     } as const;
   }
@@ -153,12 +165,13 @@ export const chunking = async (
               text: strToken,
             });
           } else {
-            const error = new Error("Oh oh! something went worng");
-            rej(error);
+            rej(r.error);
           }
         })
         .catch(() => {
-          const error = new Error("Oh oh! something went worng");
+          const error = new Error(
+            "Unexpected error while generating the embedding",
+          );
           rej(error);
         });
     });

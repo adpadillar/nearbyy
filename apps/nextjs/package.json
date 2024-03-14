@@ -33,7 +33,7 @@
     "mammoth": "^1.7.0",
     "next": "^14.0.3",
     "openai": "^4.24.0",
-    "pdf2json": "3.0.5",
+    "pdf2json": "github:kylerob/pdf2json#fix-createScratchCanvas-import",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
