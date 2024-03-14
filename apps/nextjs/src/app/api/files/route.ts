@@ -12,8 +12,6 @@ import { chunking } from "@nearbyy/embeddings";
 
 import { TextExtractor } from "~/utils/server/TextExtractor";
 
-export const maxDuration = 60;
-
 export const DELETE = withKeyAuth({
   handler: async ({ body, projectid }) => {
     const deletion = await db.drizzle
