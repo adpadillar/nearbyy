@@ -1,8 +1,8 @@
 import type {
+  ChunkEndpointGetParams,
+  ChunkEndpointGetResponse,
   FileEndpointDeleteBody,
   FileEndpointDeleteResponse,
-  FileEndpointGetParams,
-  FileEndpointGetResponse,
   FileEndpointPostBody,
   FileEndpointPostResponse,
 } from "../api";
@@ -46,18 +46,18 @@ export class NearbyyClient {
     return json;
   }
 
-  async queryDatabase(params: FileEndpointGetParams) {
+  async queryDatabase(params: ChunkEndpointGetParams) {
     const query = Object.entries(params)
       .map(([key, value]) => `${key}=${value}`)
       .join("&");
 
-    const res = await fetch(`${this.API_URL}/files?${query}`, {
+    const res = await fetch(`${this.API_URL}/chunks?${query}`, {
       headers: {
         Authorization: `Bearer ${this.API_KEY}`,
       },
     });
 
-    const data = (await res.json()) as FileEndpointGetResponse;
+    const data = (await res.json()) as ChunkEndpointGetResponse;
 
     return data;
   }
