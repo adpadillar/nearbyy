@@ -104,7 +104,7 @@ export const POST = withKeyAuth({
       // store the assigned UUID to the file URL
       urlToUUID[fileUrl] = fileId;
 
-      const resChunking = await chunking(text, 100, 10);
+      const resChunking = await chunking(text, 300, 30);
       await db.drizzle.insert(db.schema.chunks).values(
         resChunking.map((chunk) => ({
           id: crypto.randomUUID(),
