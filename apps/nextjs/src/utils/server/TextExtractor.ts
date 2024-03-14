@@ -42,6 +42,10 @@ export class TextExtractor {
     PDFParser.parseBuffer(Buffer.from(this.arrayBuffer));
 
     const v = new Promise<string>((resolve, reject) => {
+      setTimeout(() => {
+        reject("PDF parsing timed out after 10 seconds");
+      }, 10000);
+
       PDFParser.on("pdfParser_dataError", (err) => {
         reject(err);
       });

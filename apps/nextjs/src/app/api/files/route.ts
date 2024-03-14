@@ -160,7 +160,7 @@ export const POST = withKeyAuth({
         status: 500,
         body: {
           success: false,
-          error: `All files could not be uploaded: ${errors}`,
+          error: errors,
           data: {
             ids: fulfilledIds,
             rejectedUrls,
