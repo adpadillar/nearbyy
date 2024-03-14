@@ -110,7 +110,7 @@ importers:
         specifier: ^4.24.0
         version: 4.28.4
       pdf2json:
-        specifier: github:kylerob/pdf2json#fix-createScratchCanvas-import
+        specifier: kylerob/pdf2json#fix-createScratchCanvas-import
         version: github.com/kylerob/pdf2json/2af2f1fa49ae3b9d6f98f57805c3a414a1beaaf4
       react:
         specifier: 18.2.0
