@@ -6,25 +6,54 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_KEY,
 });
 
-/**
- *
- * Uses OpenAI's API to embed a string into a 1536 dimensional vector
- *
- * @example
- *
- * ### Create an embedding
- *
- * ```ts
- * const { embedding, success } = await getSingleEmbedding("Hello, world!");
- * if (success) {
- *  console.log(embedding); // [0.1, 0.2, 0.3, ...]
- * }
- * ```
- *
- * @param toEmbed the string to embed
- * @returns
- */
+export const getMultipleEmbeddings = async (toEmbed: string[]) => {
+  if (toEmbed.length === 0) {
+    return {
+      success: false,
+      error: new Error("No strings to embed"),
+      embeddings: null,
+    } as const;
+  }
+
+  try {
+    const embeddings = await client.embeddings.create({
+      model: "text-embedding-ada-002",
+      input: toEmbed,
+    });
+
+    const embeddingsArray = embeddings.data.map((d) => d.embedding);
+
+    if (embeddingsArray.length === 0) {
+      return {
+        success: false,
+        error: new Error("No embeddings found"),
+        embeddings: null,
+      } as const;
+    }
+
+    return {
+      success: true,
+      embeddings: embeddingsArray,
+      error: null,
+    } as const;
+  } catch (e) {
+    return {
+      success: false,
+      error: new Error("Unexpected error while generating the embeddings"),
+      embeddings: null,
+    } as const;
+  }
+};
+
 export const getSingleEmbedding = async (toEmbed: string) => {
+  if (!toEmbed) {
+    return {
+      success: false,
+      error: new Error("No string to embed"),
+      embedding: null,
+    } as const;
+  }
+
   try {
     const embeddings = await client.embeddings.create({
       model: "text-embedding-ada-002",
@@ -34,7 +63,11 @@ export const getSingleEmbedding = async (toEmbed: string) => {
     const embedding = embeddings.data[0]?.embedding;
 
     if (!embedding) {
-      throw new Error("No embedding found");
+      return {
+        success: false,
+        error: new Error("No embedding found"),
+        embedding: null,
+      } as const;
     }
 
     return {
@@ -45,7 +78,7 @@ export const getSingleEmbedding = async (toEmbed: string) => {
   } catch (e) {
     return {
       success: false,
-      error: e,
+      error: new Error("Unexpected error while generating the embedding"),
       embedding: null,
     } as const;
   }
@@ -106,7 +139,7 @@ export const chunking = async (
 ) => {
   const tokenizer = new Tokenizer();
   const tokenizedString = tokenizer.encode(text);
-  const chunkArray: Promise<Chunk>[] = [];
+  const chunkArray: Omit<Chunk, "embedding">[] = [];
 
   const chunkCount = calculateChunkAmount(
     tokenizedString.length,
@@ -139,32 +172,29 @@ export const chunking = async (
         break;
       }
     }
-    const promise = new Promise<Chunk>((res, rej) => {
-      const strToken = tokenizer.decode(chunk);
-      const embedding = getSingleEmbedding(strToken);
-      embedding
-        .then((r) => {
-          if (r.success) {
-            res({
-              order: i,
-              embedding: r.embedding,
-              tokens: chunk,
-              tokenLength: chunk.length,
-              text: strToken,
-            });
-          } else {
-            const error = new Error("Oh oh! something went worng");
-            rej(error);
-          }
-        })
-        .catch(() => {
-          const error = new Error("Oh oh! something went worng");
-          rej(error);
-        });
-    });
 
-    chunkArray.push(promise);
+    const chunkWithoutEmbedding: Omit<Chunk, "embedding"> = {
+      order: i,
+      tokens: chunk,
+      tokenLength: chunk.length,
+      text: tokenizer.decode(chunk),
+    };
+
+    chunkArray.push(chunkWithoutEmbedding);
   }
 
-  return await Promise.all(chunkArray);
+  const { success, embeddings } = await getMultipleEmbeddings(
+    chunkArray.map((c) => c.text),
+  );
+
+  if (!success) {
+    throw new Error("Could not generate embeddings");
+  }
+
+  const chunkArrayWithEmbeddings: Chunk[] = chunkArray.map((c, idx) => ({
+    ...c,
+    embedding: embeddings[idx]!,
+  }));
+
+  return chunkArrayWithEmbeddings;
 };

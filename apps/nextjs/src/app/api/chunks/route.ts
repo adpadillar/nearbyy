@@ -36,6 +36,7 @@ export const GET = withKeyAuth({
         error: null,
         data: {
           items: chunks.map((c) => ({
+            chunkId: c.id,
             tokenLength: c.tokenLength,
             text: c.text,
             order: c.order,

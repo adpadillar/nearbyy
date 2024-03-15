@@ -1,12 +1,6 @@
 // Importing env files here to validate on build
 import "./src/env.js";
 
-import CopyPlugin from "copy-webpack-plugin";
-
-const dontBundlePdf2Json = new CopyPlugin({
-  patterns: ["node_modules/pdf2json/**/*"],
-});
-
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -28,13 +22,6 @@ const config = {
       permanent: false,
     },
   ],
-  experimental: {
-    serverComponentsExternalPackages: ["pdf2json"],
-  },
-  webpack: {
-    externals: ["pdf2json"],
-    plugins: [dontBundlePdf2Json],
-  },
 };
 
 export default config;

@@ -12,6 +12,8 @@ import { chunking } from "@nearbyy/embeddings";
 
 import { TextExtractor } from "~/utils/server/TextExtractor";
 
+export const maxDuration = 120;
+
 export const DELETE = withKeyAuth({
   handler: async ({ body, projectid }) => {
     const deletion = await db.drizzle
@@ -102,7 +104,7 @@ export const POST = withKeyAuth({
       // store the assigned UUID to the file URL
       urlToUUID[fileUrl] = fileId;
 
-      const resChunking = await chunking(text, 100, 10);
+      const resChunking = await chunking(text, 300, 30);
       await db.drizzle.insert(db.schema.chunks).values(
         resChunking.map((chunk) => ({
           id: crypto.randomUUID(),
@@ -128,9 +130,14 @@ export const POST = withKeyAuth({
 
     const results = await Promise.allSettled(promises);
 
+    let errors = "";
     const rejectedIndexes = results
       .map((res, idx) => {
-        if (res.status === "rejected") return idx;
+        if (res.status === "rejected") {
+          errors += `Error uploading file at index ${idx}: ${res.reason}\n`;
+          return idx;
+        }
+
         return -1;
       })
       .filter((idx) => idx !== -1);
@@ -153,7 +160,7 @@ export const POST = withKeyAuth({
         status: 500,
         body: {
           success: false,
-          error: "All files could not be uploaded",
+          error: errors,
           data: {
             ids: fulfilledIds,
             rejectedUrls,
