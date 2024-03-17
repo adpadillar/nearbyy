@@ -6,7 +6,7 @@ import type {
   SortingState,
   VisibilityState,
 } from "@tanstack/react-table";
-import React from "react";
+import React, { useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -51,7 +51,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  pagination = true,
+  pagination: enablePagination = true,
 }: DataTableProps<TData, TValue>) {
   const utils = api.useUtils();
   const { id: projectid } = useProjectId();
@@ -66,6 +66,10 @@ export function DataTable<TData, TValue>({
       },
     });
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0, //initial page index
+    pageSize: 6, //default page size
+  });
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
@@ -76,13 +80,16 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: pagination ? getPaginationRowModel() : undefined,
+    getPaginationRowModel: enablePagination
+      ? getPaginationRowModel()
+      : undefined,
+    onPaginationChange: setPagination,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    state: { sorting, columnFilters, columnVisibility },
+    state: { sorting, columnFilters, columnVisibility, pagination },
   });
 
   return (
@@ -197,7 +204,7 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      {pagination ? (
+      {enablePagination ? (
         <div className="flex items-center justify-end space-x-2 px-4 py-4">
           {/* Pagination */}
           <Button

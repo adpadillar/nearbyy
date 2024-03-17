@@ -112,18 +112,27 @@ const columns: ColumnDef<Key>[] = [
   },
 ];
 
-interface TestPageProps {
+interface KeysPageProps {
   children?: React.ReactNode;
 }
 
-const TestPage: NextPage<TestPageProps> = () => {
+const KeysPage: NextPage<KeysPageProps> = () => {
   const { id } = useProjectId();
   const { data, isLoading } = api.keys.listForProject.useQuery({
     projectId: id,
   });
 
   if (!data || isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col space-y-4 p-4">
+        <h1 className="text-4xl font-medium">API Keys</h1>
+        <p className="pt-2 text-lg opacity-[0.67]">
+          View and manage your Nearbyy keys
+        </p>
+
+        <div>Loading...</div>
+      </div>
+    );
   }
 
   return (
@@ -138,4 +147,4 @@ const TestPage: NextPage<TestPageProps> = () => {
   );
 };
 
-export default TestPage;
+export default KeysPage;
