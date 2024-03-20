@@ -9,6 +9,7 @@ export * from "./components/ui/combobox";
 export * from "./components/ui/table";
 export * from "./components/ui/input";
 export * from "./components/ui/dropdown-menu";
+export * from "./components/ui/sheet"
 
 // utils
 export * from "./lib/utils";

@@ -2,13 +2,13 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { NextPage } from "next";
-import Link from "next/link";
 import { ArrowUpDown } from "lucide-react";
 
 import { Button } from "@nearbyy/ui";
 
 import type { RouterOutputs } from "~/trpc/trpc";
 import { DataTable } from "~/components/DataTable";
+import { PreviewSheet } from "~/components/PreviewSheet";
 import { useProjectId } from "~/components/ProjectIdContext";
 import { api } from "~/trpc/react";
 
@@ -23,6 +23,14 @@ const columns: ColumnDef<File>[] = [
       const firstPart = file.id.slice(0, 8);
 
       return <div>{firstPart}</div>;
+    },
+  },
+  {
+    accessorKey: "type",
+    header: "Type",
+    cell: ({ row }) => {
+      const file = row.original;
+      return <div>{file.type}</div>;
     },
   },
   {
@@ -52,9 +60,9 @@ const columns: ColumnDef<File>[] = [
       const file = row.original;
 
       return (
-        <Button asChild>
-          <Link href={file.url}>Preview</Link>
-        </Button>
+        <PreviewSheet name="Vista previa" fileUrl={file.url}>
+          Preview
+        </PreviewSheet>
       );
     },
   },
