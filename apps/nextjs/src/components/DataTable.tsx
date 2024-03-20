@@ -45,12 +45,14 @@ import { useProjectId } from "./ProjectIdContext";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  search?: string;
   pagination?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  search = "id",
   pagination: enablePagination = true,
 }: DataTableProps<TData, TValue>) {
   const utils = api.useUtils();
@@ -96,10 +98,10 @@ export function DataTable<TData, TValue>({
     <div className="rounded-md border">
       <div className="flex justify-between px-4 py-4">
         <Input
-          placeholder="Filter keys by id..."
-          value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
+          placeholder={`Search by ${search}`}
+          value={(table.getColumn(search)?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("id")?.setFilterValue(event.target.value)
+            table.getColumn(search)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
