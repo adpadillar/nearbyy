@@ -27,7 +27,7 @@ export function PreviewSheet({ fileUrl, children, name }: PreviewSheetProps) {
           <SheetTitle>{name}</SheetTitle>
           <SheetDescription>Visualizar documento</SheetDescription>
         </SheetHeader>
-        <div className="mt-4 grid h-[60dvh] sm:h-[83dvh]">
+        <div className="mt-4 grid h-[60dvh] bg-gray-200 sm:h-[83dvh]">
           <iframe
             title="Preview"
             src={fileUrl ?? ""}
