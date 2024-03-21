@@ -70,8 +70,10 @@ const columns: ColumnDef<File>[] = [
     cell: ({ row }) => {
       const file = row.original;
 
+      console.log(file);
+
       return (
-        <PreviewSheet name="Vista previa" fileUrl={file.url}>
+        <PreviewSheet name="Vista previa" text={file.text} fileUrl={file.url}>
           Preview
         </PreviewSheet>
       );
