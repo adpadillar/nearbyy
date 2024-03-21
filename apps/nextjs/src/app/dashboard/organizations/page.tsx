@@ -7,7 +7,7 @@ interface OrganizationsProps {
 const Organizations: React.FC<OrganizationsProps> = () => {
   return (
     <div>
-      <h1>This is a organization</h1>
+      <h1>We are working on creating this page!</h1>
     </div>
   );
 };
