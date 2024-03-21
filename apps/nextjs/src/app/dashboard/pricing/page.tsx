@@ -7,7 +7,7 @@ interface PricingProps {
 const Pricing: React.FC<PricingProps> = () => {
   return (
     <div>
-      <h1>This is a pricing</h1>
+      <h1>We are working on creating this page!</h1>
     </div>
   );
 };
