@@ -16,6 +16,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@nearbyy/ui";
 
 import type { RouterOutputs } from "~/trpc/trpc";
@@ -24,6 +30,51 @@ import { useProjectId } from "~/components/ProjectIdContext";
 import { api } from "~/trpc/react";
 
 type Key = RouterOutputs["keys"]["listForProject"]["keys"][number];
+
+const CreateApiKeyDialog = () => {
+  const utils = api.useUtils();
+  const { id: projectid } = useProjectId();
+  const { mutate: generateKey, data: keyData } =
+    api.keys.generateForProject.useMutation({
+      onSuccess: async () => {
+        await utils.keys.listForProject.invalidate({ projectId: projectid });
+      },
+      onError: async (err) => {
+        toast.error("Something went wrong generating the key");
+        console.error(err);
+      },
+    });
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Create a key</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Create a new Nearbyy API Key</DialogTitle>
+          <DialogDescription>
+            <p>
+              You are about to create a Nearbyy API Key. Once you do, it will
+              only be shown once. Make sure to copy it before you continue. Make
+              sure to keep this key safe, as it has access to this
+              project&apos;s resources
+            </p>
+            <div className="pt-4">
+              {!keyData ? (
+                <Button onClick={() => generateKey({ projectId: projectid })}>
+                  Generate key
+                </Button>
+              ) : (
+                <pre>{keyData.key}</pre>
+              )}
+            </div>
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const columns: ColumnDef<Key>[] = [
   {
@@ -142,7 +193,12 @@ const KeysPage: NextPage<KeysPageProps> = () => {
         View and manage your Nearbyy keys
       </p>
 
-      <DataTable columns={columns} data={data.keys} pagination={false} />
+      <DataTable
+        columns={columns}
+        data={data.keys}
+        pagination={false}
+        button={<CreateApiKeyDialog />}
+      />
     </div>
   );
 };
