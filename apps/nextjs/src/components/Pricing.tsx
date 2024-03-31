@@ -31,7 +31,7 @@ const Pricing: React.FC<PricingProps> = ({ path }) => {
 
       <div className=" grid grid-cols-1 gap-y-8 px-8 sm:grid-cols-2  sm:gap-x-4 sm:px-4 lg:grid-cols-3 lg:gap-x-4 lg:px-4 xl:gap-x-6">
         {/* BOX 1 */}
-        <div className="flex h-full items-center justify-center">
+        <div className="flex items-center justify-center">
           <PricingCard
             content={{
               header: "Hobby Plan",
@@ -49,10 +49,10 @@ const Pricing: React.FC<PricingProps> = ({ path }) => {
               note: "*Or 1 GB, whichever comes first",
               linkStyle: "primary",
             }}
-          ></PricingCard>
+          />
         </div>
         {/* BOX 2 */}
-        <div className="flex h-full items-center justify-center">
+        <div className="flex items-center justify-center">
           <PricingCard
             content={{
               header: "Pro Plan",
@@ -71,10 +71,10 @@ const Pricing: React.FC<PricingProps> = ({ path }) => {
               linkStyle: "secondary",
               topLabelText: "Coming Soon",
             }}
-          ></PricingCard>
+          />
         </div>
         {/* BOX 3 */}
-        <div className="col-span-1 flex h-full items-center justify-center sm:col-span-2 lg:col-span-1">
+        <div className="col-span-1 flex items-center justify-center sm:col-span-2 lg:col-span-1">
           <PricingCard
             content={{
               header: "Enterprise",
@@ -94,7 +94,7 @@ const Pricing: React.FC<PricingProps> = ({ path }) => {
               topLabelText: "Coming Soon",
               note: "*Starts at 199 USD/month",
             }}
-          ></PricingCard>
+          />
         </div>
       </div>
     </div>
