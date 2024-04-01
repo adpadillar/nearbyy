@@ -90,4 +90,25 @@ export const projectRouter = createTRPCRouter({
 
       return { success: true };
     }),
+
+  deleteFromCurrentUser: protectedProcedure
+    .input(z.object({ externalId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // We delete all of the files associated with the project
+      await ctx.drizzle
+        .delete(ctx.schema.files)
+        .where(ctx.helpers.eq(ctx.schema.files.projectid, input.externalId));
+
+      // We delete the project from the database
+      await ctx.drizzle
+        .delete(ctx.schema.projects)
+        .where(
+          ctx.helpers.and(
+            ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
+            ctx.helpers.eq(ctx.schema.projects.externalId, input.externalId),
+          ),
+        );
+
+      return { success: true };
+    }),
 });
