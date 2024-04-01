@@ -12,7 +12,7 @@ interface ProjectListProps {
 const ProjectList: React.FC<ProjectListProps> = () => {
   const { data, isLoading } = api.projects.getFromCurrentUser.useQuery();
 
-  if (isLoading || !data) return <div>Loading...</div>;
+  if (isLoading || !data) return <ProjectCard project={undefined} loading />;
 
   return data.map((project) => (
     <ProjectCard key={project.id} project={project} />
