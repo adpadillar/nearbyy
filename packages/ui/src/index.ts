@@ -12,5 +12,9 @@ export * from "./components/ui/dropdown-menu";
 export * from "./components/ui/sheet";
 export * from "./components/ui/tabs";
 
+export * from "./patterns/jigsaw";
+export * from "./patterns/randomColors";
+export * from "./patterns/random-pattern";
+
 // utils
 export * from "./lib/utils";
