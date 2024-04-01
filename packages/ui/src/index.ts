@@ -11,6 +11,8 @@ export * from "./components/ui/input";
 export * from "./components/ui/dropdown-menu";
 export * from "./components/ui/sheet";
 export * from "./components/ui/tabs";
+export * from "./components/ui/skeleton";
+export * from "./components/ui/label";
 
 export * from "./patterns/jigsaw";
 export * from "./patterns/randomColors";

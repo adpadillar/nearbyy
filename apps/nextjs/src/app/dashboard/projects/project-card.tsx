@@ -26,13 +26,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     <Link
       href={`/dashboard/${project.id}`}
       key={project.id}
-      className="flex h-64 min-w-[16rem] overflow-hidden rounded-md border border-black/20"
+      className="flex h-64 overflow-hidden rounded-md border border-black/20"
     >
       <span>
         <Pattern
           backgroundColor={colors.background}
           pathColor={colors.foreground}
-          className="h-40 w-64"
+          fillOpacity={0.3}
+          className="h-40 w-96"
         />
         <div className="p-4">
           <h1 className="text-xl font-semibold">{project.name}</h1>
