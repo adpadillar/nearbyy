@@ -2,6 +2,7 @@
 
 import React from "react";
 
+import PageSkeleton from "~/components/loading/page-skeleton";
 import { api } from "~/trpc/react";
 
 interface PricingViewProps {
@@ -12,7 +13,7 @@ const PricingView: React.FC<PricingViewProps> = () => {
   const { data, isLoading } = api.projects.getFromCurrentUser.useQuery();
 
   if (!data || isLoading) {
-    return <div>Loading...</div>;
+    return <PageSkeleton />;
   }
 
   return (

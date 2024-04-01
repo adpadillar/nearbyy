@@ -83,7 +83,7 @@ const Footer: React.FC<FooterProps> = ({ content }) => {
           flexGrow: "0px",
         }}
         className="relative z-10"
-      ></div>
+      />
 
       <div className="relative z-10 flex justify-between pt-12">
         <div className="flex space-x-14 ">
