@@ -8,9 +8,10 @@ import UserButton from "./UserButton";
 
 interface SidebarProps {
   children?: React.ReactNode;
+  loading?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = () => {
+const Sidebar: React.FC<SidebarProps> = ({ loading }) => {
   const { exists: found, id: projectid } = useProjectId();
 
   const LinkElement = found
@@ -20,7 +21,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
   return (
     <div className="flex flex-col space-y-8 text-white">
       <div>
-        <UserButton projectid={found ? projectid : undefined} />
+        {!loading && <UserButton projectid={found ? projectid : undefined} />}
       </div>
 
       <hr className="pointer-events-none h-[0.1rem] w-full rounded-full bg-white" />

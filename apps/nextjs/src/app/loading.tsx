@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     >
       <Toaster position="bottom-right" />
       <div className="h-full w-full max-w-[26rem] overflow-scroll rounded-3xl border-2 border-black bg-[#2C2C2C] p-10">
-        <Sidebar />
+        <Sidebar loading />
       </div>
       <div className="relative w-full overflow-scroll rounded-bl-[2rem] rounded-tl-[4rem] bg-[#EDEDED] px-28 py-20">
         <div className="absolute left-16 top-[5%] h-[100%] w-[1px] bg-black" />
