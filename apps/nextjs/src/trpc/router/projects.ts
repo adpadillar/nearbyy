@@ -30,6 +30,16 @@ export const projectRouter = createTRPCRouter({
       id: p.externalId,
       name: p.name,
       description: p.description,
+      billing: {
+        plan: "free",
+        usage: {
+          requests: {
+            current: p.runningQueryCount,
+            limit: 20_000,
+          },
+        },
+        lastQuotaReset: p.lastQuotaReset,
+      },
     }));
   }),
   createFromCurrentUser: protectedProcedure
