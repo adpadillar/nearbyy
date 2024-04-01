@@ -26,13 +26,26 @@ export const projectRouter = createTRPCRouter({
       where: ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
     });
 
-    return projects.map((p) => ({
+    async function getProjectFileCountQuery(projectId: string) {
+      const countQuery = await ctx.drizzle
+        .select({ count: ctx.helpers.count(ctx.schema.files) })
+        .from(ctx.schema.files)
+        .where(ctx.helpers.eq(ctx.schema.files.projectid, projectId));
+
+      return countQuery[0]?.count ?? 0;
+    }
+
+    const ret = projects.map(async (p) => ({
       id: p.externalId,
       name: p.name,
       description: p.description,
       billing: {
         plan: "free",
         usage: {
+          files: {
+            current: await getProjectFileCountQuery(p.id),
+            limit: 250,
+          },
           requests: {
             current: p.runningQueryCount,
             limit: 20_000,
@@ -41,6 +54,8 @@ export const projectRouter = createTRPCRouter({
         lastQuotaReset: p.lastQuotaReset,
       },
     }));
+
+    return await Promise.all(ret);
   }),
   createFromCurrentUser: protectedProcedure
     .input(
