@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
 
+import PageSkeleton from "~/components/loading/page-skeleton";
+
 interface TestPageProps {
   children?: React.ReactNode;
 }
@@ -12,6 +14,7 @@ const TestPage: NextPage<TestPageProps> = () => {
         Follow this simple guide to connect the Nearbyy API to your first
         project
       </p>
+      <PageSkeleton />
     </div>
   );
 };

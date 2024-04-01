@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
 
+import PageSkeleton from "~/components/loading/page-skeleton";
+
 interface TestPageProps {
   children?: React.ReactNode;
 }
@@ -11,6 +13,7 @@ const TestPage: NextPage<TestPageProps> = () => {
       <p className="pt-2 text-lg opacity-[0.67]">
         View a summary of all files uploaded to this project
       </p>
+      <PageSkeleton />
     </div>
   );
 };
