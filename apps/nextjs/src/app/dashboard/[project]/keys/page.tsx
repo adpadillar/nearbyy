@@ -26,6 +26,7 @@ import {
 
 import type { RouterOutputs } from "~/trpc/trpc";
 import { DataTable } from "~/components/DataTable";
+import PageSkeleton from "~/components/loading/page-skeleton";
 import { useProjectId } from "~/components/ProjectIdContext";
 import { api } from "~/trpc/react";
 
@@ -181,7 +182,7 @@ const KeysPage: NextPage<KeysPageProps> = () => {
           View and manage your Nearbyy keys
         </p>
 
-        <div>Loading...</div>
+        <PageSkeleton />
       </div>
     );
   }

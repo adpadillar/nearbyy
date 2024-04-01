@@ -8,6 +8,7 @@ import { Button } from "@nearbyy/ui";
 
 import type { RouterOutputs } from "~/trpc/trpc";
 import { DataTable } from "~/components/DataTable";
+import PageSkeleton from "~/components/loading/page-skeleton";
 import { PreviewSheet } from "~/components/PreviewSheet";
 import { useProjectId } from "~/components/ProjectIdContext";
 import { api } from "~/trpc/react";
@@ -98,7 +99,7 @@ const FilesPage: NextPage<FilesPageProps> = () => {
           View a summary of all files uploaded to this project
         </p>
 
-        <div>Loading...</div>
+        <PageSkeleton />
       </div>
     );
   }
