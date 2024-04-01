@@ -1,0 +1,2 @@
+ALTER TABLE "projects" ADD COLUMN "runningQueryCount" integer DEFAULT 0 NOT NULL;--> statement-breakpoint
+ALTER TABLE "projects" ADD COLUMN "last_reset" timestamp with time zone DEFAULT now() NOT NULL;
