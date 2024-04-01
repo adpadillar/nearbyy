@@ -28,8 +28,5 @@
     "turbo": "^1.11.2",
     "typescript": "^5.4.2"
   },
-  "prettier": "@nearbyy/prettier-config",
-  "dependencies": {
-    "typedoc": "^0.25.4"
-  }
+  "prettier": "@nearbyy/prettier-config"
 }
