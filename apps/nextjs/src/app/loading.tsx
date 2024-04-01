@@ -25,8 +25,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Sidebar />
       </div>
       <div className="relative w-full overflow-scroll rounded-bl-[2rem] rounded-tl-[4rem] bg-[#EDEDED] px-28 py-20">
-        <div className="absolute left-16 top-[5%] h-[100%] w-[1px] bg-black"></div>
-        <div className="absolute left-[3.125rem] top-[12%] h-7 w-7 rounded-full bg-black"></div>
+        <div className="absolute left-16 top-[5%] h-[100%] w-[1px] bg-black" />
+        <div className="absolute left-[3.125rem] top-[12%] h-7 w-7 rounded-full bg-black" />
         <div className="max-w-[48rem]">{children}</div>
       </div>
     </div>
