@@ -52,6 +52,18 @@ export const projectRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // Check if the externalId is already in use by the user
+      const userProjects = await ctx.drizzle.query.projects.findMany({
+        where: ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
+      });
+
+      // if the user has more than 3 projects, we return 429
+      if (userProjects.length >= 3) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "You can only have 3 projects",
+        });
+      }
+
       const existingProject = await ctx.drizzle.query.projects.findFirst({
         where: ctx.helpers.and(
           ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
