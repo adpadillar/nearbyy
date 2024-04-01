@@ -23,7 +23,7 @@ interface PricingCardProps {
 
 const PricingCard: React.FC<PricingCardProps> = ({ content }) => {
   return (
-    <div className="relative z-10 rounded-3xl bg-gradient-to-t from-[#166AE8] to-red-600 p-[0.1rem]  shadow-2xl">
+    <div className="h-full relative z-10 max-w-sm rounded-3xl bg-gradient-to-t from-[#166AE8] to-red-600 p-[0.1rem]  shadow-2xl">
       <div className="h-full rounded-3xl bg-[#151515] p-10">
         <div className="flex flex-col space-y-6 ">
           <div className="flex justify-between">

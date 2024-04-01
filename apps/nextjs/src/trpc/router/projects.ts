@@ -26,11 +26,36 @@ export const projectRouter = createTRPCRouter({
       where: ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
     });
 
-    return projects.map((p) => ({
+    async function getProjectFileCountQuery(projectId: string) {
+      const countQuery = await ctx.drizzle
+        .select({ count: ctx.helpers.count(ctx.schema.files) })
+        .from(ctx.schema.files)
+        .where(ctx.helpers.eq(ctx.schema.files.projectid, projectId));
+
+      return countQuery[0]?.count ?? 0;
+    }
+
+    const ret = projects.map(async (p) => ({
       id: p.externalId,
       name: p.name,
       description: p.description,
+      billing: {
+        plan: "free",
+        usage: {
+          files: {
+            current: await getProjectFileCountQuery(p.id),
+            limit: 250,
+          },
+          requests: {
+            current: p.runningQueryCount,
+            limit: 20_000,
+          },
+        },
+        lastQuotaReset: p.lastQuotaReset,
+      },
     }));
+
+    return await Promise.all(ret);
   }),
   createFromCurrentUser: protectedProcedure
     .input(
@@ -42,6 +67,18 @@ export const projectRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // Check if the externalId is already in use by the user
+      const userProjects = await ctx.drizzle.query.projects.findMany({
+        where: ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
+      });
+
+      // if the user has more than 3 projects, we return 429
+      if (userProjects.length >= 3) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "You can only have 3 projects",
+        });
+      }
+
       const existingProject = await ctx.drizzle.query.projects.findFirst({
         where: ctx.helpers.and(
           ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
@@ -65,6 +102,27 @@ export const projectRouter = createTRPCRouter({
         owner: ctx.session.userId!,
         description: input.description,
       });
+
+      return { success: true };
+    }),
+
+  deleteFromCurrentUser: protectedProcedure
+    .input(z.object({ externalId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // We delete all of the files associated with the project
+      await ctx.drizzle
+        .delete(ctx.schema.files)
+        .where(ctx.helpers.eq(ctx.schema.files.projectid, input.externalId));
+
+      // We delete the project from the database
+      await ctx.drizzle
+        .delete(ctx.schema.projects)
+        .where(
+          ctx.helpers.and(
+            ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
+            ctx.helpers.eq(ctx.schema.projects.externalId, input.externalId),
+          ),
+        );
 
       return { success: true };
     }),

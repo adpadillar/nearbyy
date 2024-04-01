@@ -7,6 +7,7 @@ const config = {
   ],
   rules: {
     "react/prop-types": "off",
+    "react/self-closing-comp": "warn",
   },
   globals: {
     React: "writable",

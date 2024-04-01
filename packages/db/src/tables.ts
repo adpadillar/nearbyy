@@ -57,11 +57,24 @@ export const projects = pgTable("projects", {
   createdAt: timestamp("createdAt", { mode: "date", withTimezone: true })
     .notNull()
     .defaultNow(),
+  /** The internal id, unique to all projects */
   id: text("id").primaryKey(),
+  /** The user created id, can be repeated between projects */
   externalId: text("externalId").notNull(),
   name: text("name").notNull(),
   description: text("description"),
   owner: text("owner").notNull(),
+  /** The amount of queries made since `lastQuotaReset` */
+  runningQueryCount: integer("runningQueryCount").notNull().default(0),
+  /** The lifetime amount of queries in a project */
+  queryCount: integer("queryCount").notNull().default(0),
+  /** The last time the `runningQueryCount` value was reset */
+  lastQuotaReset: timestamp("last_reset", {
+    mode: "date",
+    withTimezone: true,
+  })
+    .defaultNow()
+    .notNull(),
 });
 
 // Chunk has to include

@@ -1,4 +1,4 @@
-import { withKeyAuth } from "@nearbyy/auth";
+import { queryRatelimit, withKeyAuth } from "@nearbyy/auth";
 import {
   chunkEndpointGetParams,
   chunkEndpointGetResponse,
@@ -8,9 +8,24 @@ import { getSingleEmbedding } from "@nearbyy/embeddings";
 
 export const GET = withKeyAuth({
   handler: async ({ params, projectid }) => {
-    const { embedding, success } = await getSingleEmbedding(params.query);
+    const { success: rateLimitSuccess } = await queryRatelimit(projectid);
 
-    if (!success) {
+    if (!rateLimitSuccess) {
+      return {
+        status: 429,
+        body: {
+          data: null,
+          success: false,
+          error: "Rate limit exceeded",
+        },
+      } as const;
+    }
+
+    const { embedding, success: embeddingSuccess } = await getSingleEmbedding(
+      params.query,
+    );
+
+    if (!embeddingSuccess) {
       return {
         status: 500,
         body: {

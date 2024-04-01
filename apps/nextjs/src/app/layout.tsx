@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import "~/styles/globals.css";
 import "@nearbyy/ui/dist/output.css";
 
+import { CSPostHogProvider } from "~/components/analytics/provider";
 import { env } from "~/env";
 
 export const metadata: Metadata = {
@@ -29,7 +30,7 @@ export default function Layout(props: { children: React.ReactNode }) {
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
       <body className={`min-h-screen bg-[#1C1C1C] ${GeistSans.className}`}>
-        {props.children}
+        <CSPostHogProvider>{props.children}</CSPostHogProvider>
       </body>
     </html>
   );

@@ -12,7 +12,7 @@ import { chunking } from "@nearbyy/embeddings";
 
 import { TextExtractor } from "~/utils/server/TextExtractor";
 
-export const maxDuration = 120;
+export const maxDuration = 10;
 
 export const DELETE = withKeyAuth({
   handler: async ({ body, projectid }) => {
@@ -81,6 +81,27 @@ export const DELETE = withKeyAuth({
 export const POST = withKeyAuth({
   handler: async ({ body, projectid }) => {
     const fileUrls = body.fileUrls;
+
+    const countQuery = await db.drizzle
+      .select({ count: db.helpers.count(db.schema.files) })
+      .from(db.schema.files)
+      .where(db.helpers.eq(db.schema.files.projectid, projectid));
+
+    const projectFileCount = countQuery[0]?.count ?? 0;
+
+    if (projectFileCount + fileUrls.length > 250) {
+      return {
+        status: 500,
+        body: {
+          success: false,
+          error: "Project file limit exceeded",
+          data: {
+            ids: [] as string[],
+            rejectedUrls: fileUrls,
+          },
+        },
+      } as const;
+    }
 
     const urlToUUID: Record<string, string> = {};
 
