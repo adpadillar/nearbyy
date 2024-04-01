@@ -15,8 +15,8 @@ const Projects: React.FC<ProjectsProps> = () => {
         Select a project from the following list
       </p>
       <div className="grid grid-cols-3 gap-4">
-        <ProjectList />
         <CreateNewProjectButton />
+        <ProjectList />
       </div>
     </div>
   );

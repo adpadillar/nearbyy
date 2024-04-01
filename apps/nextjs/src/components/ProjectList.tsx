@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 
+import ProjectCard from "~/app/dashboard/projects/project-card";
 import { api } from "~/trpc/react";
 
 interface ProjectListProps {
@@ -12,16 +12,10 @@ interface ProjectListProps {
 const ProjectList: React.FC<ProjectListProps> = () => {
   const { data, isLoading } = api.projects.getFromCurrentUser.useQuery();
 
-  if (isLoading || !data) return <div>Loading...</div>;
+  if (isLoading || !data) return <ProjectCard project={undefined} loading />;
 
   return data.map((project) => (
-    <Link
-      href={`/dashboard/${project.id}`}
-      key={project.id}
-      className="flex h-64 items-center justify-center rounded-md border border-black/60"
-    >
-      {project.name}
-    </Link>
+    <ProjectCard key={project.id} project={project} />
   ));
 };
 

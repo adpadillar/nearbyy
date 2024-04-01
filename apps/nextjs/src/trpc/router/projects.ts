@@ -62,10 +62,22 @@ export const projectRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         description: z.string().optional(),
-        externalId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      if (!input.name) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Name is required",
+        });
+      }
+      // create an externalId for the project based on the name
+      // if the project name is "My Project", the externalId will be "my-project"
+      const externalId = input.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "-")
+        .replace(/-+/g, "-");
+
       // Check if the externalId is already in use by the user
       const userProjects = await ctx.drizzle.query.projects.findMany({
         where: ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
@@ -82,7 +94,7 @@ export const projectRouter = createTRPCRouter({
       const existingProject = await ctx.drizzle.query.projects.findFirst({
         where: ctx.helpers.and(
           ctx.helpers.eq(ctx.schema.projects.owner, ctx.session.userId!),
-          ctx.helpers.eq(ctx.schema.projects.externalId, input.externalId),
+          ctx.helpers.eq(ctx.schema.projects.externalId, externalId),
         ),
       });
 
@@ -90,13 +102,13 @@ export const projectRouter = createTRPCRouter({
       if (existingProject) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Project with this externalId already exists",
+          message: "Project with this name already exists",
         });
       }
 
       // We insert the project into the database
       await ctx.drizzle.insert(ctx.schema.projects).values({
-        externalId: input.externalId,
+        externalId: externalId,
         id: crypto.randomUUID(),
         name: input.name,
         owner: ctx.session.userId!,
