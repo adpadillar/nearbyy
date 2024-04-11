@@ -39,6 +39,10 @@ Nearbyy is a platform that allows you to integrate RAG into your applications. I
 - **API first**: Keep your knowledge base up-to-date by integrating Nearbyy into your existing workflows.
 - **Developer experience**: We are focused on making the developer experience as smooth as possible.
 
+This is a simplified overview of the nearbyy platform. Click on the image below to open the full-size image.
+
+[![](/infra.png)](/infra.png)
+
 ## Further reading
 
 In the next section, we will be setting up our first Nearbyy project with Typescript.
