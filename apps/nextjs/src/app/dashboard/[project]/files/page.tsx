@@ -2,20 +2,22 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { NextPage } from "next";
+import { useState } from "react";
 import { ArrowUpDown } from "lucide-react";
 
-import { Button } from "@nearbyy/ui";
+import { Button, Input } from "@nearbyy/ui";
 
 import type { RouterOutputs } from "~/trpc/trpc";
 import { DataTable } from "~/components/DataTable";
 import PageSkeleton from "~/components/loading/page-skeleton";
 import { PreviewSheet } from "~/components/PreviewSheet";
 import { useProjectId } from "~/components/ProjectIdContext";
+import { useS3Upload } from "~/hooks/useS3Upload";
 import { api } from "~/trpc/react";
 
-type File = RouterOutputs["files"]["listForProject"]["files"][number];
+type FileT = RouterOutputs["files"]["listForProject"]["files"][number];
 
-const columns: ColumnDef<File>[] = [
+const columns: ColumnDef<FileT>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -86,10 +88,15 @@ interface FilesPageProps {
 
 const FilesPage: NextPage<FilesPageProps> = () => {
   const { id } = useProjectId();
+  const { uploadFile } = useS3Upload();
+  const [file, setFile] = useState<File>();
 
   const { data, isLoading } = api.files.listForProject.useQuery({
     projectId: id,
   });
+
+  const { mutateAsync: apiFileUpload } =
+    api.files.uploadForProject.useMutation();
 
   if (!data || isLoading) {
     return (
@@ -110,6 +117,26 @@ const FilesPage: NextPage<FilesPageProps> = () => {
       <p className="pt-2 text-lg opacity-[0.67]">
         View a summary of all files uploaded to this project
       </p>
+
+      <Input
+        onChange={(e) => {
+          if (e.target.files) {
+            setFile(e.target.files[0]);
+          }
+        }}
+        type="file"
+      />
+      <Button
+        disabled={!file}
+        onClick={async () => {
+          if (!file) return;
+          const fileId = await uploadFile(file);
+          await apiFileUpload({ fileId: fileId, projectId: id });
+          console.log("File uploaded with id", fileId);
+        }}
+      >
+        Submit
+      </Button>
 
       <DataTable columns={columns} data={data.files} />
     </div>
