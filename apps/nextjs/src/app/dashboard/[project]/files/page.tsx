@@ -2,10 +2,10 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { NextPage } from "next";
-import { useState } from "react";
 import { ArrowUpDown } from "lucide-react";
+import toast from "react-hot-toast";
 
-import { Button, Input } from "@nearbyy/ui";
+import { Button } from "@nearbyy/ui";
 
 import type { RouterOutputs } from "~/trpc/trpc";
 import { DataTable } from "~/components/DataTable";
@@ -14,6 +14,7 @@ import { PreviewSheet } from "~/components/PreviewSheet";
 import { useProjectId } from "~/components/ProjectIdContext";
 import { useS3Upload } from "~/hooks/useS3Upload";
 import { api } from "~/trpc/react";
+import { ALLOWED_EXTENSIONS } from "~/utils/shared/constants";
 
 type FileT = RouterOutputs["files"]["listForProject"]["files"][number];
 
@@ -89,7 +90,37 @@ interface FilesPageProps {
 const FilesPage: NextPage<FilesPageProps> = () => {
   const { id } = useProjectId();
   const { uploadFile } = useS3Upload();
-  const [file, setFile] = useState<File>();
+  const utils = api.useUtils();
+
+  function handleOnClick() {
+    // here we want to create an input element type file
+    // and click it to open the file dialog
+    const input = document.createElement("input");
+    input.type = "file";
+    input.style.display = "none";
+    input.multiple = false;
+    input.accept = ALLOWED_EXTENSIONS.map((ext) => `.${ext}`).join(",");
+    input.click();
+
+    input.onchange = async (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files) {
+        const file = target.files[0]!;
+
+        const loadingPromise = uploadFile(file).then((fileId) => {
+          return apiFileUpload({ fileId, projectId: id });
+        });
+
+        await toast.promise(loadingPromise, {
+          loading: "Uploading file...",
+          success: "File uploaded successfully!",
+          error: "Error uploading file",
+        });
+
+        await utils.files.listForProject.invalidate();
+      }
+    };
+  }
 
   const { data, isLoading } = api.files.listForProject.useQuery({
     projectId: id,
@@ -118,25 +149,9 @@ const FilesPage: NextPage<FilesPageProps> = () => {
         View a summary of all files uploaded to this project
       </p>
 
-      <Input
-        onChange={(e) => {
-          if (e.target.files) {
-            setFile(e.target.files[0]);
-          }
-        }}
-        type="file"
-      />
-      <Button
-        disabled={!file}
-        onClick={async () => {
-          if (!file) return;
-          const fileId = await uploadFile(file);
-          await apiFileUpload({ fileId: fileId, projectId: id });
-          console.log("File uploaded with id", fileId);
-        }}
-      >
-        Submit
-      </Button>
+      <div className="flex w-full items-end justify-end">
+        <Button onClick={handleOnClick}>Upload File</Button>
+      </div>
 
       <DataTable columns={columns} data={data.files} />
     </div>
