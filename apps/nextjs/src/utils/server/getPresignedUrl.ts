@@ -33,7 +33,7 @@ export async function getPresignedUrl(
       "x-nearbyy-project-id": projectId,
       "x-nearbyy-file-id": fileId,
     },
-    Expires: 3600,
+    Expires: 3600, // 1 hour,
   });
 
   return { url, fields };
