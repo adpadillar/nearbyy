@@ -99,6 +99,7 @@ Different file types are supported by Nearbyy. Our backend service will look at 
 | Markdown  | `text/markdown`                                                           |
 | Text      | `text/plain`                                                              |
 | PDF       | `application/pdf`                                                         |
+| MP3       | `audio/mpeg`                                                              |
 | Docx      | `application/vnd.openxmlformats-officedocument.wordprocessingml.document` |
 
 :::tip[Your file type is not supported?]

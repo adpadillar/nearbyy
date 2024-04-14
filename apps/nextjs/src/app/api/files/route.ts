@@ -107,12 +107,10 @@ export const POST = withKeyAuth({
 
     const promises = fileUrls.map(async (fileUrl) => {
       const file = await fetch(fileUrl);
-      const fileBuffer = await file.arrayBuffer();
-      const fileMimeString = file.headers.get("Content-Type") ?? "";
-
+      const fileBlob = await file.blob();
+      const fileMimeString = fileBlob.type;
       const textExtractor = new TextExtractor({
-        arrayBuffer: fileBuffer,
-        mimeType: fileMimeString,
+        fileBlob: fileBlob,
       });
 
       const { error, text } = await textExtractor.extract();
