@@ -3,6 +3,7 @@ import {
   boolean,
   doublePrecision,
   integer,
+  json,
   pgTable,
   text,
   timestamp,
@@ -98,4 +99,17 @@ export const chunks = pgTable("chunks", {
   tokenLength: integer("tokenLength").notNull(),
   embedding: doublePrecision("embedding").array(1536).notNull(),
   text: text("text").notNull(),
+});
+
+export const presignedUrls = pgTable("presigned_urls", {
+  createdAt: timestamp("createdAt", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  id: text("id").primaryKey(),
+  fileId: text("fileId").notNull(),
+  status: text("status").notNull().default("PENDING"),
+  projectId: text("projectId").notNull(),
+  contentType: text("contentType").notNull(),
+  url: text("url").notNull(),
+  fields: json("fields").$type<Record<string, string>>().notNull(),
 });

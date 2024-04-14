@@ -3,11 +3,11 @@ import { z } from "zod";
 
 import { chunking } from "@nearbyy/embeddings";
 
+import { env } from "~/env";
 import { getPresignedUrl } from "~/utils/server/getPresignedUrl";
 import { TextExtractor } from "~/utils/server/TextExtractor";
+import { FILE_QUOTA } from "~/utils/shared/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-
-const CLOUDFRONT_URL = "https://dzpv5o2pvfxys.cloudfront.net";
 
 export const filesRouter = createTRPCRouter({
   uploadForProject: protectedProcedure
@@ -39,14 +39,14 @@ export const filesRouter = createTRPCRouter({
 
       const projectFileCount = countQuery[0]?.count ?? 0;
 
-      if (projectFileCount + 1 > 250) {
+      if (projectFileCount + 1 > FILE_QUOTA) {
         throw new TRPCError({
           message: "Project file limit exceeded",
           code: "TOO_MANY_REQUESTS",
         });
       }
 
-      const fileUrl = `${CLOUDFRONT_URL}/${input.fileId}`;
+      const fileUrl = `${env.CLOUDFRONT_URL}/${input.fileId}`;
 
       const file = await fetch(fileUrl);
       const fileBlob = await file.blob();

@@ -2,6 +2,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 
 import { env } from "~/env";
+import { FILE_UPLOAD_URL_TTL } from "../shared/constants";
 
 const client = new S3Client({
   region: "us-east-1",
@@ -22,7 +23,7 @@ export async function getPresignedUrl(
   contentType: string,
 ): Promise<GetPresignedUrlResponse> {
   const { url, fields } = await createPresignedPost(client, {
-    Bucket: "nearbyy-file-storage",
+    Bucket: env.AWS_BUCKET_NAME,
     Key: fileId,
     Conditions: [
       ["content-length-range", 0, 10485760], // up to 10 MB
@@ -33,7 +34,7 @@ export async function getPresignedUrl(
       "x-nearbyy-project-id": projectId,
       "x-nearbyy-file-id": fileId,
     },
-    Expires: 3600,
+    Expires: FILE_UPLOAD_URL_TTL, // 1 hour,
   });
 
   return { url, fields };

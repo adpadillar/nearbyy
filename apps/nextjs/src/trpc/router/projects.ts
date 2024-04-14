@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { FILE_QUOTA } from "~/utils/shared/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const projectRouter = createTRPCRouter({
@@ -44,7 +45,7 @@ export const projectRouter = createTRPCRouter({
         usage: {
           files: {
             current: await getProjectFileCountQuery(p.id),
-            limit: 250,
+            limit: FILE_QUOTA,
           },
           requests: {
             current: p.runningQueryCount,
