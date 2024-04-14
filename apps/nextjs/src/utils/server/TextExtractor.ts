@@ -50,19 +50,6 @@ export class TextExtractor {
     return transcription.text;
   }
 
-  //   await worker.load();
-  //   await worker.loadLanguage("eng");
-  //   await worker.initialize("eng");
-  //   const {
-  //     data: { text },
-  //   } = await worker.recognize(file);
-  //   setOcr(text);
-  // } catch (e) {
-  //   console.log(2222222, e);
-  //   setOcr("Failed to scan image");
-  // }
-  // };
-
   async extractFromImage() {
     const buffer = Buffer.from(await this.arrayBufferPromise);
     const worker = await createWorker("spa+fra+eng");
@@ -70,7 +57,6 @@ export class TextExtractor {
     await worker.terminate();
     return ret.data.text;
   }
-  //
 
   async extract() {
     if (this.mimeType === MIME_TYPES.txt || this.mimeType === MIME_TYPES.md) {
