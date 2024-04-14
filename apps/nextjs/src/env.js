@@ -28,6 +28,8 @@ export const env = createEnv({
     AWS_SECRET_ACCESS_KEY: z.string().min(1),
     AWS_BUCKET_NAME: z.string().min(1),
     AWS_BUCKET_NAME_DEV: z.string().min(1),
+    CLOUDFRONT_URL: z.string().min(1),
+    CLOUDFRONT_URL_DEV: z.string().min(1),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -58,6 +60,8 @@ export const env = createEnv({
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
     AWS_BUCKET_NAME_DEV: process.env.AWS_BUCKET_NAME_DEV,
+    CLOUDFRONT_URL: process.env.CLOUDFRONT_URL,
+    CLOUDFRONT_URL_DEV: process.env.CLOUDFRONT_URL_DEV,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:
