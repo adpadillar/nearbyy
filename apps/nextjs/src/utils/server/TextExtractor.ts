@@ -1,13 +1,7 @@
 import { extractRawText } from "mammoth";
 import pdfparse from "pdf-parse-fork";
 
-const MIME_TYPES = {
-  pdf: "application/pdf",
-  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  txt: "text/plain",
-  md: "text/markdown",
-  html: "text/html",
-};
+import { MIME_TYPES } from "../shared/constants";
 
 export class TextExtractor {
   arrayBuffer: ArrayBuffer;
