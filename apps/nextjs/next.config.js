@@ -3,6 +3,7 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  experimental: { serverComponentsExternalPackages: ["tesseract.js"] },
   reactStrictMode: true,
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [

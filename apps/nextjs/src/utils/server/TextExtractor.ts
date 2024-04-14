@@ -2,6 +2,7 @@ import { File } from "@web-std/file";
 import { extractRawText } from "mammoth";
 import OpenAI from "openai";
 import pdfparse from "pdf-parse-fork";
+import { createWorker } from "tesseract.js";
 
 import { env } from "~/env";
 import { MIME_TYPES } from "../shared/constants";
@@ -49,6 +50,28 @@ export class TextExtractor {
     return transcription.text;
   }
 
+  //   await worker.load();
+  //   await worker.loadLanguage("eng");
+  //   await worker.initialize("eng");
+  //   const {
+  //     data: { text },
+  //   } = await worker.recognize(file);
+  //   setOcr(text);
+  // } catch (e) {
+  //   console.log(2222222, e);
+  //   setOcr("Failed to scan image");
+  // }
+  // };
+
+  async extractFromImage() {
+    const buffer = Buffer.from(await this.arrayBufferPromise);
+    const worker = await createWorker("spa+fra+eng");
+    const ret = await worker.recognize(buffer);
+    await worker.terminate();
+    return ret.data.text;
+  }
+  //
+
   async extract() {
     if (this.mimeType === MIME_TYPES.txt || this.mimeType === MIME_TYPES.md) {
       return { text: await this.extractFromText(), error: null } as const;
@@ -64,6 +87,14 @@ export class TextExtractor {
 
     if (this.mimeType === MIME_TYPES.mp3) {
       return { text: await this.extractFromMp3(), error: null } as const;
+    }
+
+    if (
+      this.mimeType === MIME_TYPES.png ||
+      this.mimeType === MIME_TYPES.jpg ||
+      this.mimeType === MIME_TYPES.jpeg
+    ) {
+      return { text: await this.extractFromImage(), error: null } as const;
     }
     return { text: null, error: "Unsupported file type" } as const;
   }

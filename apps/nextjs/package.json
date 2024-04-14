@@ -43,6 +43,7 @@
     "shiki": "^0.14.7",
     "superjson": "2.2.1",
     "svix": "^1.15.0",
+    "tesseract.js": "^5.0.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
