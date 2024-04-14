@@ -2,6 +2,7 @@ import { S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 
 import { env } from "~/env";
+import { FILE_UPLOAD_URL_TTL } from "../shared/constants";
 
 const client = new S3Client({
   region: "us-east-1",
@@ -33,7 +34,7 @@ export async function getPresignedUrl(
       "x-nearbyy-project-id": projectId,
       "x-nearbyy-file-id": fileId,
     },
-    Expires: 3600, // 1 hour,
+    Expires: FILE_UPLOAD_URL_TTL, // 1 hour,
   });
 
   return { url, fields };
