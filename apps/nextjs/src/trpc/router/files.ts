@@ -49,12 +49,11 @@ export const filesRouter = createTRPCRouter({
       const fileUrl = `${CLOUDFRONT_URL}/${input.fileId}`;
 
       const file = await fetch(fileUrl);
-      const fileBuffer = await file.arrayBuffer();
-      const fileMimeString = file.headers.get("Content-Type") ?? "";
+      const fileBlob = await file.blob();
+      const fileMimeString = fileBlob.type;
 
       const textExtractor = new TextExtractor({
-        arrayBuffer: fileBuffer,
-        mimeType: fileMimeString,
+        fileBlob,
       });
 
       const { error, text } = await textExtractor.extract();

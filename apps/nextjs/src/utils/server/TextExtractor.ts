@@ -39,20 +39,13 @@ export class TextExtractor {
     return res.text.replaceAll("\u0000", "");
   }
 
-  // lastModified
-  // name
-  // size
-  // type
-  // text
-
   async extractFromMp3() {
     const file = new File([this.fileBlob], "name.mp3");
     const transcription = await openai.audio.transcriptions.create({
       file: file,
       model: "whisper-1",
-      response_format: "text",
+      response_format: "json",
     });
-    console.log(transcription);
     return transcription.text;
   }
 
