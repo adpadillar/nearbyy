@@ -28,6 +28,7 @@
     "@trpc/client": "^10.45.0",
     "@trpc/react-query": "^10.45.0",
     "@trpc/server": "^10.45.0",
+    "@web-std/file": "^3.0.3",
     "class-variance-authority": "^0.7.0",
     "geist": "^1.2.0",
     "lucide-react": "^0.319.0",
@@ -42,6 +43,7 @@
     "shiki": "^0.14.7",
     "superjson": "2.2.1",
     "svix": "^1.15.0",
+    "tesseract.js": "^5.0.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
