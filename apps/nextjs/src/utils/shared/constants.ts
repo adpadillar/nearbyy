@@ -4,6 +4,7 @@ export const MIME_TYPES = {
   txt: "text/plain",
   md: "text/markdown",
   html: "text/html",
+  mp3: "audio/mpeg",
 };
 
 export const ALLOWED_EXTENSIONS = Object.keys(MIME_TYPES);
