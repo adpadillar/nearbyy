@@ -22,7 +22,7 @@ export async function getPresignedUrl(
   contentType: string,
 ): Promise<GetPresignedUrlResponse> {
   const { url, fields } = await createPresignedPost(client, {
-    Bucket: "nearbyy-file-storage",
+    Bucket: env.AWS_BUCKET_NAME,
     Key: fileId,
     Conditions: [
       ["content-length-range", 0, 10485760], // up to 10 MB
