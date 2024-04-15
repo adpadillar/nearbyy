@@ -5,10 +5,6 @@ sidebar:
   order: 1
 ---
 
-:::caution[Nearbyy is currently in ALPHA]
-Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, [please contact us here](mailto:adpadillar25@gmail.com).
-:::
-
 In this guide, you will be setting up your first Nearbyy project in Typescript. Make sure you have an account on [Nearbyy](https://nearbyy.com) before you begin.
 
 ## Creating a new project
@@ -32,8 +28,8 @@ For now, the Nearbyy sdk runs from the server. We support the following runtimes
 - Node.js
 - Edge Runtime
 
-:::danger[Running in the browser]
-While running our SDK is technically possible in the browser, we strongly advise against it. This will leak your API keys. We plan to support running in the browser in the future, eliminating the need for your own backend. However, this is not supported yet.
+:::note[Running in the browser]
+While we don't support running in the browser directly without a server, we plan to support this use case in the future, eliminating the need for your own backend.
 :::
 
 ## Getting your API key

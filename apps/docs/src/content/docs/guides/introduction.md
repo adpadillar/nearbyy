@@ -5,10 +5,6 @@ sidebar:
   order: 0
 ---
 
-:::caution[Nearbyy is currently in ALPHA]
-Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, [please contact us here](mailto:adpadillar25@gmail.com).
-:::
-
 Nearbyy is a platform that allows you to integrate Retrieval Augmented Generation (RAG) into your applications. It provides a simple API that allows you to upload and retrieve files from the Nearbyy platform.
 
 ## Retrieval Augmented Generation
