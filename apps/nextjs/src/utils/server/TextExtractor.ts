@@ -1,5 +1,10 @@
+import { Readability } from "@mozilla/readability";
 import { File } from "@web-std/file";
+import createDOMPurify from "dompurify";
+import { JSDOM } from "jsdom";
 import { extractRawText } from "mammoth";
+import { NodeHtmlMarkdown } from "node-html-markdown";
+import { getTextExtractor } from "office-text-extractor";
 import OpenAI from "openai";
 import pdfparse from "pdf-parse-fork";
 import { createWorker } from "tesseract.js";
@@ -58,6 +63,35 @@ export class TextExtractor {
     return ret.data.text;
   }
 
+  async extractFromPptx() {
+    const textExtractor = getTextExtractor();
+    const buffer = Buffer.from(await this.arrayBufferPromise);
+    const text = await textExtractor.extractText({
+      input: buffer,
+      type: "buffer",
+    });
+    return text;
+  }
+
+  async extractFromHtml() {
+    const text = new TextDecoder().decode(await this.arrayBufferPromise);
+    const dom = new JSDOM(text);
+    const reader = new Readability(dom.window.document);
+    const article = reader.parse();
+    const window = dom.window;
+    const DOMPurify = createDOMPurify(window);
+
+    if (!article) {
+      throw new Error("Failed to extract article");
+    }
+
+    const clean = DOMPurify.sanitize(article.content);
+
+    const md = NodeHtmlMarkdown.translate(clean);
+
+    return md;
+  }
+
   async extract() {
     if (this.mimeType === MIME_TYPES.txt || this.mimeType === MIME_TYPES.md) {
       return { text: await this.extractFromText(), error: null } as const;
@@ -73,6 +107,14 @@ export class TextExtractor {
 
     if (this.mimeType === MIME_TYPES.mp3) {
       return { text: await this.extractFromMp3(), error: null } as const;
+    }
+
+    if (this.mimeType === MIME_TYPES.pptx) {
+      return { text: await this.extractFromPptx(), error: null } as const;
+    }
+
+    if (this.mimeType === MIME_TYPES.html) {
+      return { text: await this.extractFromHtml(), error: null } as const;
     }
 
     if (
