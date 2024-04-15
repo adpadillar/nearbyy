@@ -5,19 +5,110 @@ import type {
   FileEndpointDeleteResponse,
   FileEndpointPostBody,
   FileEndpointPostResponse,
+  GetUploadUrlEndpointGetParams,
+  GetUploadUrlEndpointGetResponse,
 } from "../api";
 
-interface _FileUploader {
-  upload(files: File[]): Promise<string[]>;
-}
-
 export class NearbyyClient {
-  API_KEY: string | undefined;
+  API_KEY: string;
   API_URL: string;
+  CLOUDFRONT_URL: string;
 
-  constructor(options: { API_KEY?: string; API_URL?: string }) {
-    this.API_KEY = options.API_KEY ?? process.env.NEARBYY_API_KEY ?? undefined;
+  constructor(options: {
+    API_KEY: string;
+    API_URL?: string;
+    CLOUDFRONT_URL?: string;
+  }) {
+    this.API_KEY = options.API_KEY;
     this.API_URL = options.API_URL ?? "https://nearbyy.com/api";
+    this.CLOUDFRONT_URL =
+      options.CLOUDFRONT_URL ?? "https://dzpv5o2pvfxys.cloudfront.net";
+  }
+
+  async uploadFiles(
+    payload: { files: File[] } | { fileUrls: string[] },
+  ): Promise<FileEndpointPostResponse> {
+    if ("files" in payload) {
+      const files = payload.files;
+
+      // first, get presigned URLs
+      const presignedUrlResponses = await Promise.all(
+        files.map(async (file) => {
+          const queryParams: GetUploadUrlEndpointGetParams = {
+            contentType: file.type,
+          };
+
+          const queryString = Object.entries(queryParams)
+            .map(([key, value]) => `${key}=${value}`)
+            .join("&");
+
+          const res = await fetch(
+            `${this.API_URL}/files/get-upload-url?${queryString}`,
+            {
+              headers: {
+                Authorization: `Bearer ${this.API_KEY}`,
+              },
+            },
+          );
+
+          const json = res.json() as unknown as GetUploadUrlEndpointGetResponse;
+          return json;
+        }),
+      );
+
+      // then, upload the files
+      const allFileUrls = await Promise.all(
+        presignedUrlResponses.map(async (presignedUrlResponse, idx) => {
+          if (presignedUrlResponse.success) {
+            const { fields, fileId, uploadUrl } = presignedUrlResponse.data;
+            const formData = new FormData();
+
+            Object.entries(fields).forEach(([key, value]) => {
+              formData.append(key, value);
+            });
+
+            formData.append("file", files[idx]!);
+
+            await fetch(uploadUrl, {
+              method: "POST",
+              body: formData,
+            });
+
+            return `${this.CLOUDFRONT_URL}/${fileId}`;
+          }
+        }),
+      );
+
+      const fileUrls = allFileUrls.filter(
+        (url) => url !== undefined,
+      ) as string[];
+
+      const res = await fetch(`${this.API_URL}/files`, {
+        headers: {
+          Authorization: `Bearer ${this.API_KEY}`,
+        },
+        method: "POST",
+        body: JSON.stringify({ fileUrls } as FileEndpointPostBody),
+      });
+
+      const json = (await res.json()) as FileEndpointPostResponse;
+      return json;
+    }
+
+    if ("fileUrls" in payload) {
+      const res = await fetch(`${this.API_URL}/files`, {
+        headers: {
+          Authorization: `Bearer ${this.API_KEY}`,
+        },
+        method: "POST",
+        body: JSON.stringify(payload as FileEndpointPostBody),
+      });
+
+      const json = (await res.json()) as FileEndpointPostResponse;
+      return json;
+    }
+
+    throw new Error("Invalid payload");
   }
 
   async deleteFile(payload: FileEndpointDeleteBody) {
@@ -30,19 +121,6 @@ export class NearbyyClient {
     });
 
     const json = (await res.json()) as FileEndpointDeleteResponse;
-    return json;
-  }
-
-  async uploadFile(payload: FileEndpointPostBody) {
-    const res = await fetch(`${this.API_URL}/files`, {
-      headers: {
-        Authorization: `Bearer ${this.API_KEY}`,
-      },
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-
-    const json = (await res.json()) as FileEndpointPostResponse;
     return json;
   }
 
