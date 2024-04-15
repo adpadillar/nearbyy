@@ -10,6 +10,7 @@ import {
 import { db } from "@nearbyy/db";
 import { chunking } from "@nearbyy/embeddings";
 
+import { env } from "~/env";
 import { TextExtractor } from "~/utils/server/TextExtractor";
 import { FILE_QUOTA } from "~/utils/shared/constants";
 
@@ -120,7 +121,16 @@ export const POST = withKeyAuth({
         return Promise.reject(new Error(error));
       }
 
-      const fileId = crypto.randomUUID();
+      let fileId = "";
+      if (fileUrl.startsWith(env.CLOUDFRONT_URL)) {
+        // If the file corresponds to our cloudfront URL, we can extract the fileId from the URL
+        // to match the fileId that was already assigned to the file
+        fileId = fileUrl.split("/").pop()!;
+      } else {
+        // Otherwise, we generate a new fileId
+        fileId = crypto.randomUUID();
+      }
+
       // store the assigned UUID to the file URL
       urlToUUID[fileUrl] = fileId;
 
