@@ -2,8 +2,8 @@ import { describe } from "vitest";
 
 import { it, supportedFiles, unsupportedFiles } from ".";
 import {
+  chunkEndpointGetResponse,
   fileEndpointDeleteResponse,
-  fileEndpointGetResponse,
   fileEndpointPostResponse,
   NearbyyClient,
 } from "..";
@@ -27,15 +27,15 @@ describe("API shape test", () => {
       limit: 101,
     });
 
-    fileEndpointGetResponse.parse(res1);
-    fileEndpointGetResponse.parse(res2);
+    chunkEndpointGetResponse.parse(res1);
+    chunkEndpointGetResponse.parse(res2);
   });
 
   it("/files POST shape", async () => {
-    const res1 = await nearbyy.uploadFile({
+    const res1 = await nearbyy.uploadFiles({
       fileUrls: supportedFiles,
     });
-    const res2 = await nearbyy.uploadFile({
+    const res2 = await nearbyy.uploadFiles({
       fileUrls: unsupportedFiles,
     });
 
