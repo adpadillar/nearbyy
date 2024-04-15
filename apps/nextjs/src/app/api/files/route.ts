@@ -11,6 +11,7 @@ import { db } from "@nearbyy/db";
 import { chunking } from "@nearbyy/embeddings";
 
 import { TextExtractor } from "~/utils/server/TextExtractor";
+import { FILE_QUOTA } from "~/utils/shared/constants";
 
 export const maxDuration = 10;
 
@@ -89,7 +90,7 @@ export const POST = withKeyAuth({
 
     const projectFileCount = countQuery[0]?.count ?? 0;
 
-    if (projectFileCount + fileUrls.length > 250) {
+    if (projectFileCount + fileUrls.length > FILE_QUOTA) {
       return {
         status: 500,
         body: {
@@ -107,12 +108,10 @@ export const POST = withKeyAuth({
 
     const promises = fileUrls.map(async (fileUrl) => {
       const file = await fetch(fileUrl);
-      const fileBuffer = await file.arrayBuffer();
-      const fileMimeString = file.headers.get("Content-Type") ?? "";
-
+      const fileBlob = await file.blob();
+      const fileMimeString = fileBlob.type;
       const textExtractor = new TextExtractor({
-        arrayBuffer: fileBuffer,
-        mimeType: fileMimeString,
+        fileBlob: fileBlob,
       });
 
       const { error, text } = await textExtractor.extract();

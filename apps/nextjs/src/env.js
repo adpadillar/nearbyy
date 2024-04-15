@@ -24,6 +24,12 @@ export const env = createEnv({
     CLERK_SECRET_KEY: z.string().min(1),
     CLERK_SIGNING_KEY: z.string().min(1),
     CLERK_SIGNING_KEY_DEV: z.string().min(1),
+    AWS_ACCESS_KEY_ID: z.string().min(1),
+    AWS_SECRET_ACCESS_KEY: z.string().min(1),
+    AWS_BUCKET_NAME: z.string().min(1),
+    AWS_BUCKET_NAME_DEV: z.string().min(1),
+    CLOUDFRONT_URL: z.string().min(1),
+    CLOUDFRONT_URL_DEV: z.string().min(1),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -50,6 +56,12 @@ export const env = createEnv({
     CLERK_SIGNING_KEY_DEV: process.env.CLERK_SIGNING_KEY_DEV,
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
+    AWS_BUCKET_NAME_DEV: process.env.AWS_BUCKET_NAME_DEV,
+    CLOUDFRONT_URL: process.env.CLOUDFRONT_URL,
+    CLOUDFRONT_URL_DEV: process.env.CLOUDFRONT_URL_DEV,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:

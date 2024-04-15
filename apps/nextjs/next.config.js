@@ -3,6 +3,14 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  experimental: {
+    serverComponentsExternalPackages: [
+      "tesseract.js",
+      "jsdom",
+      "dompurify",
+      "@mozilla/readability",
+    ],
+  },
   reactStrictMode: true,
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
