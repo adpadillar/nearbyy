@@ -34,6 +34,7 @@
     "lucide-react": "^0.319.0",
     "mammoth": "^1.7.0",
     "next": "^14.0.3",
+    "office-text-extractor": "^3.0.2",
     "openai": "^4.24.0",
     "pdf-parse-fork": "^1.2.0",
     "posthog-js": "^1.116.6",

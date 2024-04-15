@@ -8,6 +8,7 @@ export const MIME_TYPES = {
   jpg: "image/jpeg",
   png: "image/png",
   jpeg: "image/jpeg",
+  pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 };
 
 export const ALLOWED_EXTENSIONS = Object.keys(MIME_TYPES);
