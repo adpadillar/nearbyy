@@ -5,30 +5,30 @@ sidebar:
   order: 4
 ---
 
-## Files
+## Chunks
 
-### FileEndpointGetParams
+### ChunkEndpointGetParams
 
-```typescript title="FileEndpointGetParams.ts"
-type FileEndpointGetParams = {
+```typescript title="ChunkEndpointGetParams.ts"
+type ChunkEndpointGetParams = {
   limit: number;
   query: string;
 };
 ```
 
-### FileEndpointGetResponse
+### ChunkEndpointGetResponse
 
-```typescript title="FileEndpointGetResponse.ts"
-type FileEndpointGetResponse =
+```typescript title="ChunkEndpointGetResponse.ts"
+type ChunkEndpointGetResponse =
   | {
       error: null;
       data: {
         items: {
-          type: string;
-          id: string;
+          order: number;
+          tokenLength: number;
           text: string;
-          url: string;
           _extras: {
+            fileId: string;
             projectid: string;
             distance?: number | undefined;
           };
@@ -42,6 +42,8 @@ type FileEndpointGetResponse =
       success: false;
     };
 ```
+
+## Files
 
 ### FileEndpointPostBody
 

@@ -76,8 +76,8 @@ async semanticSearch(params: ChunkEndpointGetParams): Promise<ChunkEndpointGetRe
 
 #### Parameters
 
-- `params` - [`ChunkEndpointGetParams`](../../api-reference/types#fileendpointgetparams): The parameters of the request.
+- `params` - [`ChunkEndpointGetParams`](../../api-reference/types#chunkendpointgetparams): The parameters of the request.
 
 #### Returns
 
-- [`Promise<ChunkEndpointGetResponse>`](../../api-reference/types#fileendpointgetresponse): The response from the server.
+- [`Promise<ChunkEndpointGetResponse>`](../../api-reference/types#chunkendpointgetresponse): The response from the server.
