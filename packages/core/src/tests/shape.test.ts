@@ -17,12 +17,12 @@ describe("API shape test", () => {
   });
 
   it("/files GET shape", async () => {
-    const res1 = await nearbyy.queryDatabase({
+    const res1 = await nearbyy.semanticSearch({
       query: "garlic",
       limit: 1,
     });
 
-    const res2 = await nearbyy.queryDatabase({
+    const res2 = await nearbyy.semanticSearch({
       query: "garlic",
       limit: 101,
     });
@@ -46,11 +46,11 @@ describe("API shape test", () => {
   });
 
   it("/files DELETE shape", async () => {
-    const res1 = await nearbyy.deleteFile({
+    const res1 = await nearbyy.deleteFiles({
       ids: createdIds,
     });
 
-    const res2 = await nearbyy.deleteFile({
+    const res2 = await nearbyy.deleteFiles({
       ids: ["non-existant-id"],
     });
 
