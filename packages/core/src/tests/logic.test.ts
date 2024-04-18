@@ -13,7 +13,7 @@ describe("SDK Core logic test", () => {
 
   describe("Uploads", () => {
     it("One supported file", async () => {
-      const { success, data, error } = await nearbyy.uploadFile({
+      const { success, data, error } = await nearbyy.uploadFiles({
         fileUrls: [supportedFiles[0]!],
       });
 
@@ -28,7 +28,7 @@ describe("SDK Core logic test", () => {
     it("Multiple supported files", async () => {
       const files = supportedFiles.slice(1, supportedFiles.length);
 
-      const { data, error, success } = await nearbyy.uploadFile({
+      const { data, error, success } = await nearbyy.uploadFiles({
         fileUrls: files,
       });
 
@@ -41,7 +41,7 @@ describe("SDK Core logic test", () => {
     });
 
     it("Unsupported files", async () => {
-      const { data, error, success } = await nearbyy.uploadFile({
+      const { data, error, success } = await nearbyy.uploadFiles({
         fileUrls: unsupportedFiles,
       });
 
@@ -53,7 +53,7 @@ describe("SDK Core logic test", () => {
     });
 
     it("Both supported and unsupported files", async () => {
-      const { data, error, success } = await nearbyy.uploadFile({
+      const { data, error, success } = await nearbyy.uploadFiles({
         fileUrls: [...supportedFiles, ...unsupportedFiles],
       });
 
