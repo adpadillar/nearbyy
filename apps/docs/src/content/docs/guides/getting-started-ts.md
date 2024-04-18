@@ -108,7 +108,7 @@ When you upload a file, our backend service will download it from the `fileUrl` 
 
 ### Semantic Search
 
-Once you have uploaded a file, you can search for it using the [`queryDatabase`](../../typescript-sdk/nearbyy-client#querydatabase) method of the client. The [`queryDatabase`](../../typescript-sdk/nearbyy-client#querydatabase) method takes a [`FileEndpointGetParams`](../../api-reference/types#fileendpointgetparams) object and returns a [`Promise<FileEndpointGetResponse>`](../../api-reference/types#fileendpointgetresponse).
+Once you have uploaded a file, you can search for it using the [`semanticSearch`](../../typescript-sdk/nearbyy-client#semanticsearch) method of the client. The [`semanticSearch`](../../typescript-sdk/nearbyy-client#semanticsearch) method takes a [`ChunkEndpointGetParams`](../../api-reference/types#chunkendpointgetparams) object and returns a [`Promise<ChunkEndpointGetResponse>`](../../api-reference/types#chunkendpointgetresponse).
 
 ```typescript title="example.ts" ""What are the benefits of eating garlic?""
 const files = await client.queryDatabase({
@@ -119,7 +119,7 @@ const files = await client.queryDatabase({
 
 ### Deleting a file
 
-To delete a file, use the [`deleteFile`](../../typescript-sdk/nearbyy-client#deletefile) method of the client.
+To delete a file, use the [`deleteFiles`](../../typescript-sdk/nearbyy-client#deletefiles) method of the client.
 
 ```typescript title="example.ts"
 const { success, error, data } = await client.deleteFile({
