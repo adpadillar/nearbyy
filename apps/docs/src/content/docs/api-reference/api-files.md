@@ -99,10 +99,8 @@ Returns a pre-signed URL for uploading a file to the Nearbyy platform.
 
 - `contentType`: The content type of the file.
 
-```json title="Request Query Parameters"
-{
-  "contentType": "text/plain"
-}
+```json "contentType" title="Query Parameters"
+?contentType=text/plain
 ```
 
 ### Response

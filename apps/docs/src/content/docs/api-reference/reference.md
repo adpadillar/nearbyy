@@ -11,9 +11,9 @@ Here you can find the reference documentation for the Nearbyy API.
 
 - [Authentication](../../api-reference/authentication)
 - [Response Format](../../api-reference/response-format)
-- [Types](./types)
+- [Types](../../api-reference/types)
 
 ## Endpoints
 
-- [Files](./api-files)
-- [Chunks](./api-chunks)
+- [Files](../../api-reference/api-files)
+- [Chunks](../../api-reference/api-chunks)
