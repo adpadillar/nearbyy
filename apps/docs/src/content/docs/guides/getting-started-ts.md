@@ -7,13 +7,21 @@ sidebar:
 
 In this guide, you will be setting up your first Nearbyy project in Typescript. Make sure you have an account on [Nearbyy](https://nearbyy.com) before you begin.
 
+This guide is framework agnostic, and you can use it with any framework that supports running Javascript/Typescript on the server. We are also working on a [Next.js](https://nextjs.org/) and [Express.js](https://expressjs.com/) guides, which will be in these docs soon.
+
+:::note[About using Javascript]
+If you want, you can also use Javascript instead of Typescript. You can still take advantage of the types and autocompletion provided by the SDK.
+:::
+
 ## Creating a new project
 
-Open the [Nearbyy Dashboard](https://nearbyy.com/dashboard) and click on the **Create a new project** button. You will be asked to enter a name for your project, a description, and a project-id. Enter each one and click on **OK**.
+Open the [Nearbyy Dashboard](https://nearbyy.com/dashboard/projects) and click on the **Create a new project** button. You will be asked to enter a name for your project and a description. Enter each one and click on **Create project**. Once your project is created, you will be redirected to the project's Getting Started guide
+
+![](/project-dashboard.png)
 
 ## Installing npm package
 
-After creating your project, click on it. This will direct you to the project's Getting Started guide. To start using Nearbyy in your project, you need to install the npm package. Run the following command in your project directory:
+To start using Nearbyy in your project, you need to install the npm package. Run the following command in your project's directory:
 
 ```bash
 npm install @nearbyy/core
@@ -23,18 +31,20 @@ The `@nearbyy/core` package contains the core Nearbyy SDK. It is the only packag
 
 ### Supported runtimes
 
-For now, the Nearbyy sdk runs from the server. We support the following runtimes:
+For now, the Nearbyy SDK runs only on the server. We support the following runtimes:
 
 - Node.js
 - Edge Runtime
 
-:::note[Running in the browser]
-While we don't support running in the browser directly without a server, we plan to support this use case in the future, eliminating the need for your own backend.
-:::
+Running the SDK in the browser is not supported yet, but it is something we are working on.
 
 ## Getting your API key
 
-Now, click on Get API Key. This will generate an API key for your project. You will need this API key to authenticate your requests to the Nearbyy API. This API will not be shown again, so make sure to store it in a safe place. You can manage your API keys from the `dashboard/<project-id>/keys` page
+Go to the Keys page of your project by clicking on the **Keys** tab on the project's dashboard. From there, click on the **Create a key** button and then on **Generate key**. This will generate an API key for your project. You will need this API key to authenticate your requests to the Nearbyy API. This API key will not be shown again, so make sure to store it in a safe place.
+
+You can manage your existing API keys from this page.
+
+![](/api-key.png)
 
 After getting your API Key, it is recommended that you store it in a `.env` file, with whatever name you want. For example, if you want to store your API key in a variable named `NEARBYY_API_KEY`, you can create a `.env` file with the following contents:
 
@@ -68,10 +78,20 @@ The SDK is typed in such a way that types narrow down. For example, if the `succ
 
 ### Uploading a file
 
-To upload a file, use the [`uploadFile`](../../typescript-sdk/nearbyy-client#uploadfile) method of the client.
+Different file types are supported by Nearbyy. Our backend service will look at the `Content-Type` header of the file to determine how to process it. You can see the [list of supported file types here](/faq/file-processing).
+
+#### Through the dashboard
+
+To upload a file, you can use the Nearbyy dashboard. Go to the Files page of your project by clicking on the **Files** tab on the project's dashboard. From there, click on the **Upload file** button and select the file you want to upload.
+
+![](/upload-file.gif)
+
+#### Through the client
+
+You can also use the client to upload a file, use the [`uploadFiles`](../../typescript-sdk/nearbyy-client#uploadfiles) method of the client.
 
 ```typescript title="example.ts"
-const { success, error, data } = await client.uploadFile({
+const { success, error, data } = await client.uploadFiles({
   fileUrls: ["https://example.com/image.jpg"],
 });
 
@@ -84,11 +104,7 @@ if (success) {
 }
 ```
 
-When you upload a file, our backend service will download it from the `fileUrl` and convert it into plain text. The text will then be processed, embedded and stored into a vector database, where the file will be available for search after a few seconds.
-
-#### Supported file types
-
-Different file types are supported by Nearbyy. Our backend service will look at the `Content-Type` header of the file to determine how to process it. You can see the [list of supported file types here](/faq/file-processing).
+When you upload a file, our backend service will download it from the `fileUrl` and convert it into plain text. The text will then be processed, embedded and stored into a vector database, where the file will be available for search after a few seconds. For more information on how files are processed, see the [file processing FAQ](../../faq/file-processing).
 
 ### Semantic Search
 
