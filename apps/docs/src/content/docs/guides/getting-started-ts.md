@@ -111,7 +111,7 @@ When you upload a file, our backend service will download it from the `fileUrl` 
 Once you have uploaded a file, you can search for it using the [`semanticSearch`](../../typescript-sdk/nearbyy-client#semanticsearch) method of the client. The [`semanticSearch`](../../typescript-sdk/nearbyy-client#semanticsearch) method takes a [`ChunkEndpointGetParams`](../../api-reference/types#chunkendpointgetparams) object and returns a [`Promise<ChunkEndpointGetResponse>`](../../api-reference/types#chunkendpointgetresponse).
 
 ```typescript title="example.ts" ""What are the benefits of eating garlic?""
-const files = await client.queryDatabase({
+const files = await client.semanticSearch({
   query: "What are the benefits of eating garlic?", // Replace with your query
   limit: 5,
 });
