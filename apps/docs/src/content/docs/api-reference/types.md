@@ -102,3 +102,31 @@ type FileEndpointDeleteResponse =
       success: false;
     };
 ```
+
+### GetUploadUrlEndpointGetParams
+
+```typescript title="GetUploadUrlEndpointGetParams.ts"
+type GetUploadUrlEndpointGetParams = {
+  contentType: string;
+};
+```
+
+### GetUploadUrlEndpointGetResponse
+
+```typescript title="GetUploadUrlEndpointGetResponse.ts"
+type GetUploadUrlEndpointGetResponse =
+  | {
+      error: null;
+      data: {
+        uploadUrl: string;
+        fileId: string;
+        fields: Record<string, string>;
+      };
+      success: true;
+    }
+  | {
+      error: string;
+      data: null;
+      success: false;
+    };
+```
