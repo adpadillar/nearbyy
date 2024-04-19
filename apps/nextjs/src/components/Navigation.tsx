@@ -10,7 +10,7 @@ interface NavigationProps {
 }
 
 const links = [
-  { href: "#", label: "Documentation" },
+  { href: "https://docs.nearbyy.com", label: "Documentation" },
   { href: "#", label: "Pricing" },
   { href: "#", label: "Showcase" },
   { href: "/dashboard", label: "Dashboard" },
