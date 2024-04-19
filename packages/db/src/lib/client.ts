@@ -76,7 +76,7 @@ const createCustomDatabase = ({ directUrl }: { directUrl: string }) => {
 
         const embeddings = embedding.toString();
 
-        const statement = sql`SELECT ${table}.*, ${field}::vector(1536) <=> '[${sql.raw(
+        const statement = sql`SELECT ${table}.*, ${field}::vector(256) <=> '[${sql.raw(
           embeddings,
         )}]' AS distance FROM ${table} WHERE ${whereClause} ORDER BY distance LIMIT ${limit};`;
 

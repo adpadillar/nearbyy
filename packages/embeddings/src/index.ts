@@ -6,6 +6,9 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_KEY,
 });
 
+const model = "text-embedding-3-small";
+const dimensions = 256;
+
 export const getMultipleEmbeddings = async (toEmbed: string[]) => {
   if (toEmbed.length === 0) {
     return {
@@ -17,7 +20,8 @@ export const getMultipleEmbeddings = async (toEmbed: string[]) => {
 
   try {
     const embeddings = await client.embeddings.create({
-      model: "text-embedding-ada-002",
+      model,
+      dimensions,
       input: toEmbed,
     });
 
@@ -56,7 +60,8 @@ export const getSingleEmbedding = async (toEmbed: string) => {
 
   try {
     const embeddings = await client.embeddings.create({
-      model: "text-embedding-ada-002",
+      model,
+      dimensions,
       input: [toEmbed],
     });
 

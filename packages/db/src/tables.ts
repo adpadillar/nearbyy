@@ -97,7 +97,7 @@ export const chunks = pgTable("chunks", {
   order: integer("order").notNull(),
   tokens: integer("tokens").array().notNull(),
   tokenLength: integer("tokenLength").notNull(),
-  embedding: doublePrecision("embedding").array(1536).notNull(),
+  embedding: doublePrecision("embedding").array(256).notNull(),
   text: text("text").notNull(),
 });
 
