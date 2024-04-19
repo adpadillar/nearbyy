@@ -15,3 +15,6 @@ export const ALLOWED_EXTENSIONS = Object.keys(MIME_TYPES);
 
 export const FILE_QUOTA = 250; // temporary value for testing
 export const FILE_UPLOAD_URL_TTL = 60 * 60 * 1000;
+
+export const ONE_MB = 1024 * 1024;
+export const MAX_FILE_SIZE = 20 * ONE_MB;

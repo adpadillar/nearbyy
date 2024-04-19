@@ -14,7 +14,7 @@ import { env } from "~/env";
 import { TextExtractor } from "~/utils/server/TextExtractor";
 import { FILE_QUOTA } from "~/utils/shared/constants";
 
-export const maxDuration = 10;
+export const maxDuration = 60;
 
 export const DELETE = withKeyAuth({
   handler: async ({ body, projectid }) => {
