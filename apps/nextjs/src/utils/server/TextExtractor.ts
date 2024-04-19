@@ -1,7 +1,7 @@
 import { Readability } from "@mozilla/readability";
 import { File } from "@web-std/file";
 import createDOMPurify from "dompurify";
-import { JSDOM } from "jsdom";
+import { JSDOM, VirtualConsole } from "jsdom";
 import { extractRawText } from "mammoth";
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import { getTextExtractor } from "office-text-extractor";
@@ -75,7 +75,9 @@ export class TextExtractor {
 
   async extractFromHtml() {
     const text = new TextDecoder().decode(await this.arrayBufferPromise);
-    const dom = new JSDOM(text);
+    const virtualConsole = new VirtualConsole();
+    virtualConsole.on("error", () => void 0);
+    const dom = new JSDOM(text, { virtualConsole });
     const reader = new Readability(dom.window.document);
     const article = reader.parse();
     const window = dom.window;
@@ -93,37 +95,43 @@ export class TextExtractor {
   }
 
   async extract() {
-    if (this.mimeType === MIME_TYPES.txt || this.mimeType === MIME_TYPES.md) {
+    if (
+      this.mimeType.includes(MIME_TYPES.txt) ||
+      this.mimeType.includes(MIME_TYPES.md)
+    ) {
       return { text: await this.extractFromText(), error: null } as const;
     }
 
-    if (this.mimeType === MIME_TYPES.pdf) {
+    if (this.mimeType.includes(MIME_TYPES.pdf)) {
       return { text: await this.extractFromPdf(), error: null } as const;
     }
 
-    if (this.mimeType === MIME_TYPES.docx) {
+    if (this.mimeType.includes(MIME_TYPES.docx)) {
       return { text: await this.extractFromDocx(), error: null } as const;
     }
 
-    if (this.mimeType === MIME_TYPES.mp3) {
+    if (this.mimeType.includes(MIME_TYPES.mp3)) {
       return { text: await this.extractFromMp3(), error: null } as const;
     }
 
-    if (this.mimeType === MIME_TYPES.pptx) {
+    if (this.mimeType.includes(MIME_TYPES.pptx)) {
       return { text: await this.extractFromPptx(), error: null } as const;
     }
 
-    if (this.mimeType === MIME_TYPES.html) {
+    if (this.mimeType.includes(MIME_TYPES.html)) {
       return { text: await this.extractFromHtml(), error: null } as const;
     }
 
     if (
-      this.mimeType === MIME_TYPES.png ||
-      this.mimeType === MIME_TYPES.jpg ||
-      this.mimeType === MIME_TYPES.jpeg
+      this.mimeType.includes(MIME_TYPES.png) ||
+      this.mimeType.includes(MIME_TYPES.jpg) ||
+      this.mimeType.includes(MIME_TYPES.jpeg)
     ) {
       return { text: await this.extractFromImage(), error: null } as const;
     }
+
+    console.log("Unsupported file type", this.mimeType);
+
     return { text: null, error: "Unsupported file type" } as const;
   }
 }

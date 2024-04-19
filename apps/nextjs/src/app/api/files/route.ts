@@ -135,22 +135,27 @@ export const POST = withKeyAuth({
       urlToUUID[fileUrl] = fileId;
 
       const resChunking = await chunking(text, 300, 30);
-      await db.drizzle.insert(db.schema.chunks).values(
-        resChunking.map((chunk) => ({
-          id: crypto.randomUUID(),
-          fileId: fileId,
-          projectId: projectid,
-          order: chunk.order,
-          tokens: chunk.tokens,
-          tokenLength: chunk.tokenLength,
-          embedding: chunk.embedding,
-          text: chunk.text,
-        })),
-      );
+
+      for (let i = 0; i < resChunking.length; i += 8) {
+        const chunkSlice = resChunking.slice(i, i + 8);
+        const chunkPromise = db.drizzle.insert(db.schema.chunks).values(
+          chunkSlice.map((chunk) => ({
+            id: crypto.randomUUID(),
+            fileId: fileId,
+            projectId: projectid,
+            order: chunk.order,
+            tokens: chunk.tokens,
+            tokenLength: chunk.tokenLength,
+            embedding: chunk.embedding,
+            text: chunk.text,
+          })),
+        );
+        await chunkPromise;
+      }
 
       await db.drizzle.insert(db.schema.files).values({
         projectid,
-        text,
+        text: "", // temporarily empty
         type: fileMimeString,
         url: fileUrl,
         id: fileId,
