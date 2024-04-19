@@ -3,11 +3,8 @@ title: Getting Started with the API
 description: Setting up your first project with Nearbyy
 sidebar:
   order: 2
+  hidden: true
 ---
-
-:::caution[Nearbyy is currently in ALPHA]
-Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, [please contact us here](mailto:adpadillar25@gmail.com).
-:::
 
 If we don't support your language, you can still use Nearbyy by using the Nearbyy API. The Nearbyy API is a REST API that allows you to upload and retrieve files from the Nearbyy platform in any language.
 

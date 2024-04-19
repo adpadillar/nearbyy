@@ -68,7 +68,7 @@ describe("SDK Core logic test", () => {
 
   describe("Queries", () => {
     it("Simple Query", async () => {
-      const { data, success, error } = await nearbyy.queryDatabase({
+      const { data, success, error } = await nearbyy.semanticSearch({
         query: "garlic",
         limit: 1,
       });
@@ -83,7 +83,7 @@ describe("SDK Core logic test", () => {
 
   describe("Deletions", () => {
     it("A single file", async () => {
-      const { success, error, data } = await nearbyy.deleteFile({
+      const { success, error, data } = await nearbyy.deleteFiles({
         ids: [createdIds[0]!],
       });
 
@@ -95,7 +95,7 @@ describe("SDK Core logic test", () => {
     });
 
     it("Multiple files", async () => {
-      const { success, error, data } = await nearbyy.deleteFile({
+      const { success, error, data } = await nearbyy.deleteFiles({
         ids: createdIds.slice(1, createdIds.length),
       });
 
@@ -108,7 +108,7 @@ describe("SDK Core logic test", () => {
 
     it("Non-existing file", async () => {
       const id = crypto.randomUUID();
-      const { success, error, data } = await nearbyy.deleteFile({ ids: [id] });
+      const { success, error, data } = await nearbyy.deleteFiles({ ids: [id] });
 
       if (!success) {
         expect(data.ids).toHaveLength(0);

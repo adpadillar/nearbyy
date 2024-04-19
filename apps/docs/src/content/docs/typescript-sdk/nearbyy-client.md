@@ -5,8 +5,8 @@ sidebar:
   order: 2
 ---
 
-:::caution[Nearbyy is currently in ALPHA]
-Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, [please contact us here](mailto:adpadillar25@gmail.com).
+:::note
+This page is up to date as of `@nearbyy/core` version `0.3.24`
 :::
 
 The NearbyyClient class is the main class of the Nearbyy SDK. It is used to upload and retrieve files from the Nearbyy platform.
@@ -19,6 +19,7 @@ Calling `new NearbyyClient()` will create a new instance of the NearbyyClient cl
 interface NearbyyClientOptions {
   API_KEY: string;
   API_URL?: string;
+  CLOUDFRONT_URL?: string;
 }
 
 constructor(options: NearbyyClientOptions)
@@ -27,55 +28,56 @@ constructor(options: NearbyyClientOptions)
 ### Parameters
 
 - `options`: The options to use when creating the client.
-  - `API_KEY?`: Your API key. Defaults to `process.env.NEARBYY_API_KEY`.
+  - `API_KEY`: Your API key. Neccessary for authenticating requests.
   - `API_URL?`: The URL of the Nearbyy API. Defaults to `https://nearbyy.com/api`.
+  - `CLOUDFRONT_URL?`: The URL of the Nearbyy CDN. Defaults to `https://dzpv5o2pvfxys.cloudfront.net`.
 
 ## Methods
 
-### uploadFile
+### uploadFiles
 
-Uploads a file to the Nearbyy platform.
+Uploads one or multiple files to the Nearbyy platform.
 
 ```typescript title="uploadFile.ts"
-async uploadFile(body: FileEndpointPostBody): Promise<FileEndpointPostResponse>
+async uploadFile(body: { files: File[] } | { fileUrls: string[] }): Promise<FileEndpointPostResponse>
 ```
 
 #### Parameters
 
-- [`FileEndpointPostBody`](../../api-reference/types#fileendpointpostbody): The body of the request.
+- `body`: The body of the request.
+  - `files`: An array of files to upload.
+  - `fileUrls`: An array of URLs to upload.
+
+Note: You can either provide an array of files or an array of URLs, but not both.
 
 #### Returns
 
 - [`Promise<FileEndpointPostResponse>`](../../api-reference/types#fileendpointpostresponse): The response from the server.
 
-### queryDatabase
+### deleteFiles
+
+Deeletes one or multiple files from the Nearbyy platform.
+
+```typescript title="deleteFiles.ts"
+async deleteFiles(body: FileEndpointDeleteBody): Promise<FileEndpointDeleteResponse>
+```
+
+#### Parameters
+
+- `body` - [`FileEndpointDeleteBody`](../../api-reference/types#fileendpointdeletebody): The body of the request.
+
+### semanticSearch
 
 Performs a semantic search on the Nearbyy platform.
 
 ```typescript title="queryDatabase.ts"
-async queryDatabase(params: FileEndpointGetParams): Promise<FileEndpointGetResponse>
+async semanticSearch(params: ChunkEndpointGetParams): Promise<ChunkEndpointGetResponse>
 ```
 
 #### Parameters
 
-- [`FileEndpointGetParams`](../../api-reference/types#fileendpointgetparams): The parameters of the request.
+- `params` - [`ChunkEndpointGetParams`](../../api-reference/types#chunkendpointgetparams): The parameters of the request.
 
 #### Returns
 
-- [`Promise<FileEndpointGetResponse>`](../../api-reference/types#fileendpointgetresponse): The response from the server.
-
-### deleteFile
-
-Deletes a file from the Nearbyy platform.
-
-```typescript title="deleteFile.ts"
-async deleteFile(params: FileEndpointDeleteParams): Promise<FileEndpointDeleteResponse>
-```
-
-#### Parameters
-
-- [`FileEndpointDeleteParams`](../../api-reference/types#fileendpointdeleteparams): The parameters of the request.
-
-#### Returns
-
-- [`Promise<FileEndpointDeleteResponse>`](../../api-reference/types#fileendpointdeleteresponse): The response from the server.
+- [`Promise<ChunkEndpointGetResponse>`](../../api-reference/types#chunkendpointgetresponse): The response from the server.

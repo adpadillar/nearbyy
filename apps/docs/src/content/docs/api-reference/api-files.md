@@ -1,16 +1,12 @@
 ---
-title: Files
+title: Files endpoint
 description: API /files endpoint
 sidebar:
   order: 3
 ---
 
-:::caution[Nearbyy is currently in ALPHA]
-Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, [please contact us here](mailto:adpadillar25@gmail.com).
-:::
-
-- Endpoint: `https://nearbyy.com/api/files`
-- Methods: `GET`, `POST`, `DELETE`
+- Endpoints: `https://nearbyy.com/api/files`, `https://nearbyy.com/api/files/get-upload-url`
+- Methods: `POST`, `DELETE`
 
 ## Upload files
 
@@ -44,59 +40,6 @@ Uploads files to the Nearbyy platform.
 {
   "data": {
     "ids": ["file-id-1"]
-  },
-  "success": true,
-  "error": null
-}
-```
-
-## Query for files
-
-Performs a semantic search on the Nearbyy platform.
-
-### Request
-
-- Method: `GET`
-- Endpoint: `https://nearbyy.com/api/files`
-
-### Query Parameters
-
-[`FileEndpointGetParams`](../types#fileendpointgetparams)
-
-- `limit`: The maximum number of results to return.
-- `query`: The query to search for.
-
-```http
-GET /api/files?limit=10&query=example
-```
-
-### Response
-
-[`FileEndpointGetResponse`](../types#fileendpointgetresponse)
-
-- `data.items`: The files that matched the query.
-  - `type`: The type of the file.
-  - `id`: The ID of the file.
-  - `text`: The text of the file.
-  - `url`: The URL of the file.
-  - `_extras.projectid`: The ID of the project that the file belongs to.
-  - `_extras.distance`: The distance of the file from the query.
-
-```json title="Response Body"
-{
-  "data": {
-    "items": [
-      {
-        "type": "pdf",
-        "id": "file-id-1",
-        "text": "Example file",
-        "url": "https://example.com/file.txt",
-        "_extras": {
-          "projectid": "project-id-1",
-          "distance": 0.5
-        }
-      }
-    ]
   },
   "success": true,
   "error": null
@@ -140,3 +83,46 @@ Deletes files from the Nearbyy platform.
   "error": null
 }
 ```
+
+## Get upload URL
+
+Returns a pre-signed URL for uploading a file to the Nearbyy platform.
+
+### Request
+
+- Method: `GET`
+- Endpoint: `https://nearbyy.com/api/files/get-upload-url`
+
+### Query parameters
+
+[`GetUploadUrlEndpointGetParams`](../types#getuploadurlendpointgetparams)
+
+- `contentType`: The content type of the file.
+
+```json "contentType" title="Query Parameters"
+?contentType=text/plain
+```
+
+### Response
+
+[`GetUploadUrlEndpointGetResponse`](../types#getuploadurlendpointgetresponse)
+
+- `data.uploadUrl`: The pre-signed URL for uploading the file.
+- `data.fileId`: The ID of the file.
+- `data.fields`: The fields required to upload the file.
+
+  ```json title="Response Body"
+  {
+    "data": {
+      "uploadUrl": "https://nearbyy.com/upload",
+      "fileId": "file-id-1",
+      "fields": {
+        "key": "file-id-1",
+        "Content-Type": "text/plain",
+        "x-amz-meta-userid": "user-id-1"
+      }
+    },
+    "success": true,
+    "error": null
+  }
+  ```

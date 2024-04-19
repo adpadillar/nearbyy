@@ -108,10 +108,12 @@ export class NearbyyClient {
       return json;
     }
 
-    throw new Error("Invalid payload");
+    throw new Error(
+      "Invalid payload. Neither 'files' nor 'fileUrls' key found.",
+    );
   }
 
-  async deleteFile(payload: FileEndpointDeleteBody) {
+  async deleteFiles(payload: FileEndpointDeleteBody) {
     const res = await fetch(`${this.API_URL}/files`, {
       headers: {
         Authorization: `Bearer ${this.API_KEY}`,
@@ -124,7 +126,7 @@ export class NearbyyClient {
     return json;
   }
 
-  async queryDatabase(params: ChunkEndpointGetParams) {
+  async semanticSearch(params: ChunkEndpointGetParams) {
     const query = Object.entries(params)
       .map(([key, value]) => `${key}=${value}`)
       .join("&");

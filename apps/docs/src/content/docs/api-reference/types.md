@@ -5,34 +5,30 @@ sidebar:
   order: 4
 ---
 
-:::caution[Nearbyy is currently in ALPHA]
-Nearbyy is currently in alpha, and breaking changes may be introduced at any time. If you find any bugs or have any suggestions, [please contact us here](mailto:adpadillar25@gmail.com).
-:::
+## Chunks
 
-## Files
+### ChunkEndpointGetParams
 
-### FileEndpointGetParams
-
-```typescript title="FileEndpointGetParams.ts"
-type FileEndpointGetParams = {
+```typescript title="ChunkEndpointGetParams.ts"
+type ChunkEndpointGetParams = {
   limit: number;
   query: string;
 };
 ```
 
-### FileEndpointGetResponse
+### ChunkEndpointGetResponse
 
-```typescript title="FileEndpointGetResponse.ts"
-type FileEndpointGetResponse =
+```typescript title="ChunkEndpointGetResponse.ts"
+type ChunkEndpointGetResponse =
   | {
       error: null;
       data: {
         items: {
-          type: string;
-          id: string;
+          order: number;
+          tokenLength: number;
           text: string;
-          url: string;
           _extras: {
+            fileId: string;
             projectid: string;
             distance?: number | undefined;
           };
@@ -46,6 +42,8 @@ type FileEndpointGetResponse =
       success: false;
     };
 ```
+
+## Files
 
 ### FileEndpointPostBody
 
@@ -101,6 +99,34 @@ type FileEndpointDeleteResponse =
         ids: string[];
         rejectedIds: string[];
       };
+      success: false;
+    };
+```
+
+### GetUploadUrlEndpointGetParams
+
+```typescript title="GetUploadUrlEndpointGetParams.ts"
+type GetUploadUrlEndpointGetParams = {
+  contentType: string;
+};
+```
+
+### GetUploadUrlEndpointGetResponse
+
+```typescript title="GetUploadUrlEndpointGetResponse.ts"
+type GetUploadUrlEndpointGetResponse =
+  | {
+      error: null;
+      data: {
+        uploadUrl: string;
+        fileId: string;
+        fields: Record<string, string>;
+      };
+      success: true;
+    }
+  | {
+      error: string;
+      data: null;
       success: false;
     };
 ```
