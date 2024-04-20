@@ -34,10 +34,10 @@ export const keys = pgTable("keys", {
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
-  imageUrl: text("imageUrl").notNull(),
-  firstName: text("firstName").notNull(),
-  lastName: text("lastName").notNull(),
-  fullName: text("fullName").notNull(),
+  imageUrl: text("imageUrl"),
+  firstName: text("firstName"),
+  lastName: text("lastName"),
+  fullName: text("fullName"),
   createdAt: bigint("createdAt", { mode: "number" }),
   updatedAt: bigint("updatedAt", { mode: "number" }),
   twoFactorEnabled: boolean("twoFactorEnabled").notNull(),
