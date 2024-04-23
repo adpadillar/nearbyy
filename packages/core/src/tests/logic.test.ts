@@ -64,6 +64,19 @@ describe("SDK Core logic test", () => {
         createdIds.push(...data.ids);
       }
     });
+
+    it("Single tagged upload", async () => {
+      const { data, error, success } = await nearbyy.uploadFiles({
+        fileUrls: [supportedFiles[0]!],
+        tag: "test-tag",
+      });
+
+      if (success) {
+        expect(data.ids).toHaveLength(1);
+      }
+
+      expect(error).toBe(null);
+    });
   });
 
   describe("Queries", () => {
@@ -75,6 +88,34 @@ describe("SDK Core logic test", () => {
 
       if (success) {
         expect(data.items).toHaveLength(1);
+      }
+
+      expect(error).toBe(null);
+    });
+
+    it("Query with tags", async () => {
+      const { data, success, error } = await nearbyy.semanticSearch({
+        query: "garlic",
+        tag: "test-tag",
+        limit: 1,
+      });
+
+      if (success) {
+        expect(data.items).toHaveLength(1);
+      }
+
+      expect(error).toBe(null);
+    });
+
+    it("Query with inexistent tag", async () => {
+      const { data, success, error } = await nearbyy.semanticSearch({
+        query: "garlic",
+        tag: "inexistent-tag",
+        limit: 1,
+      });
+
+      if (success) {
+        expect(data.items).toHaveLength(0);
       }
 
       expect(error).toBe(null);

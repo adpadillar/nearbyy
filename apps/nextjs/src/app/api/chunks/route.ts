@@ -36,13 +36,24 @@ export const GET = withKeyAuth({
       } as const;
     }
 
-    // Get the chunks that are similar to the embedding
-    const chunks = await db.vector.similarity({
-      table: "chunks",
-      limit: params.limit,
-      vector: { embedding: embedding },
-      where: { projectId: projectid },
-    });
+    let chunks;
+
+    if (params.tag) {
+      chunks = await db.vector.similarity({
+        table: "chunks",
+        limit: params.limit,
+        vector: { embedding: embedding },
+        where: { projectId: projectid, tag: params.tag },
+      });
+    } else {
+      // Get the chunks that are similar to the embedding
+      chunks = await db.vector.similarity({
+        table: "chunks",
+        limit: params.limit,
+        vector: { embedding: embedding },
+        where: { projectId: projectid },
+      });
+    }
 
     return {
       status: 200,

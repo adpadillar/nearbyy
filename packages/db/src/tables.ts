@@ -18,6 +18,7 @@ export const files = pgTable("files", {
   url: text("url").notNull(),
   projectid: text("projectid").notNull(),
   type: text("type").notNull(),
+  tag: text("tag"),
 });
 
 export const keys = pgTable("keys", {
@@ -99,6 +100,7 @@ export const chunks = pgTable("chunks", {
   tokenLength: integer("tokenLength").notNull(),
   embedding: doublePrecision("embedding").array(256).notNull(),
   text: text("text").notNull(),
+  tag: text("tag"),
 });
 
 export const presignedUrls = pgTable("presigned_urls", {

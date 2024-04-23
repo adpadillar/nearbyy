@@ -15,6 +15,7 @@ export const fileEndpointPostResponse = createResponseSchema({
 
 export const fileEndpointPostBody = z.object({
   fileUrls: z.array(z.string()),
+  tag: z.string().optional(),
 });
 
 export type FileEndpointPostResponse = z.infer<typeof fileEndpointPostResponse>;
