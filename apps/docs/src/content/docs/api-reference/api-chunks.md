@@ -23,9 +23,10 @@ Retrieves chunks from the Nearbyy platform in a semanic search.
 
 - `query`: The term or phrase to search for.
 - `limit`: The maximum number of chunks to return (between 1 and 100).
+- `tag`: A specific tag that the chunks must have to be returned.
 
 ```json "query" "limit" title="Query Parameters"
-?query=value&limit=number
+?query=value&limit=number&tag=tagname
 ```
 
 ### Response

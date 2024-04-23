@@ -13,6 +13,7 @@ sidebar:
 type ChunkEndpointGetParams = {
   limit: number;
   query: string;
+  tag?: string;
 };
 ```
 
@@ -50,6 +51,7 @@ type ChunkEndpointGetResponse =
 ```typescript title="FileEndpointPostBody.ts"
 type FileEndpointPostBody = {
   fileUrls: string[];
+  tag?: string;
 };
 ```
 

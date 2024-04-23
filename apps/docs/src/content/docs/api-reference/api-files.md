@@ -23,7 +23,8 @@ Uploads files to the Nearbyy platform.
 
 ```json title="Request Body"
 {
-  "fileUrls": ["https://example.com/file.txt"]
+  "fileUrls": ["https://example.com/file.txt"],
+  "tag": "tagname"
 }
 ```
 

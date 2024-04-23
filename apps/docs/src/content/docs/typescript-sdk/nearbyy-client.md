@@ -6,7 +6,7 @@ sidebar:
 ---
 
 :::note
-This page is up to date as of `@nearbyy/core` version `0.3.24`
+This page is up to date as of `@nearbyy/core` version `0.3.25`
 :::
 
 The NearbyyClient class is the main class of the Nearbyy SDK. It is used to upload and retrieve files from the Nearbyy platform.
@@ -39,7 +39,7 @@ constructor(options: NearbyyClientOptions)
 Uploads one or multiple files to the Nearbyy platform.
 
 ```typescript title="uploadFile.ts"
-async uploadFile(body: { files: File[] } | { fileUrls: string[] }): Promise<FileEndpointPostResponse>
+async uploadFile(body: { files: File[], tag: string } | { fileUrls: string[], tag: string }): Promise<FileEndpointPostResponse>
 ```
 
 #### Parameters
@@ -47,6 +47,7 @@ async uploadFile(body: { files: File[] } | { fileUrls: string[] }): Promise<File
 - `body`: The body of the request.
   - `files`: An array of files to upload.
   - `fileUrls`: An array of URLs to upload.
+  - `tag`: The tag to apply to the files, used for filtering on queries.
 
 Note: You can either provide an array of files or an array of URLs, but not both.
 
@@ -56,7 +57,7 @@ Note: You can either provide an array of files or an array of URLs, but not both
 
 ### deleteFiles
 
-Deeletes one or multiple files from the Nearbyy platform.
+Deletes one or multiple files from the Nearbyy platform.
 
 ```typescript title="deleteFiles.ts"
 async deleteFiles(body: FileEndpointDeleteBody): Promise<FileEndpointDeleteResponse>
@@ -77,6 +78,9 @@ async semanticSearch(params: ChunkEndpointGetParams): Promise<ChunkEndpointGetRe
 #### Parameters
 
 - `params` - [`ChunkEndpointGetParams`](../../api-reference/types#chunkendpointgetparams): The parameters of the request.
+  - `query`: The term or phrase to search for.
+  - `limit`: The maximum number of chunks to return (between 1 and 100).
+  - `tag?`: If provided, only chunks with this tag will be returned.
 
 #### Returns
 
