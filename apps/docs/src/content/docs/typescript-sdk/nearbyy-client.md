@@ -6,7 +6,7 @@ sidebar:
 ---
 
 :::note
-This page is up to date as of `@nearbyy/core` version `0.3.26`
+This page is up to date as of `@nearbyy/core` version `0.3.27`
 :::
 
 The NearbyyClient class is the main class of the Nearbyy SDK. It is used to upload and retrieve files from the Nearbyy platform.
