@@ -27,6 +27,7 @@ export class NearbyyClient {
 
   async uploadFiles(
     payload: { files: File[] } | { fileUrls: string[] },
+    tag?: string,
   ): Promise<FileEndpointPostResponse> {
     if ("files" in payload) {
       const files = payload.files;
@@ -88,7 +89,7 @@ export class NearbyyClient {
           Authorization: `Bearer ${this.API_KEY}`,
         },
         method: "POST",
-        body: JSON.stringify({ fileUrls } as FileEndpointPostBody),
+        body: JSON.stringify({ fileUrls, tag } as FileEndpointPostBody),
       });
 
       const json = (await res.json()) as FileEndpointPostResponse;
@@ -101,7 +102,7 @@ export class NearbyyClient {
           Authorization: `Bearer ${this.API_KEY}`,
         },
         method: "POST",
-        body: JSON.stringify(payload as FileEndpointPostBody),
+        body: JSON.stringify({ ...payload, tag } as FileEndpointPostBody),
       });
 
       const json = (await res.json()) as FileEndpointPostResponse;

@@ -83,6 +83,7 @@ export const DELETE = withKeyAuth({
 export const POST = withKeyAuth({
   handler: async ({ body, projectid }) => {
     const fileUrls = body.fileUrls;
+    const tag = body.tag;
 
     const countQuery = await db.drizzle
       .select({ count: db.helpers.count(db.schema.files) })
@@ -148,6 +149,7 @@ export const POST = withKeyAuth({
             tokenLength: chunk.tokenLength,
             embedding: chunk.embedding,
             text: chunk.text,
+            tag,
           })),
         );
         await chunkPromise;
@@ -160,6 +162,7 @@ export const POST = withKeyAuth({
         url: fileUrl,
         id: fileId,
         createdAt: new Date(),
+        tag,
       });
     });
 
