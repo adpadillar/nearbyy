@@ -64,6 +64,19 @@ describe("SDK Core logic test", () => {
         createdIds.push(...data.ids);
       }
     });
+
+    it("Single tagged upload", async () => {
+      const { data, error, success } = await nearbyy.uploadFiles({
+        fileUrls: [supportedFiles[0]!],
+        tag: "test-tag",
+      });
+
+      if (success) {
+        expect(data.ids).toHaveLength(1);
+      }
+
+      expect(error).toBe(null);
+    });
   });
 
   describe("Queries", () => {
