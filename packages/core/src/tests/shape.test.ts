@@ -42,7 +42,7 @@ describe("API shape test", () => {
     fileEndpointPostResponse.parse(res1);
     fileEndpointPostResponse.parse(res2);
 
-    createdIds.push(...res1.data.ids);
+    createdIds.push(...res1.data.files.map((file) => file.id));
   });
 
   it("/files DELETE shape", async () => {
