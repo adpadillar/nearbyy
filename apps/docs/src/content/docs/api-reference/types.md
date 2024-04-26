@@ -62,14 +62,20 @@ type FileEndpointPostResponse =
   | {
       error: null;
       data: {
-        ids: string[];
+        files: {
+          id: string;
+          url: string;
+        }[];
       };
       success: true;
     }
   | {
       error: string;
       data: {
-        ids: string[];
+        files: {
+          id: string;
+          url: string;
+        }[];
         rejectedUrls: string[];
       };
       success: false;

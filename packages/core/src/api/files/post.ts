@@ -5,10 +5,20 @@ import { createResponseSchema } from "../utils";
 // POST /files
 export const fileEndpointPostResponse = createResponseSchema({
   schemaIfSuccess: z.object({
-    ids: z.array(z.string()),
+    files: z.array(
+      z.object({
+        id: z.string(),
+        url: z.string(),
+      }),
+    ),
   }),
   schemaIfError: z.object({
-    ids: z.array(z.string()),
+    files: z.array(
+      z.object({
+        url: z.string(),
+        id: z.string(),
+      }),
+    ),
     rejectedUrls: z.array(z.string()),
   }),
 });

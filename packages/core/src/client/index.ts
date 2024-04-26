@@ -55,7 +55,8 @@ export class NearbyyClient {
             },
           );
 
-          const json = res.json() as unknown as GetUploadUrlEndpointGetResponse;
+          const json =
+            res.json() as unknown as Promise<GetUploadUrlEndpointGetResponse>;
           return json;
         }),
       );
@@ -63,6 +64,7 @@ export class NearbyyClient {
       // then, upload the files
       const allFileUrls = await Promise.all(
         presignedUrlResponses.map(async (presignedUrlResponse, idx) => {
+          console.log("presignedUrl", presignedUrlResponse);
           if (presignedUrlResponse.success) {
             const { fields, fileId, uploadUrl } = presignedUrlResponse.data;
             const formData = new FormData();
@@ -87,6 +89,7 @@ export class NearbyyClient {
         (url) => url !== undefined,
       ) as string[];
 
+      console.log("sending fileUrls", fileUrls);
       const res = await fetch(`${this.API_URL}/files`, {
         headers: {
           Authorization: `Bearer ${this.API_KEY}`,

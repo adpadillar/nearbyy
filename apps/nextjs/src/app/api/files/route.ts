@@ -96,14 +96,14 @@ export const POST = withKeyAuth({
       return {
         status: 500,
         body: {
-          success: false,
+          success: false as const,
           error: "Project file limit exceeded",
           data: {
-            ids: [] as string[],
+            files: [],
             rejectedUrls: fileUrls,
           },
         },
-      } as const;
+      };
     }
 
     const urlToUUID: Record<string, string> = {};
@@ -189,7 +189,7 @@ export const POST = withKeyAuth({
 
     const rejectedUrls = rejectedIndexes.map((idx) => fileUrls[idx]!);
     const fulfilledIds = fulfilledIndexes.map(
-      (idx) => urlToUUID[fileUrls[idx]!]!,
+      (idx) => [urlToUUID[fileUrls[idx]!]!, fileUrls[idx]!] as [string, string],
     );
 
     if (rejectedIndexes.length === fileUrls.length) {
@@ -197,14 +197,14 @@ export const POST = withKeyAuth({
       return {
         status: 500,
         body: {
-          success: false,
+          success: false as const,
           error: errors,
           data: {
-            ids: fulfilledIds,
+            files: [],
             rejectedUrls,
           },
         },
-      } as const;
+      };
     }
 
     if (rejectedUrls.length > 0) {
@@ -215,7 +215,7 @@ export const POST = withKeyAuth({
           success: false,
           error: "Some files could not be uploaded",
           data: {
-            ids: fulfilledIds,
+            files: fulfilledIds.map(([id, url]) => ({ id, url })),
             rejectedUrls,
           },
         },
@@ -225,11 +225,13 @@ export const POST = withKeyAuth({
     return {
       status: 200,
       body: {
-        success: true,
+        success: true as const,
         error: null,
-        data: { ids: fulfilledIds },
+        data: {
+          files: fulfilledIds.map(([id, url]) => ({ id, url })),
+        },
       },
-    } as const;
+    };
   },
   schema: {
     body: fileEndpointPostBody,
@@ -243,10 +245,10 @@ export const GET = withKeyAuth({
       status: 500,
       body: {
         data: null,
-        success: false,
+        success: false as const,
         error: "Route not implemented yet",
       },
-    } as const;
+    };
   },
   schema: {
     params: fileEndpointGetParams,

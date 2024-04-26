@@ -8,7 +8,8 @@ describe("SDK Core logic test", () => {
 
   const nearbyy = new NearbyyClient({
     API_KEY: process.env.NEARBYY_TESTING_KEY!,
-    API_URL: "http://localhost:3000/api", // Test with the local server
+    API_URL: "http://localhost:3000/api", // Test with the local server,
+    CLOUDFRONT_URL: process.env.CLOUDFRONT_URL_DEV!, // Test with the local server
   });
 
   describe("Uploads", () => {
@@ -18,8 +19,24 @@ describe("SDK Core logic test", () => {
       });
 
       if (success) {
-        expect(data.ids).toHaveLength(1);
-        createdIds.push(data.ids[0]!);
+        expect(data.files).toHaveLength(1);
+        createdIds.push(data.files[0]!.id);
+      }
+
+      expect(error).toBe(null);
+    });
+
+    it("One file from a File()", async () => {
+      const file = new File(["test"], "test.txt", { type: "text/plain" });
+
+      const { data, error, success } = await nearbyy.uploadFiles({
+        files: [file],
+      });
+
+      if (success) {
+        console.log(data);
+        expect(data.files).toHaveLength(1);
+        createdIds.push(data.files[0]!.id);
       }
 
       expect(error).toBe(null);
@@ -33,8 +50,8 @@ describe("SDK Core logic test", () => {
       });
 
       if (success) {
-        expect(data.ids).toHaveLength(files.length);
-        createdIds.push(...data.ids);
+        expect(data.files).toHaveLength(files.length);
+        createdIds.push(...data.files.map((file) => file.id));
       }
 
       expect(error).toBe(null);
@@ -47,7 +64,7 @@ describe("SDK Core logic test", () => {
 
       if (!success) {
         expect(data.rejectedUrls).toHaveLength(unsupportedFiles.length);
-        expect(data.ids).toHaveLength(0);
+        expect(data.files).toHaveLength(0);
         expect(error).toBeTypeOf("string");
       }
     });
@@ -59,9 +76,9 @@ describe("SDK Core logic test", () => {
 
       if (!success) {
         expect(data.rejectedUrls).toHaveLength(unsupportedFiles.length);
-        expect(data.ids).toHaveLength(supportedFiles.length);
+        expect(data.files).toHaveLength(supportedFiles.length);
         expect(error).toBeTypeOf("string");
-        createdIds.push(...data.ids);
+        createdIds.push(...data.files.map((file) => file.id));
       }
     });
 
@@ -72,7 +89,7 @@ describe("SDK Core logic test", () => {
       });
 
       if (success) {
-        expect(data.ids).toHaveLength(1);
+        expect(data.files).toHaveLength(1);
       }
 
       expect(error).toBe(null);
