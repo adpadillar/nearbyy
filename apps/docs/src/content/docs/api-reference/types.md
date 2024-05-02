@@ -14,6 +14,7 @@ type ChunkEndpointGetParams = {
   limit: number;
   query: string;
   tag?: string;
+  fileId?: string;
 };
 ```
 
