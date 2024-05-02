@@ -1,5 +1,17 @@
 # @nearbyy/nextjs
 
+## 0.1.18
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+- Updated dependencies
+  - @nearbyy/core@0.3.30
+
 ## 0.1.17
 
 ### Patch Changes
