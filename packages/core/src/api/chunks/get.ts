@@ -25,6 +25,7 @@ export const chunkEndpointGetParams = z.object({
   limit: z.coerce.number().gt(0).lte(100).int().default(10),
   query: z.string().min(1),
   tag: z.string().optional(),
+  fileId: z.string().optional(),
 });
 
 export type ChunkEndpointGetResponse = z.infer<typeof chunkEndpointGetResponse>;

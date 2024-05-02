@@ -38,21 +38,59 @@ export const GET = withKeyAuth({
 
     let chunks;
 
-    if (params.tag) {
+    if (params.tag && params.fileId) {
+      // filter by tag and fileId
       chunks = await db.vector.similarity({
         table: "chunks",
         limit: params.limit,
         vector: { embedding: embedding },
-        where: { projectId: projectid, tag: params.tag },
+        where: { projectId: projectid, tag: params.tag, fileId: params.fileId },
       });
     } else {
-      // Get the chunks that are similar to the embedding
-      chunks = await db.vector.similarity({
-        table: "chunks",
-        limit: params.limit,
-        vector: { embedding: embedding },
-        where: { projectId: projectid },
-      });
+      // we know that either fileId or tag is not present
+      // here we do the query based on the presence of tag
+      if (params.tag) {
+        chunks = await db.vector.similarity({
+          table: "chunks",
+          limit: params.limit,
+          vector: { embedding: embedding },
+          where: { projectId: projectid, tag: params.tag },
+        });
+      }
+
+      // if fileId is present, we query based on fileId
+      if (params.fileId) {
+        chunks = await db.vector.similarity({
+          table: "chunks",
+          limit: params.limit,
+          vector: { embedding: embedding },
+          where: { projectId: projectid, fileId: params.fileId },
+        });
+      }
+
+      // Here we query without any filter
+      if (!params.tag && !params.fileId) {
+        chunks = await db.vector.similarity({
+          table: "chunks",
+          limit: params.limit,
+          vector: { embedding: embedding },
+          where: { projectId: projectid },
+        });
+      }
+
+      if (!chunks) {
+        // we should never really reach here,
+        // but if we do, we return an error. This also
+        // narrows the type of chunks to be non-null
+        return {
+          status: 500,
+          body: {
+            success: false,
+            error: "Could not find any chunks",
+            data: null,
+          } as const,
+        };
+      }
     }
 
     return {
