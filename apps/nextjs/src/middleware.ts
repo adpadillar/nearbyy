@@ -11,6 +11,7 @@ const ignoredResources = [
   "/api/files",
   "/api/chunks",
   "/api/clerk",
+  "/api/files/get-upload-url",
 ];
 
 // Public Routes: Means we call the middleware, but we still allow anonymous access
