@@ -64,7 +64,6 @@ export class NearbyyClient {
       // then, upload the files
       const allFileUrls = await Promise.all(
         presignedUrlResponses.map(async (presignedUrlResponse, idx) => {
-          console.log("presignedUrl", presignedUrlResponse);
           if (presignedUrlResponse.success) {
             const { fields, fileId, uploadUrl } = presignedUrlResponse.data;
             const formData = new FormData();
