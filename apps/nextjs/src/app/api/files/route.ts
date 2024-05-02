@@ -164,6 +164,14 @@ export const POST = withKeyAuth({
         createdAt: new Date(),
         tag,
       });
+
+      if (fileUrl.startsWith(env.CLOUDFRONT_URL)) {
+        // mark the presigned URL as SUCCESS
+        await db.drizzle
+          .update(db.schema.presignedUrls)
+          .set({ status: "SUCCESS" })
+          .where(db.helpers.eq(db.schema.presignedUrls.fileId, fileId));
+      }
     });
 
     const results = await Promise.allSettled(promises);
