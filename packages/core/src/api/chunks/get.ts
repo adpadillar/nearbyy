@@ -7,6 +7,7 @@ export const chunkEndpointGetResponse = createResponseSchema({
   schemaIfSuccess: z.object({
     items: z.array(
       z.object({
+        chunkId: z.string(),
         order: z.number(),
         tokenLength: z.number(),
         text: z.string(),
