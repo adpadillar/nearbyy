@@ -1,5 +1,16 @@
 # @nearbyy/core
 
+## 0.3.31
+
+### Patch Changes
+
+- typo fixed
+- removed embeddings from type
+- test
+- updated api naming
+- initial commit
+- Corrected a type declaration for API response
+
 ## 0.3.30
 
 ### Patch Changes
