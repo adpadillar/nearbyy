@@ -157,7 +157,7 @@ export const POST = withKeyAuth({
 
       await db.drizzle.insert(db.schema.files).values({
         projectid,
-        text: "", // temporarily empty
+        text, // temporarily empty
         type: fileMimeString,
         url: fileUrl,
         id: fileId,
