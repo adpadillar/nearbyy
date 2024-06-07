@@ -2,10 +2,20 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { NextPage } from "next";
+import { useState } from "react";
 import { ArrowUpDown } from "lucide-react";
 import toast from "react-hot-toast";
 
-import { Button } from "@nearbyy/ui";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  Input,
+} from "@nearbyy/ui";
 
 import type { RouterOutputs } from "~/trpc/trpc";
 import { DataTable } from "~/components/DataTable";
@@ -91,6 +101,8 @@ const FilesPage: NextPage<FilesPageProps> = () => {
   const { id } = useProjectId();
   const { uploadFile } = useS3Upload();
   const utils = api.useUtils();
+  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [websiteDialog, setWebsiteDialog] = useState(false);
 
   function handleOnClick() {
     // here we want to create an input element type file
@@ -123,15 +135,12 @@ const FilesPage: NextPage<FilesPageProps> = () => {
   }
 
   async function handleWebsiteUpload() {
-    const url = prompt("Enter the URL of the website to upload");
-    if (!url) {
-      return;
-    }
-
     const apiFilePromise = apiFileUpload({
       projectId: id,
-      fileUrl: url,
+      fileUrl: websiteUrl,
     });
+
+    setWebsiteDialog(false);
 
     await toast.promise(apiFilePromise, {
       loading: "Uploading website...",
@@ -140,6 +149,8 @@ const FilesPage: NextPage<FilesPageProps> = () => {
     });
 
     await utils.files.listForProject.invalidate();
+
+    setWebsiteUrl("");
   }
 
   const { data, isLoading } = api.files.listForProject.useQuery({
@@ -171,7 +182,38 @@ const FilesPage: NextPage<FilesPageProps> = () => {
 
       <div className="flex w-full items-end justify-end space-x-2">
         <Button onClick={handleOnClick}>Upload File</Button>
-        <Button onClick={handleWebsiteUpload}>Upload Website</Button>
+        <Dialog
+          open={websiteDialog}
+          onOpenChange={(nv) => {
+            setWebsiteDialog(nv);
+          }}
+        >
+          <DialogTrigger asChild>
+            <Button variant="outline">Upload Website</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Upload a website from the internet</DialogTitle>
+              <DialogDescription>
+                <p>
+                  Enter the URL of the website you want to upload to Nearbyy.
+                  The service will do its best to scrape the website and upload
+                  the text as markdown.
+                </p>
+                <Input
+                  className="mt-4"
+                  placeholder="Add a website URL"
+                  type="text"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                />
+                <div className="pt-4">
+                  <Button onClick={handleWebsiteUpload}>Upload Website</Button>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <DataTable columns={columns} data={data.files} />
