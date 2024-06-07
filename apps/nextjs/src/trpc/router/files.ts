@@ -10,6 +10,56 @@ import { FILE_QUOTA } from "~/utils/shared/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const filesRouter = createTRPCRouter({
+  deleteForProject: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+        fileId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx: db, input }) => {
+      const project = await db.drizzle.query.projects.findFirst({
+        where: db.helpers.and(
+          db.helpers.eq(db.schema.projects.externalId, input.projectId),
+          db.helpers.eq(db.schema.projects.owner, db.session.userId!),
+        ),
+      });
+
+      if (!project) {
+        throw new TRPCError({
+          message: "Project not found",
+          code: "NOT_FOUND",
+        });
+      }
+
+      const deleted = await db.drizzle
+        .delete(db.schema.files)
+        .where(
+          db.helpers.and(
+            db.helpers.eq(db.schema.files.projectid, project.id),
+            db.helpers.eq(db.schema.files.id, input.fileId),
+          ),
+        )
+        .returning({ id: db.schema.files.id });
+
+      await db.drizzle
+        .delete(db.schema.chunks)
+        .where(
+          db.helpers.and(
+            db.helpers.eq(db.schema.chunks.projectId, project.id),
+            db.helpers.eq(db.schema.chunks.fileId, input.fileId),
+          ),
+        );
+
+      if (deleted.length === 0) {
+        throw new TRPCError({
+          message: "File not found",
+          code: "NOT_FOUND",
+        });
+      }
+
+      return { success: true };
+    }),
   uploadForProject: protectedProcedure
     .input(
       z.object({

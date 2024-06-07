@@ -1,10 +1,11 @@
 "use client";
 
+import type { ButtonHTMLAttributes } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+
 import {
-  Button,
   Sheet,
   SheetContent,
-  SheetTrigger,
   Tabs,
   TabsContent,
   TabsList,
@@ -18,13 +19,65 @@ interface PreviewSheetProps {
   children?: React.ReactNode;
 }
 
-export function PreviewSheet({ fileUrl, children, text }: PreviewSheetProps) {
+const SheetContext = createContext<{
+  toggle: (f: string) => void;
+  active: string | null;
+}>({
+  toggle: () => void 0,
+  active: null,
+});
+
+export const PreviewProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const toggle = (f: string) => {
+    if (activeTab === f) {
+      setActiveTab(null);
+    } else {
+      setActiveTab(f);
+    }
+  };
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button className="flex-grow">{children ?? "Preview"}</Button>
-      </SheetTrigger>
-      <SheetContent className="h-full min-w-[50vw] overflow-y-scroll">
+    <SheetContext.Provider value={{ toggle, active: activeTab }}>
+      {children}
+    </SheetContext.Provider>
+  );
+};
+
+export function ActivatePreviewSheet({
+  fileUrl,
+  children,
+  ...rest
+}: { fileUrl: string } & ButtonHTMLAttributes<HTMLButtonElement>) {
+  const { toggle } = useContext(SheetContext);
+
+  return (
+    <button onClick={() => toggle(fileUrl)} {...rest}>
+      {children}
+    </button>
+  );
+}
+
+export function PreviewSheet({ fileUrl, text }: PreviewSheetProps) {
+  const { active, toggle } = useContext(SheetContext);
+
+  useEffect(() => {
+    if (active === fileUrl) {
+      console.log("Opening sheet", fileUrl);
+    }
+  }, [active, fileUrl]);
+
+  return (
+    <Sheet
+      open={active === fileUrl}
+      onOpenChange={() => {
+        toggle(fileUrl);
+      }}
+    >
+      <SheetContent className="h-full min-w-[50vw] overflow-y-scroll bg-black">
         <Tabs defaultValue="file-preview" className="w-full pt-6">
           <TabsList className="sticky top-0 w-full">
             <TabsTrigger value="file-preview" className="w-full">
