@@ -18,7 +18,7 @@ export const maxDuration = 60;
 
 export const DELETE = withKeyAuth({
   handler: async ({ body, projectid }) => {
-    const deletion = await db.drizzle
+    const fileDeletion = await db.drizzle
       .delete(db.schema.files)
       .where(
         db.helpers.and(
@@ -28,7 +28,20 @@ export const DELETE = withKeyAuth({
       )
       .returning({ id: db.schema.files.id });
 
-    const successfulDeletionsIds = deletion.map((file) => file.id);
+    const chunkDeletion = await db.drizzle
+      .delete(db.schema.chunks)
+      .where(
+        db.helpers.and(
+          db.helpers.eq(db.schema.chunks.projectId, projectid),
+          db.helpers.inArray(db.schema.chunks.fileId, body.ids),
+        ),
+      )
+      .returning({ id: db.schema.chunks.fileId });
+
+    const deletions = new Set(
+      [...fileDeletion, ...chunkDeletion].map((chunk) => chunk.id),
+    );
+    const successfulDeletionsIds = Array.from(deletions);
 
     const rejectedIds = body.ids.filter(
       (id) => !successfulDeletionsIds.includes(id),

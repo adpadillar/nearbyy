@@ -10,11 +10,62 @@ import { FILE_QUOTA } from "~/utils/shared/constants";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const filesRouter = createTRPCRouter({
-  uploadForProject: protectedProcedure
+  deleteForProject: protectedProcedure
     .input(
       z.object({
         projectId: z.string(),
         fileId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx: db, input }) => {
+      const project = await db.drizzle.query.projects.findFirst({
+        where: db.helpers.and(
+          db.helpers.eq(db.schema.projects.externalId, input.projectId),
+          db.helpers.eq(db.schema.projects.owner, db.session.userId!),
+        ),
+      });
+
+      if (!project) {
+        throw new TRPCError({
+          message: "Project not found",
+          code: "NOT_FOUND",
+        });
+      }
+
+      const deleted = await db.drizzle
+        .delete(db.schema.files)
+        .where(
+          db.helpers.and(
+            db.helpers.eq(db.schema.files.projectid, project.id),
+            db.helpers.eq(db.schema.files.id, input.fileId),
+          ),
+        )
+        .returning({ id: db.schema.files.id });
+
+      await db.drizzle
+        .delete(db.schema.chunks)
+        .where(
+          db.helpers.and(
+            db.helpers.eq(db.schema.chunks.projectId, project.id),
+            db.helpers.eq(db.schema.chunks.fileId, input.fileId),
+          ),
+        );
+
+      if (deleted.length === 0) {
+        throw new TRPCError({
+          message: "File not found",
+          code: "NOT_FOUND",
+        });
+      }
+
+      return { success: true };
+    }),
+  uploadForProject: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+        fileId: z.string().optional(),
+        fileUrl: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -46,7 +97,25 @@ export const filesRouter = createTRPCRouter({
         });
       }
 
-      const fileUrl = `${env.CLOUDFRONT_URL}/${input.fileId}`;
+      let fileUrl = "";
+      let fileId = "";
+
+      if (input.fileUrl) {
+        fileUrl = input.fileUrl;
+        fileId = crypto.randomUUID();
+      }
+
+      if (input.fileId) {
+        fileUrl = `${env.CLOUDFRONT_URL}/${input.fileId}`;
+        fileId = input.fileId;
+      }
+
+      if (!fileUrl || !fileId) {
+        throw new TRPCError({
+          message: "Missing either fileUrl or fileId",
+          code: "BAD_REQUEST",
+        });
+      }
 
       const file = await fetch(fileUrl);
       const fileBlob = await file.blob();
@@ -64,8 +133,6 @@ export const filesRouter = createTRPCRouter({
           code: "METHOD_NOT_SUPPORTED",
         });
       }
-
-      const fileId = input.fileId;
       const resChunking = await chunking(text, 300, 30);
 
       await ctx.drizzle.insert(ctx.schema.chunks).values(

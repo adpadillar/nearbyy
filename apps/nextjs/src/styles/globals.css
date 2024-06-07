@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Styles for a slim and gray scroll bar */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ff5454;
+  border-radius: 3px;
+}
+
+/* Transparent tracking */
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
 :root {
   --shiki-color-text: #ffffff;
   --shiki-color-background: #161616; /* Dark gray background */
@@ -11,7 +26,7 @@
   --shiki-token-keyword: #aba9f1; /* Light blue keyword */
   --shiki-token-parameter: #72ff85; /* Light green parameter */
   --shiki-token-function: #ff85a0; /* Light pink function */
-  --shiki-token-string-expression: #fff48f ; /* Light yellow string expression */
+  --shiki-token-string-expression: #fff48f; /* Light yellow string expression */
   --shiki-token-punctuation: #ffffff;
   --shiki-token-link: #7cfff7; /* Light cyan link */
 }
