@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
 
+import Announcements from "~/components/Announcements";
 import ProjectIdProvider from "~/components/ProjectIdContext";
 import Sidebar from "~/components/Sidebar";
 import { TRPCReactProvider } from "~/trpc/react";
@@ -19,6 +20,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <ClerkProvider>
       <TRPCReactProvider headersPromise={getHeaders()}>
         <ProjectIdProvider>
+          <Announcements />
           <div
             className="flex h-screen w-screen space-x-20 overflow-hidden py-12 pl-12"
             style={{
