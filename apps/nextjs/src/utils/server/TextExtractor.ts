@@ -91,7 +91,7 @@ export class TextExtractor {
 
     const md = NodeHtmlMarkdown.translate(clean);
 
-    return md;
+    return `# ${article.title}\n\n${md}`;
   }
 
   async extract() {

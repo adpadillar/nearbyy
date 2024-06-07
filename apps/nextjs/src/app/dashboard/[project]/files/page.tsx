@@ -122,6 +122,26 @@ const FilesPage: NextPage<FilesPageProps> = () => {
     };
   }
 
+  async function handleWebsiteUpload() {
+    const url = prompt("Enter the URL of the website to upload");
+    if (!url) {
+      return;
+    }
+
+    const apiFilePromise = apiFileUpload({
+      projectId: id,
+      fileUrl: url,
+    });
+
+    await toast.promise(apiFilePromise, {
+      loading: "Uploading website...",
+      success: "Website uploaded successfully!",
+      error: "Error uploading website",
+    });
+
+    await utils.files.listForProject.invalidate();
+  }
+
   const { data, isLoading } = api.files.listForProject.useQuery({
     projectId: id,
   });
@@ -149,8 +169,9 @@ const FilesPage: NextPage<FilesPageProps> = () => {
         View a summary of all files uploaded to this project
       </p>
 
-      <div className="flex w-full items-end justify-end">
+      <div className="flex w-full items-end justify-end space-x-2">
         <Button onClick={handleOnClick}>Upload File</Button>
+        <Button onClick={handleWebsiteUpload}>Upload Website</Button>
       </div>
 
       <DataTable columns={columns} data={data.files} />

@@ -14,7 +14,8 @@ export const filesRouter = createTRPCRouter({
     .input(
       z.object({
         projectId: z.string(),
-        fileId: z.string(),
+        fileId: z.string().optional(),
+        fileUrl: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -46,7 +47,25 @@ export const filesRouter = createTRPCRouter({
         });
       }
 
-      const fileUrl = `${env.CLOUDFRONT_URL}/${input.fileId}`;
+      let fileUrl = "";
+      let fileId = "";
+
+      if (input.fileUrl) {
+        fileUrl = input.fileUrl;
+        fileId = crypto.randomUUID();
+      }
+
+      if (input.fileId) {
+        fileUrl = `${env.CLOUDFRONT_URL}/${input.fileId}`;
+        fileId = input.fileId;
+      }
+
+      if (!fileUrl || !fileId) {
+        throw new TRPCError({
+          message: "Missing either fileUrl or fileId",
+          code: "BAD_REQUEST",
+        });
+      }
 
       const file = await fetch(fileUrl);
       const fileBlob = await file.blob();
@@ -64,8 +83,6 @@ export const filesRouter = createTRPCRouter({
           code: "METHOD_NOT_SUPPORTED",
         });
       }
-
-      const fileId = input.fileId;
       const resChunking = await chunking(text, 300, 30);
 
       await ctx.drizzle.insert(ctx.schema.chunks).values(
