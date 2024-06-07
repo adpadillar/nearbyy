@@ -77,7 +77,7 @@ export function PreviewSheet({ fileUrl, text }: PreviewSheetProps) {
         toggle(fileUrl);
       }}
     >
-      <SheetContent className="h-full min-w-[50vw] overflow-y-scroll bg-black">
+      <SheetContent className="h-full min-w-[50vw] overflow-y-scroll">
         <Tabs defaultValue="file-preview" className="w-full pt-6">
           <TabsList className="sticky top-0 w-full">
             <TabsTrigger value="file-preview" className="w-full">
