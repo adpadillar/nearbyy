@@ -38,7 +38,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - /ingest/ (disable middleware in /ingest/**)
      */
-    "/((?!brand|_next/static|_next/image|favicon.ico).*)",
+    "/((?!brand|_next/static|_next/image|favicon.ico|ingest/).*)",
   ],
 };
