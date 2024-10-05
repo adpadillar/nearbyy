@@ -1,7 +1,10 @@
 import { File } from "@web-std/file";
+import { DOMParser } from "@xmldom/xmldom";
+import JSZip from "jszip";
 import { extractRawText } from "mammoth";
 import OpenAI from "openai";
 import pdfparse from "pdf-parse-fork";
+// import pptxtotxt from "pptxto.txt";
 import { createWorker } from "tesseract.js";
 
 import { env } from "~/env";
@@ -58,6 +61,50 @@ export class TextExtractor {
     return ret.data.text;
   }
 
+  // getTextFromNodes(node: XMLDocument, tagName: string, namespaceURI: string) {
+  //   let text = "";
+  //   const textNodes = node.getElementsByTagNameNS(namespaceURI, tagName);
+  //   for (let i = 0; i < textNodes.length; i++) {
+  //     text += textNodes[i].textContent + " ";
+  //   }
+  //   console.log(text.trim());
+  //   return text.trim();
+  // }
+
+  // async extractFromPptx() {
+  //   try {
+  //     const zip = new JSZip();
+  //     await zip.loadAsync(await this.arrayBufferPromise);
+
+  //     const aNamespace =
+  //       "https://dzpv5o2pvfxys.cloudfront.net/powerpoint-namespace.xml";
+  //     let text = "";
+
+  //     let slideIndex = 1;
+  //     // eslint-disable-next-line no-constant-condition
+  //     while (true) {
+  //       const slideFile = zip.file(`ppt/slides/slide${slideIndex}.xml`);
+
+  //       if (!slideFile) break;
+
+  //       const slideXmlStr = await slideFile.async("text");
+
+  //       const parser = new DOMParser();
+  //       const xmlDoc = parser.parseFromString(slideXmlStr, "application/xml");
+
+  //       text += this.getTextFromNodes(xmlDoc, "t", aNamespace) + " ";
+
+  //       slideIndex++;
+  //     }
+
+  //     console.log(text.trim());
+  //     return text.trim();
+  //   } catch (err) {
+  //     console.error("Error extracting text from PPTX:", err);
+  //     return "";
+  //   }
+  // }
+
   async extract() {
     if (this.mimeType === MIME_TYPES.txt || this.mimeType === MIME_TYPES.md) {
       return { text: await this.extractFromText(), error: null } as const;
@@ -75,6 +122,9 @@ export class TextExtractor {
       return { text: await this.extractFromMp3(), error: null } as const;
     }
 
+    if (this.mimeType === MIME_TYPES.pptx) {
+      return { text: await this.extractFromPptx(), error: null } as const;
+    }
     if (
       this.mimeType === MIME_TYPES.png ||
       this.mimeType === MIME_TYPES.jpg ||
